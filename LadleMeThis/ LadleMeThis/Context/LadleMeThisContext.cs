@@ -1,5 +1,9 @@
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
+using LadleMeThis.Models.RecipeModels;
+using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.SavedRecipesModels;;
+using LadleMeThis.Models.UserModels;
 using LadleMeThis.Models.TagModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +17,6 @@ public class LadleMeThisContext(DbContextOptions options) : DbContext(options)
 	public DbSet<Tag> Tags { get; set; }
 	public DbSet<Ingredient> Ingredients { get; set; }
 	public DbSet<Category> Categories { get; set; }
-	public DbSet<Review> Reviews { get; set; }
+	public DbSet<RecipeRating> Ratings { get; set; }
 	public DbSet<SavedRecipe> SavedRecipes { get; set; }
 }
