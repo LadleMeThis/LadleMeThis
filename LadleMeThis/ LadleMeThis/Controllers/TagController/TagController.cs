@@ -1,5 +1,6 @@
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.TagRepository;
+using LadleMeThis.Services.TagService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,10 +9,10 @@ namespace LadleMeThis.Controllers.TagController;
 [Route("api/[controller]")]
 public class TagController : ControllerBase
 {
-    ITagRepository _tagRepository;
-    public TagController(ITagRepository tagRepository)
+    ITagService _tagService;
+    public TagController(ITagService tagService)
     {
-        _tagRepository = tagRepository;
+        _tagService = tagService;
     }
 
     [HttpGet("all")]
@@ -19,8 +20,8 @@ public class TagController : ControllerBase
     {
         try
         {
-            var tags = await _tagRepository.GetAllAsync();
-            return Ok(tags);
+            var tagDTOs = await _tagService.GetAllAsync();
+            return Ok(tagDTOs);
         }
         catch (Exception ex)
         {
@@ -33,8 +34,8 @@ public class TagController : ControllerBase
     {
         try
         {
-            var tag = await _tagRepository.GetByIdAsync(tagId);
-            return Ok(tag);
+            var tagDTO = await _tagService.GetByIdAsync(tagId);
+            return Ok(tagDTO);
 
         }
         catch (Exception ex)
@@ -48,7 +49,7 @@ public class TagController : ControllerBase
     {
         try
         {
-            await _tagRepository.DeleteByIdAsync(tagId);
+            await _tagService.DeleteByIdAsync(tagId);
             return NoContent();
         }
         catch (Exception ex)
@@ -63,7 +64,7 @@ public class TagController : ControllerBase
     {
         try
         {
-            await _tagRepository.AddAsync(new Tag() { Name = tagDTO.Name, });
+            await _tagService.AddAsync(tagDTO);
             return Ok($"Tag successfully created!");
         }
         catch (Exception ex)

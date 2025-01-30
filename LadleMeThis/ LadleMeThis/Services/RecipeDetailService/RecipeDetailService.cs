@@ -25,6 +25,8 @@ namespace LadleMeThis.Services.RecipeDetailService
         }
 
 
+        //tag class alapján visszaad egy DTO-t (paraméter Icollection) ICollection<Tag>
+
         public async Task<IEnumerable<Tag>> GetTagsByIds(int[] tagIds)
         {
             return await _tagRepository.GetManyByIdAsync(tagIds);

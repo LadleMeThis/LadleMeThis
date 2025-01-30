@@ -17,9 +17,7 @@
       <Folder Include="Models\RecipeRatings\" />
       <Folder Include="Models\SavedRecipesModels\" />
       <Folder Include="Models\UserModels\" />
-      <Folder Include="Services\IngredientService\" />
       <Folder Include="Services\RecipeService\" />
-      <Folder Include="Services\TagService\" />
       <Folder Include="Services\UserService\" />
     </ItemGroup>
 

@@ -1,6 +1,7 @@
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.IngredientRepository;
+using LadleMeThis.Services.IngredientService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,11 +10,11 @@ namespace LadleMeThis.Controllers.IngredientController;
 [Route("api/[controller]")]
 public class IngredientController : ControllerBase
 {
-    private IIngredientRepository _ingredientRepository;
+    private IIngredientService _ingredientService;
 
-    public IngredientController(IIngredientRepository ingredientRepository)
+    public IngredientController(IIngredientService ingredientService)
     {
-        _ingredientRepository = ingredientRepository;
+        _ingredientService = ingredientService;
     }
 
     [HttpGet("all")]
@@ -21,8 +22,8 @@ public class IngredientController : ControllerBase
     {
         try
         {
-            var ingredients = await _ingredientRepository.GetAllAsync();
-            return Ok(ingredients);
+            var ingredientDTOs = await _ingredientService.GetAllAsync();
+            return Ok(ingredientDTOs);
         }
         catch (Exception ex)
         {
@@ -30,13 +31,13 @@ public class IngredientController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetByIdAsync([Required] int id)
+    [HttpGet("{ingredientId}")]
+    public async Task<IActionResult> GetByIdAsync([Required] int ingredientId)
     {
         try
         {
-            var ingredient = await _ingredientRepository.GetByIdAsync(id);
-            return Ok(ingredient);
+            var ingredientDTO = await _ingredientService.GetByIdAsync(ingredientId);
+            return Ok(ingredientDTO);
 
         }
         catch (Exception ex)
@@ -50,7 +51,7 @@ public class IngredientController : ControllerBase
     {
         try
         {
-            await _ingredientRepository.DeleteByIdAsync(ingredientId);
+            await _ingredientService.DeleteByIdAsync(ingredientId);
             return NoContent();
         }
         catch (Exception ex)
@@ -65,7 +66,7 @@ public class IngredientController : ControllerBase
     {
         try
         {
-            await _ingredientRepository.AddAsync(new Ingredient() { Name = ingredientDTO.Name, Unit = ingredientDTO.Unit });
+            await _ingredientService.AddAsync(ingredientDTO);
             return Ok($"Ingredient successfully created!");
         }
         catch (Exception ex)
