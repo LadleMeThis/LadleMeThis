@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,7 +18,6 @@
       <Folder Include="Models\RecipeModels\" />
       <Folder Include="Models\RecipeRatings\" />
       <Folder Include="Models\SavedRecipesModels\" />
-      <Folder Include="Models\TagModels\" />
       <Folder Include="Models\UserModels\" />
       <Folder Include="Services\CategoryService\" />
       <Folder Include="Services\IngredientService\" />
