@@ -15,10 +15,16 @@
     <ItemGroup>
       <Folder Include="Models\RecipeModels\" />
       <Folder Include="Models\RecipeRatings\" />
+      <Folder Include="Models\TagModels\" />
+      <Folder Include="Services\CategoryService\" />
+      <Folder Include="Services\IngredientService\" />
+      <Folder Include="Services\RecipeService\" />
+      <Folder Include="Services\TagService\" />
       <Folder Include="Models\SavedRecipesModels\" />
       <Folder Include="Models\UserModels\" />
       <Folder Include="Services\RecipeService\" />
       <Folder Include="Services\UserService\" />
+
     </ItemGroup>
 
 </Project>
