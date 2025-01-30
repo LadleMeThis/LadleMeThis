@@ -25,19 +25,19 @@ namespace LadleMeThis.Services.RecipeDetailService
         }
 
 
-        public async Task<IEnumerable<Tag>> GetAllTags()
+        public async Task<IEnumerable<Tag>> GetTagsByIds(int[] tagIds)
         {
-            return await _tagRepository.GetAllAsync();
+            return await _tagRepository.GetManyByIdAsync(tagIds);
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategories()
+        public async Task<IEnumerable<Category>> GetCategoriesByIds(int[] categoryIds)
         {
-            return await _categoryRepository.GetAllAsync();
+            return await _categoryRepository.GetManyByIdAsync(categoryIds);
         }
 
-        public async Task<IEnumerable<Ingredient>> GetAllIngredients()
+        public async Task<IEnumerable<Ingredient>> GetIngredientsByIds(int[] ingredientIds)
         {
-            return await _ingredientRepository.GetAllAsync();
+            return await _ingredientRepository.GetManyByIdAsync(ingredientIds);
         }
 
     }

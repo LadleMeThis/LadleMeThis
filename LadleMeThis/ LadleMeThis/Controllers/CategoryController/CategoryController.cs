@@ -2,6 +2,7 @@ using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
+using LadleMeThis.Services.CategoryService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,11 +13,11 @@ namespace LadleMeThis.Controllers.CategoryController;
 public class CategoryController : ControllerBase
 {
 
-    private ICategoryRepository _categoryRepository;
+    private ICategoryService _categoryService;
 
-    public CategoryController(ICategoryRepository categoryRepository)
+    public CategoryController(ICategoryService categoryService)
     {
-        _categoryRepository = categoryRepository;
+        _categoryService = categoryService;
     }
 
     [HttpGet("all")]
@@ -24,8 +25,8 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            return Ok(categories);
+            var categoryDTOs = await _categoryService.GetAllAsync();
+            return Ok(categoryDTOs);
         }
         catch (Exception ex)
         {
@@ -38,8 +39,8 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            var category = await _categoryRepository.GetByIdAsync(categoryId);
-            return Ok(category);
+            var categoryDTO = await _categoryService.GetByIdAsync(categoryId);
+            return Ok(categoryDTO);
 
         }
         catch (Exception ex)
@@ -53,7 +54,7 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            await _categoryRepository.DeleteByIdAsync(categoryId);
+            await _categoryService.DeleteByIdAsync(categoryId);
             return NoContent();
         }
         catch (Exception ex)
@@ -68,7 +69,7 @@ public class CategoryController : ControllerBase
     {
         try
         {
-            await _categoryRepository.AddAsync(new Category() { Name = categoryDTO.Name, });
+            await _categoryService.AddAsync(categoryDTO);
             return Ok($"Category successfully created!");
         }
         catch (Exception ex)
