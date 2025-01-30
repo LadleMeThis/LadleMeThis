@@ -1,6 +1,6 @@
-﻿namespace LadleMeThis.Models.TagModels
+﻿namespace LadleMeThis.Models.CategoryModels
 {
-    public class Tag
+    public class Category
     {
         public int Id { get; init; }
         public string Name { get; init; }

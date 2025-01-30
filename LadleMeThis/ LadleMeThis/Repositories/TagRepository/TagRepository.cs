@@ -15,22 +15,19 @@ namespace LadleMeThis.Repositories.TagRepository
         }
 
 
-        //optional
         public async Task AddAsync(Tag tag)
         {
             await _dbContext.Tags.AddAsync(tag);
             await _dbContext.SaveChangesAsync();
         }
 
-        //optional
-        public async Task DeleteAsync(int id)
+        public async Task DeleteByIdAsync(int tagId)
         {
-            var tag = await GetByIdAsync(id);
-            if (tag != null)
-            {
-                _dbContext.Tags.Remove(tag);
-                await _dbContext.SaveChangesAsync();
-            }
+            Tag tag = new() { Id = tagId };
+
+            _dbContext.Entry(tag).State = EntityState.Deleted;
+
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Tag>> GetAllAsync()
@@ -38,9 +35,14 @@ namespace LadleMeThis.Repositories.TagRepository
             return await _dbContext.Tags.ToListAsync();
         }
 
-        public async Task<Tag?> GetByIdAsync(int id)
+        public async Task<Tag?> GetByIdAsync(int tagId)
         {
-            return await _dbContext.Tags.FindAsync(id);
+            return await _dbContext.Tags.FindAsync(tagId);
+        }
+
+        public async Task<IEnumerable<Tag>> GetManyByIdAsync(int[] tagIds)
+        {
+            return await _dbContext.Tags.Where(tag => tagIds.Contains(tag.Id)).ToListAsync();
         }
     }
 }
