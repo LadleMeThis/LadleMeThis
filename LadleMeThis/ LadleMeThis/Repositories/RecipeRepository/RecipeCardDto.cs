@@ -1,0 +1,14 @@
+using LadleMeThis.Models.CategoryModels;
+using LadleMeThis.Models.TagModels;
+
+namespace LadleMeThis.Repositories.RecipeRepository;
+
+public record RecipeCardDto( 
+	int RecipeId,
+	string Name,
+	int FullTime,
+	int ServingSize,
+	int Rating,
+	Tag[] Tags,
+	Category[] Categories
+	);
