@@ -10,7 +10,7 @@ public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,
 	private readonly IRecipeRatingRepository _recipeRatingRepository = recipeRatingRepository;
 	private readonly IUserService _userService = userService;
 	
-	public List<RecipeRatingDto> CreateRecipeRatingDtoList(ICollection<RecipeRating> ratings)
+	public List<RecipeRatingDto> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings)
 	{
 		var users = _userService.GetUserDtos();
 
