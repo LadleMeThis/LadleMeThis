@@ -53,7 +53,7 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		return recipes.Select(CreateRecipeCard).ToList();
 	}
 	
-	public async Task<Recipe> GetRecipeByRecipeId(int recipeId) =>
+	public async Task<FullRecipeDto> GetRecipeByRecipeId(int recipeId) =>
 		await _repository.GetByRecipeId(recipeId);
 	
 	public async Task<bool> DeleteRecipe(int recipeId) => 
@@ -105,6 +105,8 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 
 	private async Task<List<Category>> GetUpdatedCategories(int[]? updatedCategoryIds) =>
 		await _recipeDetailsService.GetCategoriesByIds(int[] updatedCategoryIds);
+	private List<RecipeRating> GetUpdatedRating(int[]? updatedRatingsIds) =>
+		 _recipeRatingService.GetRecipeRatingByIds(int[] updatedRatingsIds);
 
 	private RecipeCardDto CreateRecipeCard(Recipe recipe)
 	{
@@ -127,8 +129,8 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 	private Recipe CreateRecipe(CreateRecipeDto recipeDto, User user)
 	{
 		var tags = _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
-		var ingredients = _recipeDetailsService.GetTagsByIds(recipeDto.Ingredients);
-		var categories = _recipeDetailsService.GetTagsByIds(recipeDto.Categories);
+		var ingredients = _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
+		var categories = _recipeDetailsService.GetCategoriesByIds(recipeDto.Categories);
 
 		return new Recipe()
 		{
@@ -144,4 +146,26 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 			Ingredients = ingredients
 		};
 	}
+	
+	private FullRecipeDto CreateFullRecipeDto(Recipe recipe, User user)
+	{
+		var tags = _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
+		var ingredients = _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
+		var categories = _recipeDetailsService.GetCategoriesByIds(recipeDto.Categories);
+		var ratings = _recipeRatingService.CreateRecipeRatingDtoList(recipe.Ratings);
+
+		return new FullRecipeDto(
+			recipe.RecipeId,
+			recipe.Name,
+			recipe.Instructions,
+			recipe.PrepTime,
+			recipe.CookTime,
+			recipe.ServingSize,
+			user.UserId,
+			categories,
+			tags,
+			ingredients,
+			ratings
+			);
+	} 
 }
