@@ -1,7 +1,7 @@
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.TagModels;
 
-namespace LadleMeThis.Repositories.RecipeRepository;
+namespace LadleMeThis.Models.RecipeModels;
 
 public record RecipeCardDto( 
 	int RecipeId,
