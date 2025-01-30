@@ -1,5 +1,5 @@
 using LadleMeThis.Models.DTO.SavedRecipe;
-using LadleMeThis.Models.DTO.User;
+using LadleMeThis.Models.User;
 using LadleMeThis.Services;
 using LadleMeThis.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
