@@ -1,4 +1,5 @@
 using LadleMeThis.Models.CategoryModels;
+using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
@@ -9,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 namespace LadleMeThis.Controllers.CategoryController;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("categories")]
 public class CategoryController : ControllerBase
 {
 
@@ -20,7 +21,7 @@ public class CategoryController : ControllerBase
         _categoryService = categoryService;
     }
 
-    [HttpGet("all")]
+    [HttpGet()]
     public async Task<IActionResult> GetAllAsync()
     {
         try
@@ -30,11 +31,11 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 
-    [HttpGet("{categoryId}")]
+    [HttpGet("category/{categoryId}")]
     public async Task<IActionResult> GetByIdAsync([Required] int categoryId)
     {
         try
@@ -45,11 +46,11 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpDelete("{categoryId}")]
+    [HttpDelete("category/{categoryId}")]
     public async Task<IActionResult> DeleteByIdAsync([Required] int categoryId)
     {
         try
@@ -59,10 +60,12 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
 
     }
+
+
 
     [HttpPost()]
     public async Task<IActionResult> AddAsnyc([FromBody] CategoryDTO categoryDTO)
@@ -74,7 +77,7 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 

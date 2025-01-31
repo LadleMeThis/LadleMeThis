@@ -1,4 +1,5 @@
 ﻿using LadleMeThis.Context;
+using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.TagModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,14 +36,20 @@ namespace LadleMeThis.Repositories.TagRepository
             return await _dbContext.Tags.ToListAsync();
         }
 
-        public async Task<Tag?> GetByIdAsync(int tagId)
+        public async Task<Tag> GetByIdAsync(int tagId)
         {
-            return await _dbContext.Tags.FindAsync(tagId);
+            var tag = await _dbContext.Tags.FindAsync(tagId);
+            return tag ?? throw new KeyNotFoundException("No tag was found with given Id!");
         }
 
         public async Task<IEnumerable<Tag>> GetManyByIdAsync(int[] tagIds)
         {
-            return await _dbContext.Tags.Where(tag => tagIds.Contains(tag.TagId)).ToListAsync();
+            var tags = await _dbContext.Tags.Where(tag => tagIds.Contains(tag.TagId)).ToListAsync();
+            if (tags.Count == 0)
+            {
+                throw new KeyNotFoundException("Not a single tag was found!");
+            }
+            return tags;
         }
     }
 }

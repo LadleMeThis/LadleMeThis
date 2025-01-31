@@ -34,14 +34,20 @@ namespace LadleMeThis.Repositories.CategoryRepository
             return await _dbContext.Categories.ToListAsync();
         }
 
-        public async Task<Category?> GetByIdAsync(int id)
+        public async Task<Category> GetByIdAsync(int id)
         {
-            return await _dbContext.Categories.FindAsync(id);
+            var category = await _dbContext.Categories.FindAsync(id);
+            return category ?? throw new KeyNotFoundException("No category was found with given Id!");
         }
 
         public async Task<IEnumerable<Category>> GetManyByIdAsync(int[] categoryIds)
         {
-            return await _dbContext.Categories.Where(category => categoryIds.Contains(category.CategoryId)).ToListAsync();
+            var categories = await _dbContext.Categories.Where(category => categoryIds.Contains(category.CategoryId)).ToListAsync();
+            if (categories.Count == 0)
+            {
+                throw new KeyNotFoundException("Not a single category was found!");
+            }
+            return categories;
         }
     }
 }
