@@ -1,5 +1,4 @@
-﻿using LadleMeThis.Models.DTO;
-using LadleMeThis.Models.RecipeModels;
+﻿using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Repositories.SavedRecipeRepository;
 
@@ -44,13 +43,9 @@ namespace LadleMeThis.Services.SavedRecipeService
             };
         }
 
-        public async Task<bool> DeleteSavedRecipeAsync(int userId, int recipeId)
+        public async Task DeleteSavedRecipeAsync(int userId, int recipeId)
         {
-            var savedRecipe = await _repository.GetSavedRecipeAsync(userId, recipeId);
-            if (savedRecipe == null) return false;
-
-            await _repository.DeleteSavedRecipeAsync(savedRecipe);
-            return true;
+            await _repository.DeleteSavedRecipeAsync(userId, recipeId);
         }
     }
 }
