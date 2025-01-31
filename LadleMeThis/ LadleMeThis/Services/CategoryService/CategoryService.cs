@@ -29,19 +29,19 @@ namespace LadleMeThis.Services.CategoryService
         public async Task<IEnumerable<CategoryDTO>> GetAllAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
-            return categories.Select(category => new CategoryDTO() { Name = category.Name, }).ToList();
+            return categories.Select(category => new CategoryDTO() { Name = category.Name, CategoryId = category.CategoryId }).ToList();
         }
 
         public async Task<CategoryDTO> GetByIdAsync(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
-            return new CategoryDTO() { Name = category.Name };
+            return new CategoryDTO() { Name = category.Name, CategoryId = category.CategoryId };
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetManyByIdAsync(int[] categoryIds)
         {
             var categories = await _categoryRepository.GetManyByIdAsync(categoryIds);
-            return categories.Select(category => new CategoryDTO() { Name = category.Name, }).ToList();
+            return categories.Select(category => new CategoryDTO() { Name = category.Name, CategoryId = category.CategoryId }).ToList();
         }
     }
 }
