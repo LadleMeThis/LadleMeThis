@@ -1,4 +1,4 @@
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
 
 namespace LadleMeThis.Repositories.RecipeRatingRepository;
 

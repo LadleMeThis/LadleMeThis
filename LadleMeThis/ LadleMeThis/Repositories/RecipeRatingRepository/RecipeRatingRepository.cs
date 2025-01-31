@@ -1,5 +1,5 @@
 using LadleMeThis.Context;
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace LadleMeThis.Repositories.RecipeRatingRepository;

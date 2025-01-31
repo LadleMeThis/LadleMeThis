@@ -1,7 +1,9 @@
 using LadleMeThis.Models.RecipeModels;
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
+using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRatingRepository;
 using LadleMeThis.Repositories.RecipeRepository;
+using LadleMeThis.Services.UserService;
 
 namespace LadleMeThis.Services.RecipeRatingService;
 
@@ -10,22 +12,22 @@ public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,
 	private readonly IRecipeRatingRepository _recipeRatingRepository = recipeRatingRepository;
 	private readonly IUserService _userService = userService;
 	
-	public List<RecipeRatingDto> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings)
+	public async Task<List<RecipeRatingDTO>> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings)
 	{
-		var users = _userService.GetUserDtos();
+		var users = await _userService.GetAllUsersAsync();
 
 		return ratings.Select(r => CreateRecipeRatingDto(r, users)).ToList();
 	}
 
-	private RecipeRatingDto CreateRecipeRatingDto(RecipeRating rating, List<UserDto> users)
+	private RecipeRatingDTO CreateRecipeRatingDto(RecipeRating rating, IEnumerable<UserResponseDTO> users)
 	{
 		var user = users.FirstOrDefault(u => u.UserId == rating.UserId);
 		
 		if (user is null)
-			user = new UserDto(null, "Jane Doe");
+			user = new UserDTO(null, "Jane Doe");
 		
 		
-		return new RecipeRatingDto(
+		return new RecipeRatingDTO(
 			rating.RatingId,
 			rating.Review,
 			rating.Rating,

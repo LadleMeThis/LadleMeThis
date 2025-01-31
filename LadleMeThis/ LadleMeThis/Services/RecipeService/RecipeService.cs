@@ -1,7 +1,7 @@
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.RecipeModels;
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
@@ -53,13 +53,13 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		return recipes.Select(CreateRecipeCard).ToList();
 	}
 	
-	public async Task<FullRecipeDto> GetRecipeByRecipeId(int recipeId) =>
+	public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId) =>
 		await _repository.GetByRecipeId(recipeId);
 	
 	public async Task<bool> DeleteRecipe(int recipeId) => 
 		await _repository.Delete(recipeId);
 
-	public async Task<int> Create(CreateRecipeDto createRecipeDto, User user)
+	public async Task<int> Create(CreateRecipeDTO createRecipeDto, User user)
 	{
 		var recipe = CreateRecipe(createRecipeDto, user);
 		
@@ -126,7 +126,7 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		);
 	}
 
-	private Recipe CreateRecipe(CreateRecipeDto recipeDto, User user)
+	private Recipe CreateRecipe(CreateRecipeDTO recipeDto, User user)
 	{
 		var tags = _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
 		var ingredients = _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
@@ -147,14 +147,14 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		};
 	}
 	
-	private FullRecipeDto CreateFullRecipeDto(Recipe recipe, User user)
+	private FullRecipeDTO CreateFullRecipeDto(Recipe recipe, User user)
 	{
 		var tags = _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
 		var ingredients = _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
 		var categories = _recipeDetailsService.GetCategoriesByIds(recipeDto.Categories);
 		var ratings = _recipeRatingService.CreateRecipeRatingDtoList(recipe.Ratings);
 
-		return new FullRecipeDto(
+		return new FullRecipeDTO(
 			recipe.RecipeId,
 			recipe.Name,
 			recipe.Instructions,
