@@ -15,10 +15,11 @@ namespace LadleMeThis.Repositories.IngredientRepository
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(Ingredient ingredient)
+        public async Task<Ingredient> AddAsync(Ingredient ingredient)
         {
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
+            return ingredient;
         }
 
         public async Task DeleteByIdAsync(int ingredientId)

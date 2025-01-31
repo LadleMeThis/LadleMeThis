@@ -26,11 +26,12 @@ public class TagController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpGet("tag/{tagId}")]
+    [HttpGet("/tag/{tagId}")]
     public async Task<IActionResult> GetByIdAsync([Required] int tagId)
     {
         try
@@ -41,11 +42,12 @@ public class TagController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpDelete("tag/{tagId}")]
+    [HttpDelete("/tag/{tagId}")]
     public async Task<IActionResult> DeleteByIdAsync([Required] int tagId)
     {
         try
@@ -55,22 +57,24 @@ public class TagController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return NotFound(ErrorMessages.NotFoundMessage);
         }
 
     }
 
     [HttpPost()]
-    public async Task<IActionResult> AddAsnyc([FromBody] TagDTO tagDTO)
+    public async Task<IActionResult> AddAsnyc([FromBody] TagCreateRequest tagCreateRequest)
     {
         try
         {
-            await _tagService.AddAsync(tagDTO);
-            return Ok($"Tag successfully created!");
+            var tagDTO = await _tagService.AddAsync(tagCreateRequest);
+            return Ok(tagDTO);
         }
         catch (Exception ex)
         {
-            return BadRequest(ErrorMessages.NotFoundMessage);
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 

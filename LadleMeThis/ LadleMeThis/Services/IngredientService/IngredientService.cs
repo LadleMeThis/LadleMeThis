@@ -15,9 +15,10 @@ namespace LadleMeThis.Services.IngredientService
         }
 
 
-        public async Task AddAsync(IngredientDTO ingredientDTO)
+        public async Task<IngredientDTO> AddAsync(IngredientCreateRequest ingredientCreateRequest)
         {
-            await _ingredientRepository.AddAsync(new Ingredient() { Name = ingredientDTO.Name, Unit = ingredientDTO.Unit });
+            var ingredient = await _ingredientRepository.AddAsync(new Ingredient() { Name = ingredientCreateRequest.Name, Unit = ingredientCreateRequest.Unit });
+            return new IngredientDTO() { Name = ingredient.Name, Unit = ingredient.Unit, IngredientId = ingredient.IngredientId };
         }
 
         public async Task DeleteByIdAsync(int ingredientId)

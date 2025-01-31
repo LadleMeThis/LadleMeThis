@@ -1,4 +1,5 @@
 ﻿using LadleMeThis.Models.CategoryModels;
+using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Repositories.CategoryRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -15,11 +16,11 @@ namespace LadleMeThis.Services.CategoryService
             _categoryRepository = categoryRepo;
         }
 
-        public async Task AddAsync(CategoryDTO categoryDTO)
+        public async Task<CategoryDTO> AddAsync(CategoryCreateRequest categoryCreateRequest)
         {
-            await _categoryRepository.AddAsync(new Category() { Name = categoryDTO.Name, });
+            var category = await _categoryRepository.AddAsync(new Category() { Name = categoryCreateRequest.Name });
+            return new CategoryDTO() { Name = category.Name, CategoryId = category.CategoryId };
         }
-
         public async Task DeleteByIdAsync(int categoryId)
         {
             await _categoryRepository.DeleteByIdAsync(categoryId);
@@ -31,7 +32,7 @@ namespace LadleMeThis.Services.CategoryService
             return categories.Select(category => new CategoryDTO() { Name = category.Name, }).ToList();
         }
 
-        public async Task<CategoryDTO?> GetByIdAsync(int categoryId)
+        public async Task<CategoryDTO> GetByIdAsync(int categoryId)
         {
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             return new CategoryDTO() { Name = category.Name };

@@ -31,11 +31,12 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 
-    [HttpGet("category/{categoryId}")]
+    [HttpGet("/category/{categoryId}")]
     public async Task<IActionResult> GetByIdAsync([Required] int categoryId)
     {
         try
@@ -46,11 +47,12 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpDelete("category/{categoryId}")]
+    [HttpDelete("/category/{categoryId}")]
     public async Task<IActionResult> DeleteByIdAsync([Required] int categoryId)
     {
         try
@@ -60,23 +62,25 @@ public class CategoryController : ControllerBase
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return NotFound(ErrorMessages.NotFoundMessage);
         }
 
     }
 
-
+    //make new class, category create request?
 
     [HttpPost()]
-    public async Task<IActionResult> AddAsnyc([FromBody] CategoryDTO categoryDTO)
+    public async Task<IActionResult> AddAsnyc([FromBody] CategoryCreateRequest categoryCreateRequest)
     {
         try
         {
-            await _categoryService.AddAsync(categoryDTO);
-            return Ok($"Category successfully created!");
+            CategoryDTO categoryDTO = await _categoryService.AddAsync(categoryCreateRequest);
+            return Ok(categoryDTO);
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine(ex.Message);
             return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }

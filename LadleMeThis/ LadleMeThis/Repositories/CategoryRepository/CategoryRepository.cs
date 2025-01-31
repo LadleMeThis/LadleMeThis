@@ -14,10 +14,11 @@ namespace LadleMeThis.Repositories.CategoryRepository
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(Category category)
+        public async Task<Category> AddAsync(Category category)
         {
             _dbContext.Categories.Add(category);
             await _dbContext.SaveChangesAsync();
+            return category;
         }
 
         public async Task DeleteByIdAsync(int categoryId)

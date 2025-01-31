@@ -16,10 +16,11 @@ namespace LadleMeThis.Repositories.TagRepository
         }
 
 
-        public async Task AddAsync(Tag tag)
+        public async Task<Tag> AddAsync(Tag tag)
         {
             await _dbContext.Tags.AddAsync(tag);
             await _dbContext.SaveChangesAsync();
+            return tag;
         }
 
         public async Task DeleteByIdAsync(int tagId)

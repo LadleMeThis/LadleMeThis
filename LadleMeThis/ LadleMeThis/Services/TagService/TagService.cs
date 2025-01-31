@@ -12,9 +12,10 @@ namespace LadleMeThis.Services.TagService
             _tagRepository = tagRepository;
         }
 
-        public async Task AddAsync(TagDTO tagDTO)
+        public async Task<TagDTO> AddAsync(TagCreateRequest tagCreateRequest)
         {
-            await _tagRepository.AddAsync(new Tag() { Name = tagDTO.Name });
+            var tag = await _tagRepository.AddAsync(new Tag() { Name = tagCreateRequest.Name });
+            return new TagDTO() { Name = tag.Name, TagId = tag.TagId };
         }
 
         public async Task DeleteByIdAsync(int tagId)
