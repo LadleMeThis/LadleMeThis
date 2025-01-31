@@ -10,7 +10,6 @@ public class SavedRecipe
 
 	public DateTime DateSaved { get; set; } = DateTime.UtcNow; 
 
-	// Navigációk
 	public User User { get; set; } = null!;
 	public Recipe Recipe { get; set; } = null!;
 }
