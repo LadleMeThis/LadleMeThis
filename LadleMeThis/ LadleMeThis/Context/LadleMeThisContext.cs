@@ -1,8 +1,8 @@
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.RecipeModels;
-using LadleMeThis.Models.RecipeRatings;
-using LadleMeThis.Models.SavedRecipesModels;;
+using LadleMeThis.Models.RecipeRatingsModels;
+using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Models.TagModels;
 using Microsoft.EntityFrameworkCore;

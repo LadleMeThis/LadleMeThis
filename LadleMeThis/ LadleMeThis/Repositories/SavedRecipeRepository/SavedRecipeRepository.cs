@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using LadleMeThis.Context;
 using LadleMeThis.Models.RecipeModels;
+using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Repositories.SavedRecipeRepository;
 
 namespace LadleMeThis.Repositories.SavedRecipeRepository

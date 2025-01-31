@@ -1,4 +1,4 @@
-﻿using LadleMeThis.Models.SavedRecipe;
+﻿using LadleMeThis.Models.SavedRecipesModels;
 
 namespace LadleMeThis.Services.SavedRecipeService
 {

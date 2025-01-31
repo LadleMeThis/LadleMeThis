@@ -1,4 +1,4 @@
-﻿using LadleMeThis.Models.SavedRecipe;
+﻿using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Services.SavedRecipeService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,5 @@
-using LadleMeThis.Models.DTO.SavedRecipe;
-using LadleMeThis.Models.User;
+using System.Runtime.InteropServices.JavaScript;
+using LadleMeThis.Models.UserModels;
 using LadleMeThis.Services;
 using LadleMeThis.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser([FromBody] UserDto userDto)
+    public async Task<ActionResult> CreateUser([FromBody] UserDTO userDto)
     {
         try
         {
@@ -64,7 +64,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
+    public async Task<ActionResult> UpdateUser(int id, [FromBody] UserDTO userDto)
     {
         try
         {

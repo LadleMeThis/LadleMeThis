@@ -22,7 +22,7 @@ namespace LadleMeThis.Repositories.CategoryRepository
 
         public async Task DeleteByIdAsync(int categoryId)
         {
-            Category category = new() { Id = categoryId };
+            Category category = new() { CategoryId = categoryId };
 
             _dbContext.Entry(category).State = EntityState.Deleted;
 
@@ -41,7 +41,7 @@ namespace LadleMeThis.Repositories.CategoryRepository
 
         public async Task<IEnumerable<Category>> GetManyByIdAsync(int[] categoryIds)
         {
-            return await _dbContext.Categories.Where(category => categoryIds.Contains(category.Id)).ToListAsync();
+            return await _dbContext.Categories.Where(category => categoryIds.Contains(category.CategoryId)).ToListAsync();
         }
     }
 }

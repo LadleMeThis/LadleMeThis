@@ -23,7 +23,7 @@ namespace LadleMeThis.Repositories.IngredientRepository
 
         public async Task DeleteByIdAsync(int ingredientId)
         {
-            Ingredient ingredient = new() { Id = ingredientId };
+            Ingredient ingredient = new() { IngredientId = ingredientId };
 
             _dbContext.Entry(ingredient).State = EntityState.Deleted;
 
@@ -42,7 +42,7 @@ namespace LadleMeThis.Repositories.IngredientRepository
 
         public async Task<IEnumerable<Ingredient>> GetManyByIdAsync(int[] ingredientIds)
         {
-            return await _dbContext.Ingredients.Where(ingredient => ingredientIds.Contains(ingredient.Id)).ToListAsync();
+            return await _dbContext.Ingredients.Where(ingredient => ingredientIds.Contains(ingredient.IngredientId)).ToListAsync();
         }
     }
 }

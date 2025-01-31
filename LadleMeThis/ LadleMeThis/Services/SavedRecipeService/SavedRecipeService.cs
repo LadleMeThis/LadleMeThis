@@ -1,6 +1,6 @@
 ﻿using LadleMeThis.Models.DTO;
 using LadleMeThis.Models.RecipeModels;
-using LadleMeThis.Models.SavedRecipe;
+using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Repositories.SavedRecipeRepository;
 
 namespace LadleMeThis.Services.SavedRecipeService

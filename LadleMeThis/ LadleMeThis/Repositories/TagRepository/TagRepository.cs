@@ -23,7 +23,7 @@ namespace LadleMeThis.Repositories.TagRepository
 
         public async Task DeleteByIdAsync(int tagId)
         {
-            Tag tag = new() { Id = tagId };
+            Tag tag = new() { TagId = tagId };
 
             _dbContext.Entry(tag).State = EntityState.Deleted;
 
@@ -42,7 +42,7 @@ namespace LadleMeThis.Repositories.TagRepository
 
         public async Task<IEnumerable<Tag>> GetManyByIdAsync(int[] tagIds)
         {
-            return await _dbContext.Tags.Where(tag => tagIds.Contains(tag.Id)).ToListAsync();
+            return await _dbContext.Tags.Where(tag => tagIds.Contains(tag.TagId)).ToListAsync();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using LadleMeThis.Models.User;
-using LadleMeThis.Models.UserModels;
+﻿using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.UserRepository;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,11 +15,11 @@ namespace LadleMeThis.Services.UserService
             _passwordHasher = new PasswordHasher<User>();
         }
 
-        public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllUsersAsync();
 
-            return users.Select(user => new UserResponseDto
+            return users.Select(user => new UserResponseDTO
             {
                 UserId = user.UserId,
                 Username = user.Username,
@@ -30,11 +29,11 @@ namespace LadleMeThis.Services.UserService
             }).ToList();
         }
 
-        public async Task<UserResponseDto> GetUserByIdAsync(int id)
+        public async Task<UserResponseDTO> GetUserByIdAsync(int id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
 
-            return new UserResponseDto
+            return new UserResponseDTO
             {
                 UserId = user.UserId,
                 Username = user.Username,
@@ -44,7 +43,7 @@ namespace LadleMeThis.Services.UserService
             };
         }
 
-        public async Task CreateUserAsync(UserDto userDto)
+        public async Task CreateUserAsync(UserDTO userDto)
         {
             var user = new User
             {
@@ -58,7 +57,7 @@ namespace LadleMeThis.Services.UserService
             await _userRepository.AddUserAsync(user);
         }
 
-        public async Task UpdateUserAsync(int id, UserDto userDto)
+        public async Task UpdateUserAsync(int id, UserDTO userDto)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
 

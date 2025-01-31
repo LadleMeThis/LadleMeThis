@@ -1,4 +1,4 @@
-﻿namespace LadleMeThis.Models.SavedRecipe
+﻿namespace LadleMeThis.Models.SavedRecipesModels
 {
     public class SavedRecipeDto
     {
