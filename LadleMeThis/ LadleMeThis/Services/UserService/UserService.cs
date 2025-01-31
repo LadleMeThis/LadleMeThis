@@ -9,6 +9,12 @@ namespace LadleMeThis.Services.UserService
         private readonly IUserRepository _userRepository;
         private readonly PasswordHasher<User> _passwordHasher;
 
+        private static readonly UserReviewDTO DummyUser = new UserReviewDTO
+        {
+            UserId = 0,
+            DisplayName = "Dummy User"
+        };
+
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -29,9 +35,20 @@ namespace LadleMeThis.Services.UserService
             }).ToList();
         }
 
-        public async Task<UserResponseDTO> GetUserByIdAsync(int id)
+        public async Task<IEnumerable<UserReviewDTO>> GetAllUsersInReviewFormatAsync()
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var users = await _userRepository.GetAllUsersAsync();
+
+            return users.Select(user => new UserReviewDTO
+            {
+                UserId = user.UserId,
+                DisplayName = user.DisplayName
+            });
+        }
+
+        public async Task<UserResponseDTO> GetUserByIdAsync(int userId)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId) ?? DummyUser;
 
             return new UserResponseDTO
             {
@@ -57,9 +74,9 @@ namespace LadleMeThis.Services.UserService
             await _userRepository.AddUserAsync(user);
         }
 
-        public async Task UpdateUserAsync(int id, UserDTO userDto)
+        public async Task UpdateUserAsync(int userId, UserDTO userDto)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(userId);
 
             user.Username = userDto.Username;
             user.Email = userDto.Email;
@@ -69,9 +86,9 @@ namespace LadleMeThis.Services.UserService
             await _userRepository.UpdateUserAsync(user);
         }
 
-        public async Task DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(int userId)
         {
-            await _userRepository.DeleteUserAsync(id);
+            await _userRepository.DeleteUserAsync(userId);
         }
 
     }
