@@ -15,10 +15,11 @@ namespace LadleMeThis.Repositories.IngredientRepository
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(Ingredient ingredient)
+        public async Task<Ingredient> AddAsync(Ingredient ingredient)
         {
             _dbContext.Ingredients.Add(ingredient);
             await _dbContext.SaveChangesAsync();
+            return ingredient;
         }
 
         public async Task DeleteByIdAsync(int ingredientId)
@@ -35,14 +36,20 @@ namespace LadleMeThis.Repositories.IngredientRepository
             return await _dbContext.Ingredients.ToListAsync();
         }
 
-        public async Task<Ingredient?> GetByIdAsync(int id)
+        public async Task<Ingredient> GetByIdAsync(int id)
         {
-            return await _dbContext.Ingredients.FindAsync(id);
+            var ingredient = await _dbContext.Ingredients.FindAsync(id);
+            return ingredient ?? throw new KeyNotFoundException("No ingredient was found with given Id!");
         }
 
         public async Task<IEnumerable<Ingredient>> GetManyByIdAsync(int[] ingredientIds)
         {
-            return await _dbContext.Ingredients.Where(ingredient => ingredientIds.Contains(ingredient.IngredientId)).ToListAsync();
+            var ingredients = await _dbContext.Ingredients.Where(ingredient => ingredientIds.Contains(ingredient.IngredientId)).ToListAsync();
+            if (ingredients.Count == 0)
+            {
+                throw new KeyNotFoundException("Not a single ingredient was found!");
+            }
+            return ingredients;
         }
     }
 }

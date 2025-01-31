@@ -1,3 +1,4 @@
+using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.IngredientRepository;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LadleMeThis.Controllers.IngredientController;
 [ApiController]
-[Route("api/[controller]")]
+[Route("ingredients")]
 public class IngredientController : ControllerBase
 {
     private IIngredientService _ingredientService;
@@ -17,7 +18,7 @@ public class IngredientController : ControllerBase
         _ingredientService = ingredientService;
     }
 
-    [HttpGet("all")]
+    [HttpGet()]
     public async Task<IActionResult> GetAllAsync()
     {
         try
@@ -27,11 +28,12 @@ public class IngredientController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpGet("{ingredientId}")]
+    [HttpGet("/ingredient/{ingredientId}")]
     public async Task<IActionResult> GetByIdAsync([Required] int ingredientId)
     {
         try
@@ -42,11 +44,12 @@ public class IngredientController : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpDelete("{ingredientId}")]
+    [HttpDelete("/ingredient/{ingredientId}")]
     public async Task<IActionResult> DeleteByIdAsync([Required] int ingredientId)
     {
         try
@@ -56,22 +59,24 @@ public class IngredientController : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
 
     }
 
     [HttpPost()]
-    public async Task<IActionResult> AddAsnyc([FromBody] IngredientDTO ingredientDTO)
+    public async Task<IActionResult> AddAsnyc([FromBody] IngredientCreateRequest ingredientCreateRequest)
     {
         try
         {
-            await _ingredientService.AddAsync(ingredientDTO);
-            return Ok($"Ingredient successfully created!");
+            var ingredient = await _ingredientService.AddAsync(ingredientCreateRequest);
+            return Ok(ingredient);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 
