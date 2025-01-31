@@ -1,6 +1,6 @@
 ﻿namespace LadleMeThis.Models.SavedRecipesModels
 {
-    public class SavedRecipeDto
+    public class SavedRecipeDTO
     {
         public int RecipeId { get; set; }
     }
