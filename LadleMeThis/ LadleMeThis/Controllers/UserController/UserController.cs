@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.JavaScript;
+using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Services;
 using LadleMeThis.Services.UserService;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LadleMeThis.Controllers.UserController;
 
-[Route("api/[controller]")]
 [ApiController]
 public class UserController : ControllerBase
 {
@@ -17,7 +17,7 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet]
+    [HttpGet("/users")]
     public async Task<ActionResult> GetAllUser()
     {
         try
@@ -27,75 +27,73 @@ public class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "An internal server error occurred. Please try again later.");
+            Console.Error.WriteLine(ex.Message);
+
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult> GetUserById(int id)
+    [HttpGet("/user/{userId}")]
+    public async Task<ActionResult> GetUserById(int userId)
     {
         try
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetUserByIdAsync(userId);
             return Ok(user);
         }
-        catch (KeyNotFoundException ex)
+        catch (Exception ex)
         {
-            return NotFound(new { Message = ex.Message });
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "An internal server error occurred. Please try again later.");
+            Console.Error.WriteLine(ex.Message);
+
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 
-    [HttpPost]
+    [HttpPost("/users")]
     public async Task<ActionResult> CreateUser([FromBody] UserDTO userDto)
     {
         try
         {
             await _userService.CreateUserAsync(userDto);
-            return Ok(new { Message = "User created successfully" });
+            return Ok();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500, "An internal server error occurred. Please try again later.");
+            Console.Error.WriteLine(ex.Message);
+
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateUser(int id, [FromBody] UserDTO userDto)
+    [HttpPut("/user/{userId}")]
+    public async Task<ActionResult> UpdateUser(int userId, [FromBody] UserDTO userDto)
     {
         try
         {
-            await _userService.UpdateUserAsync(id, userDto);
+            await _userService.UpdateUserAsync(userId, userDto);
             return NoContent();
         }
-        catch (KeyNotFoundException ex)
+        catch (Exception ex)
         {
-            return NotFound(new { Message = ex.Message });
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "An internal server error occurred. Please try again later.");
+            Console.Error.WriteLine(ex.Message);
+
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteUser(int id)
+    [HttpDelete("/user/{userId}")]
+    public async Task<ActionResult> DeleteUser(int userId)
     {
         try
         {
-            await _userService.DeleteUserAsync(id);
+            await _userService.DeleteUserAsync(userId);
             return NoContent();
         }
-        catch (KeyNotFoundException ex)
+        catch (Exception ex)
         {
-            return NotFound(new { Message = ex.Message });
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "An internal server error occurred. Please try again later.");
+            Console.Error.WriteLine(ex.Message);
+
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
