@@ -48,7 +48,7 @@ namespace LadleMeThis.Services.UserService
 
         public async Task<UserResponseDTO> GetUserByIdAsync(int userId)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId) ?? DummyUser;
+            var user = await _userRepository.GetUserByIdAsync(userId) ?? throw new NullReferenceException("User not found");
 
             return new UserResponseDTO
             {
@@ -76,7 +76,7 @@ namespace LadleMeThis.Services.UserService
 
         public async Task UpdateUserAsync(int userId, UserDTO userDto)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
+            var user = await _userRepository.GetUserByIdAsync(userId) ?? throw new NullReferenceException("User not found");
 
             user.Username = userDto.Username;
             user.Email = userDto.Email;

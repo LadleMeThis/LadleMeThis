@@ -10,7 +10,7 @@ namespace LadleMeThis.Services.RecipeDetailService
     /// <summary>
     /// This class is responsible to retrieve all the Ingredients, Tags and Categories.
     /// </summary>
-    public class RecipeDetailService
+    public class RecipeDetailService:IRecipeDetailService
     {
         ITagRepository _tagRepository;
         IIngredientRepository _ingredientRepository;

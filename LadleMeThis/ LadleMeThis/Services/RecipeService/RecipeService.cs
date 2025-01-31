@@ -5,15 +5,19 @@ using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
+using LadleMeThis.Services.RecipeDetailService;
+using LadleMeThis.Services.RecipeRatingService;
 
 namespace LadleMeThis.Services.RecipeService;
 
-public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsService recipeDetailsService):IRecipeService
+public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailService recipeDetailsService, IRecipeRatingService recipeRatingService):IRecipeService
 {
 	private readonly IRecipeRepository _repository = recipeRepository;
-	private readonly IRecipeDetailsService _recipeDetailsService = recipeDetailsService;
+	private readonly IRecipeDetailService _recipeDetailsService = recipeDetailsService;
+	private readonly IRecipeRatingService _recipeRatingService = recipeRatingService;
+	
 
-	public async Task<List<RecipeCardDto>> GetALlRecipeCards()
+	public async Task<List<RecipeCardDTO>> GetALlRecipeCards()
 	{
 		var recipes = await _repository.GetAll();
 		
@@ -23,7 +27,7 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		return recipes.Select(CreateRecipeCard).ToList();
 	}
 	
-	public async Task<List<RecipeCardDto>> GetRecipesByCategoryId(int categoryId)
+	public async Task<List<RecipeCardDTO>> GetRecipesByCategoryId(int categoryId)
 	{
 		var recipes = await _repository.GetByCategoryId(categoryId);
 		
@@ -33,7 +37,7 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		return recipes.Select(CreateRecipeCard).ToList();
 	}
 	
-	public async Task<List<RecipeCardDto>> GetRecipesByTagId(int tagId)
+	public async Task<List<RecipeCardDTO>> GetRecipesByTagId(int tagId)
 	{
 		var recipes = await _repository.GetByTagId(tagId);
 		
@@ -43,7 +47,7 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		return recipes.Select(CreateRecipeCard).ToList();
 	}
 	
-	public async Task<List<RecipeCardDto>> GetRecipesByIngredientId(int ingredientId)
+	public async Task<List<RecipeCardDTO>> GetRecipesByIngredientId(int ingredientId)
 	{
 		var recipes = await _repository.GetByIngredientId(ingredientId);
 		
@@ -52,21 +56,26 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		
 		return recipes.Select(CreateRecipeCard).ToList();
 	}
-	
-	public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId) =>
-		await _repository.GetByRecipeId(recipeId);
+
+	public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId, User user)
+	{
+		var recipe = await _repository.GetByRecipeId(recipeId);
+		
+		return await CreateFullRecipeDto(recipe, user);
+	}
+
 	
 	public async Task<bool> DeleteRecipe(int recipeId) => 
 		await _repository.Delete(recipeId);
 
 	public async Task<int> Create(CreateRecipeDTO createRecipeDto, User user)
 	{
-		var recipe = CreateRecipe(createRecipeDto, user);
+		var recipe = await CreateRecipe(createRecipeDto, user);
 		
 		return await _repository.Create(recipe);
 	}
 
-	public async Task<bool> UpdateRecipe(UpdateRecipeDto updateRecipeDto)
+	public async Task<bool> UpdateRecipe(UpdateRecipeDTO updateRecipeDto)
 	{
 		var recipe = await _repository.GetByRecipeId(updateRecipeDto.RecipeId);
 
@@ -97,25 +106,25 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		return await _repository.Update(recipe);
 	}
 
-	private async Task<List<Tag>> GetUpdatedTags(int[]? updatedTagIds) =>
-		await _recipeDetailsService.GetTagsByIds(int[] updatedTagIds);
+	private async Task<List<Tag>> GetUpdatedTags(int[] updatedTagIds) =>
+		(List<Tag>)await _recipeDetailsService.GetTagsByIds(updatedTagIds);
 
 	private async Task<List<Ingredient>> GetUpdatedIngredients(int[] updatedIngredientIds) =>
-		await _recipeDetailsService.GetIngredientsByIds(int[] updatedIngredientIds);
+		(List<Ingredient>)await _recipeDetailsService.GetIngredientsByIds(updatedIngredientIds);
 
-	private async Task<List<Category>> GetUpdatedCategories(int[]? updatedCategoryIds) =>
-		await _recipeDetailsService.GetCategoriesByIds(int[] updatedCategoryIds);
-	private List<RecipeRating> GetUpdatedRating(int[]? updatedRatingsIds) =>
-		 _recipeRatingService.GetRecipeRatingByIds(int[] updatedRatingsIds);
+	private async Task<List<Category>> GetUpdatedCategories(int[] updatedCategoryIds) =>
+		(List<Category>)await _recipeDetailsService.GetCategoriesByIds(updatedCategoryIds);
+	private async Task<List<RecipeRating>> GetUpdatedRating(int[] updatedRatingsIds) =>
+		 await _recipeRatingService.GetRecipeRatingByIds(updatedRatingsIds);
 
-	private RecipeCardDto CreateRecipeCard(Recipe recipe)
+	private RecipeCardDTO CreateRecipeCard(Recipe recipe)
 	{
 		var averageRating = recipe.Ratings.Any() 
 			? (int)recipe.Ratings.Average(r => r.Rating)
 			: 0;
 		var fullTime = recipe.PrepTime + recipe.CookTime;
 
-		return new RecipeCardDto(
+		return new RecipeCardDTO(
 			recipe.RecipeId,
 			recipe.Name,
 			fullTime,
@@ -126,11 +135,11 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 		);
 	}
 
-	private Recipe CreateRecipe(CreateRecipeDTO recipeDto, User user)
+	private async Task<Recipe> CreateRecipe(CreateRecipeDTO recipeDto, User user)
 	{
-		var tags = _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
-		var ingredients = _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
-		var categories = _recipeDetailsService.GetCategoriesByIds(recipeDto.Categories);
+		var tags = await _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
+		var ingredients = await _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
+		var categories = await _recipeDetailsService.GetCategoriesByIds(recipeDto.Categories);
 
 		return new Recipe()
 		{
@@ -141,18 +150,18 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 			ServingSize = recipeDto.ServingSize,
 			UserId = user.UserId,
 			User = user,
-			Categories = categories,
-			Tags = tags,
-			Ingredients = ingredients
+			Categories = categories.ToList(),
+			Tags = tags.ToList(),
+			Ingredients = ingredients.ToList()
 		};
 	}
 	
-	private FullRecipeDTO CreateFullRecipeDto(Recipe recipe, User user)
+	private async Task<FullRecipeDTO> CreateFullRecipeDto(Recipe recipe, User user)
 	{
-		var tags = _recipeDetailsService.GetTagsByIds(recipeDto.Tags);
-		var ingredients = _recipeDetailsService.GetIngredientsByIds(recipeDto.Ingredients);
-		var categories = _recipeDetailsService.GetCategoriesByIds(recipeDto.Categories);
-		var ratings = _recipeRatingService.CreateRecipeRatingDtoList(recipe.Ratings);
+		var tags =  _recipeDetailsService.GetTagDTOsByTags(recipe.Tags);
+		var ingredients =  _recipeDetailsService.GetIngredientDTOsByIngredients(recipe.Ingredients);
+		var categories = _recipeDetailsService.GetCategoryDTOsByCategories(recipe.Categories);
+		var ratings = await _recipeRatingService.CreateRecipeRatingDtoList(recipe.Ratings);
 
 		return new FullRecipeDTO(
 			recipe.RecipeId,
@@ -162,9 +171,9 @@ public class RecipeService(IRecipeRepository recipeRepository, IRecipeDetailsSer
 			recipe.CookTime,
 			recipe.ServingSize,
 			user.UserId,
-			categories,
-			tags,
-			ingredients,
+			categories.ToList(),
+			tags.ToList(),
+			ingredients.ToList(),
 			ratings
 			);
 	} 

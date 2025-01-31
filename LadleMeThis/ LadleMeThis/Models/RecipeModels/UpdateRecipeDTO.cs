@@ -1,6 +1,6 @@
 namespace LadleMeThis.Models.RecipeModels;
 
-public record UpdateRecipeDto(
+public record UpdateRecipeDTO(
 	int RecipeId,
 	string? Name,
 	int? PrepTime,

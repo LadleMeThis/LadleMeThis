@@ -33,7 +33,7 @@ namespace LadleMeThis.Controllers.SavedRecipeController
         }
 
         [HttpPost("/savedrecipe/{userId}")]
-        public async Task<ActionResult> SaveRecipe(int userId, [FromBody] SavedRecipeDto request)
+        public async Task<ActionResult> SaveRecipe(int userId, [FromBody] SavedRecipeDTO request)
         {
             try
             {
