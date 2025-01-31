@@ -24,9 +24,6 @@ namespace LadleMeThis.Services.RecipeDetailService
 
         }
 
-
-        //tag class alapján visszaad egy DTO-t (paraméter Icollection) ICollection<Tag>
-
         public async Task<IEnumerable<Tag>> GetTagsByIds(int[] tagIds)
         {
             return await _tagRepository.GetManyByIdAsync(tagIds);
@@ -40,6 +37,20 @@ namespace LadleMeThis.Services.RecipeDetailService
         public async Task<IEnumerable<Ingredient>> GetIngredientsByIds(int[] ingredientIds)
         {
             return await _ingredientRepository.GetManyByIdAsync(ingredientIds);
+        }
+
+
+        public IEnumerable<TagDTO> GetTagDTOsByTags(IEnumerable<Tag> tags)
+        {
+            return tags.Select(tag => new TagDTO() { Name = tag.Name, TagId = tag.TagId });
+        }
+        public IEnumerable<IngredientDTO> GetIngredientDTOsByIngredients(IEnumerable<Ingredient> ingredients)
+        {
+            return ingredients.Select(ingredient => new IngredientDTO() { Name = ingredient.Name, IngredientId = ingredient.IngredientId });
+        }
+        public IEnumerable<CategoryDTO> GetCategoryDTOsByCategories(IEnumerable<Category> categories)
+        {
+            return categories.Select(category => new CategoryDTO() { Name = category.Name, CategoryId = category.CategoryId });
         }
 
     }
