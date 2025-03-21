@@ -1,16 +1,15 @@
-﻿using LadleMeThis.Models.UserModels;
+﻿using LadleMeThis.Models.RecipeModels;
+using LadleMeThis.Models.UserModels;
 
-namespace LadleMeThis.Models.RecipeModels
+namespace LadleMeThis.Models.SavedRecipesModels;
+
+public class SavedRecipe
 {
-    public class SavedRecipe
-    {
-        public int UserId { get; set; }  
-        public int RecipeId { get; set; }  
+	public int UserId { get; set; }  
+	public int RecipeId { get; set; }  
 
-        public DateTime DateSaved { get; set; } = DateTime.UtcNow; 
+	public DateTime DateSaved { get; set; } = DateTime.UtcNow; 
 
-        // Navigációk
-        public User User { get; set; } = null!;
-        public Recipe Recipe { get; set; } = null!;
-    }
+	public User User { get; set; } = null!;
+	public Recipe Recipe { get; set; } = null!;
 }

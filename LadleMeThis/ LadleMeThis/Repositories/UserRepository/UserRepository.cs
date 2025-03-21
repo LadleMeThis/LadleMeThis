@@ -21,25 +21,22 @@ namespace LadleMeThis.Repositories.UserRepository
             }
             catch (Exception ex)
             {
-                throw new Exception("Database error: Unable to fetch users.", ex);
+                throw new Exception("Database error: Unable to fetch users.");
             }
         }
-
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User?> GetUserByIdAsync(int userId)
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
-                if (user == null) throw new KeyNotFoundException($"User with ID {id} not found.");
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
                 return user;
             }
             catch (Exception ex)
             {
-                throw new Exception("Database error: Unable to fetch user by ID.", ex);
+                throw new Exception("Database error: Unable to fetch user by ID.");
             }
         }
-
         public async Task AddUserAsync(User user)
         {
             try
@@ -49,43 +46,26 @@ namespace LadleMeThis.Repositories.UserRepository
             }
             catch (Exception ex)
             {
-                throw new Exception("Database error: Unable to create user.", ex);
+                throw new Exception("Database error: Unable to create user.");
             }
         }
-
         public async Task UpdateUserAsync(User user)
         {
-            try
-            {
-                _context.Users.Update(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Database error: Unable to update user.", ex);
-            }
+            _context.Users.Update(user);
+
+            int affectedRows = await _context.SaveChangesAsync();
+
+            if (affectedRows == 0) throw new KeyNotFoundException($"User with ID {user.UserId} not found.");
         }
-
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task DeleteUserAsync(int userId)
         {
-            try
-            {
-                var user = new User { UserId = id };
+            var user = new User { UserId = userId };
 
-                _context.Entry(user).State = EntityState.Deleted;
+            _context.Entry(user).State = EntityState.Deleted;
 
-                await _context.SaveChangesAsync();
+            int affectedRows = await _context.SaveChangesAsync();
 
-                return true;
-            }
-            catch (KeyNotFoundException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Database error: Unable to delete user.", ex);
-            }
+            if (affectedRows == 0) throw new KeyNotFoundException($"User with ID {userId} not found.");
         }
     }
 }

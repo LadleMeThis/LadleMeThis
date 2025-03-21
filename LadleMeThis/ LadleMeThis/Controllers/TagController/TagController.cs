@@ -1,3 +1,4 @@
+using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.TagRepository;
 using LadleMeThis.Services.TagService;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LadleMeThis.Controllers.TagController;
 [ApiController]
-[Route("api/[controller]")]
+[Route("tags")]
 public class TagController : ControllerBase
 {
     ITagService _tagService;
@@ -15,7 +16,7 @@ public class TagController : ControllerBase
         _tagService = tagService;
     }
 
-    [HttpGet("all")]
+    [HttpGet()]
     public async Task<IActionResult> GetAllAsync()
     {
         try
@@ -25,11 +26,12 @@ public class TagController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpGet("{tagId}")]
+    [HttpGet("/tag/{tagId}")]
     public async Task<IActionResult> GetByIdAsync([Required] int tagId)
     {
         try
@@ -40,11 +42,12 @@ public class TagController : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
     }
 
-    [HttpDelete("{tagId}")]
+    [HttpDelete("/tag/{tagId}")]
     public async Task<IActionResult> DeleteByIdAsync([Required] int tagId)
     {
         try
@@ -54,22 +57,24 @@ public class TagController : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
         }
 
     }
 
     [HttpPost()]
-    public async Task<IActionResult> AddAsnyc([FromBody] TagDTO tagDTO)
+    public async Task<IActionResult> AddAsnyc([FromBody] TagCreateRequest tagCreateRequest)
     {
         try
         {
-            await _tagService.AddAsync(tagDTO);
-            return Ok($"Tag successfully created!");
+            var tagDTO = await _tagService.AddAsync(tagCreateRequest);
+            return Ok(tagDTO);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
         }
     }
 

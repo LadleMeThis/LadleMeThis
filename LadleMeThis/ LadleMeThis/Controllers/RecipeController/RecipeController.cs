@@ -1,12 +1,13 @@
+using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Services.RecipeService;
+using LadleMeThis.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LadleMeThis.Controllers.RecipeController;
 
-[Route("/[controller]")]
 [ApiController]
 public class RecipeController(IRecipeService recipeService, IUserService userService) : ControllerBase
 {
@@ -15,7 +16,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		
 	
 	[HttpGet("/recipes")]
-	public async Task<ActionResult<List<RecipeCardDto>>> GetAllRecipes()
+	public async Task<ActionResult<List<RecipeCardDTO>>> GetAllRecipes()
 	{
 		try
 		{
@@ -24,12 +25,13 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return BadRequest(ErrorMessages.BadRequestMessage);
 		}
 	}
 	
-	[HttpGet("/recipes/by-category/{categoryId}")]
-	public async Task<ActionResult<List<RecipeCardDto>>> GetRecipesByCategoryId(int categoryId)
+	[HttpGet("/recipes/category/{categoryId}")]
+	public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByCategoryId(int categoryId)
 	{
 		try
 		{
@@ -38,12 +40,13 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return BadRequest(ErrorMessages.BadRequestMessage);
 		}
 	}
 	
-	[HttpGet("/recipes/by-tag/{tagId}")]
-	public async Task<ActionResult<List<RecipeCardDto>>> GetRecipesByTagId(int tagId)
+	[HttpGet("/recipes/tag/{tagId}")]
+	public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByTagId(int tagId)
 	{
 		try
 		{
@@ -52,12 +55,13 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return NotFound(ErrorMessages.NotFoundMessage);
 		}
 	}
 	
-	[HttpGet("/recipes/by-ingredient/{ingredientId}")]
-	public async Task<ActionResult<List<RecipeCardDto>>> GetRecipesByIngredientId(int ingredientId)
+	[HttpGet("/recipes/ingredient/{ingredientId}")]
+	public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByIngredientId(int ingredientId)
 	{
 		try
 		{
@@ -66,41 +70,45 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return NotFound(ErrorMessages.NotFoundMessage);
 		}
 	}
 	
-	[HttpGet("/recipes/by-id/{recipeId}")]
+	[HttpGet("/recipe/{recipeId}")]
 	public async Task<ActionResult<Recipe>> GetRecipeByRecipeId(int recipeId)
 	{
 		try
 		{
-			var recipe = await _recipeService.GetRecipeByRecipeId(recipeId);
+			var user = new User();
+			var recipe = await _recipeService.GetRecipeByRecipeId(recipeId, user);
 			return Ok(recipe);
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return NotFound(ErrorMessages.NotFoundMessage);
 		}
 	}
 	
-	[HttpPost("/recipes")]
-	public async Task<ActionResult<int>> CreateRecipe(CreateRecipeDto createRecipeDto)
+	[HttpPost("/recipes/{userId:int}")]
+	public async Task<ActionResult<int>> CreateRecipe(CreateRecipeDTO createRecipeDto)
 	{
 		try
 		{
-			var user = _userservice.GetCurrentUser(); 
+			var user = new User();
 			var recipeId = await _recipeService.Create(createRecipeDto, user);
 			return Ok(recipeId);
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return BadRequest(ErrorMessages.BadRequestMessage);
 		}
 	}
 	
-	[HttpPut("/recipes/{recipeId}")]
-	public async Task<ActionResult> UpdateRecipe(int recipeId, UpdateRecipeDto updateRecipeDto)
+	[HttpPut("/recipe/{recipeId}")]
+	public async Task<ActionResult> UpdateRecipe(int recipeId, UpdateRecipeDTO updateRecipeDto)
 	{
 		try
 		{
@@ -114,11 +122,12 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return NotFound(ErrorMessages.NotFoundMessage);
 		}
 	}
 	
-	[HttpDelete("/recipes/{recipeId}")]
+	[HttpDelete("/recipe/{recipeId}")]
 	public async Task<ActionResult> DeleteRecipe(int recipeId)
 	{
 		try
@@ -129,7 +138,8 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Internal server error");
+			Console.Error.WriteLine(ex.Message);
+			return NotFound(ErrorMessages.NotFoundMessage);
 		}
 	}
 }

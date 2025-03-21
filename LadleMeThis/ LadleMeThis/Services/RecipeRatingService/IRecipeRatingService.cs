@@ -1,8 +1,9 @@
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
 
 namespace LadleMeThis.Services.RecipeRatingService;
 
 public interface IRecipeRatingService
 {
-	List<RecipeRatingDto> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings);
+	Task<List<RecipeRatingDTO>> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings);
+	Task<List<RecipeRating>> GetRecipeRatingByIds(int[] ratingsIds);
 }

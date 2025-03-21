@@ -1,6 +1,6 @@
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Models.UserModels;
 

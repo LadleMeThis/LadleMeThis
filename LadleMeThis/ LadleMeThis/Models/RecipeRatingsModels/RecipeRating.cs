@@ -1,7 +1,7 @@
 using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.UserModels;
 
-namespace LadleMeThis.Models.RecipeRatings;
+namespace LadleMeThis.Models.RecipeRatingsModels;
 
 public class RecipeRating
 {

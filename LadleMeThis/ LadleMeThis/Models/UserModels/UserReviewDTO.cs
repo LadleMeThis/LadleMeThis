@@ -1,6 +1,6 @@
-﻿namespace LadleMeThis.Models.User
+﻿namespace LadleMeThis.Models.UserModels
 {
-    public class UserReviewDto
+    public class UserReviewDTO
     {
         public int UserId { get; set; }
         public string DisplayName { get; set; }

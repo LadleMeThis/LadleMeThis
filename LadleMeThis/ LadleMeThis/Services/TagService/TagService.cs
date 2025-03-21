@@ -12,9 +12,10 @@ namespace LadleMeThis.Services.TagService
             _tagRepository = tagRepository;
         }
 
-        public async Task AddAsync(TagDTO tagDTO)
+        public async Task<TagDTO> AddAsync(TagCreateRequest tagCreateRequest)
         {
-            await _tagRepository.AddAsync(new Tag() { Name = tagDTO.Name });
+            var tag = await _tagRepository.AddAsync(new Tag() { Name = tagCreateRequest.Name });
+            return new TagDTO() { Name = tag.Name, TagId = tag.TagId };
         }
 
         public async Task DeleteByIdAsync(int tagId)
@@ -25,18 +26,19 @@ namespace LadleMeThis.Services.TagService
         public async Task<IEnumerable<TagDTO>> GetAllAsync()
         {
             var tags = await _tagRepository.GetAllAsync();
-            return tags.Select(tag => new TagDTO() { Name = tag.Name }).ToList();
+            return tags.Select(tag => new TagDTO() { Name = tag.Name, TagId = tag.TagId }).ToList();
         }
 
-        public async Task<TagDTO?> GetByIdAsync(int tagId)
+        public async Task<TagDTO> GetByIdAsync(int tagId)
         {
             var tag = await _tagRepository.GetByIdAsync(tagId);
-            return new TagDTO() { Name = tag.Name };
+            return new TagDTO() { Name = tag.Name, TagId = tag.TagId };
         }
 
         public async Task<IEnumerable<TagDTO>> GetManyByIdAsync(int[] tagIds)
         {
-            throw new NotImplementedException();
+            var tags = await _tagRepository.GetManyByIdAsync(tagIds);
+            return tags.Select(tag => new TagDTO() { Name = tag.Name, TagId = tag.TagId }).ToList();
         }
     }
 }

@@ -1,13 +1,14 @@
-﻿using LadleMeThis.Models.User;
+﻿using LadleMeThis.Models.UserModels;
 
 namespace LadleMeThis.Services.UserService
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserResponseDto>> GetAllUsersAsync();
-        Task<UserResponseDto> GetUserByIdAsync(int id);
-        Task CreateUserAsync(UserDto userDto);
-        Task UpdateUserAsync(int id, UserDto userDto);
+        Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync();
+        Task<IEnumerable<UserReviewDTO>> GetAllUsersInReviewFormatAsync();
+        Task<UserResponseDTO> GetUserByIdAsync(int id);
+        Task CreateUserAsync(UserDTO userDto);
+        Task UpdateUserAsync(int id, UserDTO userDto);
         Task DeleteUserAsync(int id);
     }
 }

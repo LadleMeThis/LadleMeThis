@@ -1,11 +1,11 @@
-﻿using LadleMeThis.Models.SavedRecipe;
+﻿using LadleMeThis.Models.ErrorMessages;
+using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Services.SavedRecipeService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LadleMeThis.Controllers.SavedRecipeController
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class SavedRecipeController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace LadleMeThis.Controllers.SavedRecipeController
             _savedRecipeService = savedRecipeService;
         }
 
-        [HttpGet("{userId}/saved-recipes")]
+        [HttpGet("/savedrecipes")]
         public async Task<ActionResult> GetSavedRecipes(int userId)
         {
             try
@@ -26,12 +26,14 @@ namespace LadleMeThis.Controllers.SavedRecipeController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An internal error occurred.", Error = ex.Message });
+                Console.Error.WriteLine(ex.Message);
+
+                return NotFound(ErrorMessages.NotFoundMessage);
             }
         }
 
-        [HttpPost("{userId}/saved-recipes")]
-        public async Task<ActionResult> SaveRecipe(int userId, [FromBody] SavedRecipeDto request)
+        [HttpPost("/savedrecipe/{userId}")]
+        public async Task<ActionResult> SaveRecipe(int userId, [FromBody] SavedRecipeDTO request)
         {
             try
             {
@@ -41,24 +43,25 @@ namespace LadleMeThis.Controllers.SavedRecipeController
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An internal error occurred.", Error = ex.Message });
+                Console.Error.WriteLine(ex.Message);
+
+                return BadRequest(ErrorMessages.BadRequestMessage);
             }
         }
 
-        [HttpDelete("{userId}/saved-recipes/{recipeId}")]
+        [HttpDelete("/savedrecipe/{userId}/{recipeId}")]
         public async Task<ActionResult> DeleteSavedRecipe(int userId, int recipeId)
         {
             try
             {
-                var deleted = await _savedRecipeService.DeleteSavedRecipeAsync(userId, recipeId);
-                if (!deleted)
-                    return NotFound("Saved recipe not found");
-
+                await _savedRecipeService.DeleteSavedRecipeAsync(userId, recipeId);
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An internal error occurred.", Error = ex.Message });
+                Console.Error.WriteLine(ex.Message);
+
+                return NotFound(ErrorMessages.NotFoundMessage);
             }
         }
 

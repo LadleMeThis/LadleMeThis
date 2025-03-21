@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using LadleMeThis.Context;
 using LadleMeThis.Models.RecipeModels;
+using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Repositories.SavedRecipeRepository;
+using LadleMeThis.Models.UserModels;
 
 namespace LadleMeThis.Repositories.SavedRecipeRepository
 {
@@ -25,19 +27,7 @@ namespace LadleMeThis.Repositories.SavedRecipeRepository
             }
             catch (Exception ex)
             {
-                throw new Exception("Database error: Unable to fetch saved recipes.", ex);
-            }
-        }
-        public async Task<SavedRecipe?> GetSavedRecipeAsync(int userId, int recipeId)
-        {
-            try
-            {
-                return await _context.SavedRecipes
-                    .FirstOrDefaultAsync(sr => sr.UserId == userId && sr.RecipeId == recipeId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Database error: Unable to retrieve saved recipe.", ex);
+                throw new Exception("Database error: Unable to fetch saved recipes.");
             }
         }
         public async Task AddSavedRecipeAsync(SavedRecipe savedRecipe)
@@ -49,20 +39,20 @@ namespace LadleMeThis.Repositories.SavedRecipeRepository
             }
             catch (Exception ex)
             {
-                throw new Exception("Database error: Unable to add saved recipe.", ex);
+                throw new Exception("Database error: Unable to add saved recipe.");
             }
         }
-        public async Task DeleteSavedRecipeAsync(SavedRecipe savedRecipe)
+        public async Task DeleteSavedRecipeAsync(int userId, int recipeId)
         {
-            try
-            {
-                _context.Entry(savedRecipe).State = EntityState.Deleted;
+            var savedRecipe = new SavedRecipe { UserId = userId, RecipeId = recipeId };
 
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
+            _context.Entry(savedRecipe).State = EntityState.Deleted;
+
+            int affectedRows = await _context.SaveChangesAsync();
+
+            if (affectedRows == 0)
             {
-                throw new Exception("Database error: Unable to delete saved recipe.", ex);
+                throw new KeyNotFoundException($"Saved recipe with User ID {userId} and Recipe ID {recipeId} not found.");
             }
         }
     }

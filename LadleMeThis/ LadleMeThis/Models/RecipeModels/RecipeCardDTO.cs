@@ -3,7 +3,7 @@ using LadleMeThis.Models.TagModels;
 
 namespace LadleMeThis.Models.RecipeModels;
 
-public record RecipeCardDto( 
+public record RecipeCardDTO( 
 	int RecipeId,
 	string Name,
 	int FullTime,

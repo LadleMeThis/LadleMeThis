@@ -1,36 +1,42 @@
 using LadleMeThis.Models.RecipeModels;
-using LadleMeThis.Models.RecipeRatings;
+using LadleMeThis.Models.RecipeRatingsModels;
+using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRatingRepository;
 using LadleMeThis.Repositories.RecipeRepository;
+using LadleMeThis.Services.UserService;
 
 namespace LadleMeThis.Services.RecipeRatingService;
 
-public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,IUserService userService)
+public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,IUserService userService):IRecipeRatingService
 {
 	private readonly IRecipeRatingRepository _recipeRatingRepository = recipeRatingRepository;
 	private readonly IUserService _userService = userService;
-	
-	public List<RecipeRatingDto> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings)
+	private static readonly UserReviewDTO DummyUser = new UserReviewDTO
 	{
-		var users = _userService.GetUserDtos();
+		UserId = 0,
+		DisplayName = "Dummy User"
+	};
+	
+	public async Task<List<RecipeRatingDTO>> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings)
+	{
+		var users = await _userService.GetAllUsersInReviewFormatAsync();
 
 		return ratings.Select(r => CreateRecipeRatingDto(r, users)).ToList();
 	}
 
-	private RecipeRatingDto CreateRecipeRatingDto(RecipeRating rating, List<UserDto> users)
+	public async Task<List<RecipeRating>> GetRecipeRatingByIds(int[] ratingsIds) => 
+		await _recipeRatingRepository.GetByIds(ratingsIds);
+
+	private RecipeRatingDTO CreateRecipeRatingDto(RecipeRating rating, IEnumerable<UserReviewDTO> users)
 	{
 		var user = users.FirstOrDefault(u => u.UserId == rating.UserId);
 		
-		if (user is null)
-			user = new UserDto(null, "Jane Doe");
-		
-		
-		return new RecipeRatingDto(
+		return new RecipeRatingDTO(
 			rating.RatingId,
 			rating.Review,
 			rating.Rating,
 			rating.DateCreated,
-			user
+			user ?? DummyUser
 		);
 	}
 
