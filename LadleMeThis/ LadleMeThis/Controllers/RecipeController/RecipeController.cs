@@ -1,3 +1,4 @@
+using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.UserModels;

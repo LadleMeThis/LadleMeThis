@@ -1,4 +1,5 @@
-﻿using LadleMeThis.Models.RecipeModels;
+﻿using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.SavedRecipesModels;
 
 namespace LadleMeThis.Repositories.SavedRecipeRepository

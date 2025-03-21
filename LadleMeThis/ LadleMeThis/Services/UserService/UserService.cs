@@ -1,4 +1,5 @@
-﻿using LadleMeThis.Models.UserModels;
+﻿using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.UserRepository;
 using Microsoft.AspNetCore.Identity;
 

@@ -1,3 +1,4 @@
+using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.TagModels;
 
 namespace LadleMeThis.Repositories.TagRepository;

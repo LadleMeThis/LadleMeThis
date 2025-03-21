@@ -1,6 +1,4 @@
-﻿using LadleMeThis.Models.RecipeModels;
-
-namespace LadleMeThis.Models.IngredientsModels;
+﻿namespace LadleMeThis.Data.Entity;
 
 public class Ingredient
 {
