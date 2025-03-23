@@ -5,19 +5,12 @@ using LadleMeThis.Repositories.SavedRecipeRepository;
 
 namespace LadleMeThis.Services.SavedRecipeService
 {
-    public class SavedRecipeService : ISavedRecipeService
+    public class SavedRecipeService(SavedRecipeRepository repository) : ISavedRecipeService
     {
-        private readonly SavedRecipeRepository _repository;
-
-        public SavedRecipeService(SavedRecipeRepository repository)
-        {
-            _repository = repository;
-        }
-
-        public async Task<List<SavedRecipeResponseDTO>> GetUserSavedRecipesAsync(int userId)
+        public async Task<List<SavedRecipeResponseDTO>> GetUserSavedRecipesAsync(string userId)
         {
 
-            var savedRecipes = await _repository.GetUserSavedRecipesAsync(userId);
+            var savedRecipes = await repository.GetUserSavedRecipesAsync(userId);
 
             return savedRecipes.Select(sr => new SavedRecipeResponseDTO
             {
@@ -26,7 +19,7 @@ namespace LadleMeThis.Services.SavedRecipeService
             }).ToList();
         }
 
-        public async Task<SavedRecipeResponseDTO?> SaveRecipeAsync(int userId, int recipeId)
+        public async Task<SavedRecipeResponseDTO?> SaveRecipeAsync(string userId, int recipeId)
         {
             var savedRecipe = new SavedRecipe
             {
@@ -35,7 +28,7 @@ namespace LadleMeThis.Services.SavedRecipeService
                 DateSaved = DateTime.UtcNow
             };
 
-            await _repository.AddSavedRecipeAsync(savedRecipe);
+            await repository.AddSavedRecipeAsync(savedRecipe);
 
             return new SavedRecipeResponseDTO
             {
@@ -44,9 +37,9 @@ namespace LadleMeThis.Services.SavedRecipeService
             };
         }
 
-        public async Task DeleteSavedRecipeAsync(int userId, int recipeId)
+        public async Task DeleteSavedRecipeAsync(string userId, int recipeId)
         {
-            await _repository.DeleteSavedRecipeAsync(userId, recipeId);
+            await repository.DeleteSavedRecipeAsync(userId, recipeId);
         }
     }
 }

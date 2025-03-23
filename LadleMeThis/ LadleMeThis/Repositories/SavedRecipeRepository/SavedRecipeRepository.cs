@@ -17,12 +17,12 @@ namespace LadleMeThis.Repositories.SavedRecipeRepository
             _context = context;
         }
 
-        public async Task<List<SavedRecipe>> GetUserSavedRecipesAsync(int userId)
+        public async Task<List<SavedRecipe>> GetUserSavedRecipesAsync(string userId)
         {
             try
             {
                 return await _context.SavedRecipes
-                    .Where(sr => sr.UserId == userId)
+                    .Where(sr => sr.User.Id == userId)
                     .Include(sr => sr.Recipe)
                     .ToListAsync();
             }
@@ -43,18 +43,16 @@ namespace LadleMeThis.Repositories.SavedRecipeRepository
                 throw new Exception("Database error: Unable to add saved recipe.");
             }
         }
-        public async Task DeleteSavedRecipeAsync(int userId, int recipeId)
+        public async Task DeleteSavedRecipeAsync(string userId, int recipeId)
         {
-            var savedRecipe = new SavedRecipe { UserId = userId, RecipeId = recipeId };
+            var savedRecipe = await _context.SavedRecipes
+                .FirstOrDefaultAsync(sr => sr.User.Id == userId && sr.Recipe.RecipeId == recipeId);
 
-            _context.Entry(savedRecipe).State = EntityState.Deleted;
-
-            int affectedRows = await _context.SaveChangesAsync();
-
-            if (affectedRows == 0)
-            {
+            if (savedRecipe == null)
                 throw new KeyNotFoundException($"Saved recipe with User ID {userId} and Recipe ID {recipeId} not found.");
-            }
+
+            _context.SavedRecipes.Remove(savedRecipe);
+            await _context.SaveChangesAsync();
         }
     }
 }
