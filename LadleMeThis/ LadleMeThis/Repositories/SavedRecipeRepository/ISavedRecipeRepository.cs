@@ -6,8 +6,8 @@ namespace LadleMeThis.Repositories.SavedRecipeRepository
 {
     public interface ISavedRecipeRepository
     {
-        Task<List<SavedRecipe>> GetUserSavedRecipesAsync(int userId);
+        Task<List<SavedRecipe>> GetUserSavedRecipesAsync(string userId);
         Task AddSavedRecipeAsync(SavedRecipe savedRecipe);
-        Task DeleteSavedRecipeAsync(int userId, int recipeId);
+        Task DeleteSavedRecipeAsync(string userId, int recipeId);
     }
 }

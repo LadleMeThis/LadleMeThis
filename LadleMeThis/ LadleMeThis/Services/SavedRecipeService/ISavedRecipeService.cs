@@ -4,8 +4,8 @@ namespace LadleMeThis.Services.SavedRecipeService
 {
     public interface ISavedRecipeService
     {
-        Task<SavedRecipeResponseDTO?> SaveRecipeAsync(int userId, int recipeId);
-        Task<List<SavedRecipeResponseDTO>> GetUserSavedRecipesAsync(int userId);
-        Task DeleteSavedRecipeAsync(int userId, int recipeId);
+        Task<SavedRecipeResponseDTO?> SaveRecipeAsync(string userId, int recipeId);
+        Task<List<SavedRecipeResponseDTO>> GetUserSavedRecipesAsync(string userId);
+        Task DeleteSavedRecipeAsync(string userId, int recipeId);
     }
 }

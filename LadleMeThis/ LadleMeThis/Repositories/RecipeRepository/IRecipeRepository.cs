@@ -13,7 +13,7 @@ public interface IRecipeRepository
 	Task<List<Recipe>> GetByCategoryId(int categoryId);
 	Task<List<Recipe>> GetByTagId(int tagId);
 	Task<List<Recipe>> GetByIngredientId(int ingredientId);
-	Task<List<Recipe>> GetByUserId(int userId);
+	Task<List<Recipe>> GetByUserId(string userId);
 	Task<Recipe> GetByRecipeId(int recipeId);
 	Task<int> Create(Recipe recipe);
 	Task<bool> Update(Recipe recipe);
