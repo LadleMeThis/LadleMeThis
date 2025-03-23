@@ -14,7 +14,7 @@ public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,
 	private readonly IUserService _userService = userService;
 	private static readonly UserReviewDTO DummyUser = new UserReviewDTO
 	{
-		UserId = 0,
+		UserId = "dummyUs3r1d",
 		DisplayName = "Dummy User"
 	};
 	
@@ -30,7 +30,7 @@ public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,
 
 	private RecipeRatingDTO CreateRecipeRatingDto(RecipeRating rating, IEnumerable<UserReviewDTO> users)
 	{
-		var user = users.FirstOrDefault(u => u.UserId == rating.UserId);
+		var user = users.FirstOrDefault(u => u.UserId == rating.User.Id);
 		
 		return new RecipeRatingDTO(
 			rating.RatingId,
