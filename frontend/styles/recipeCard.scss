@@ -1,0 +1,59 @@
+@import  "../styles/base_styles/variables.scss";
+
+.recipe-card {
+    background-color: $primary;
+    border: 2px solid $accent-shade;
+    width: 20rem;
+    height: 15rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: height 0.3s ease, box-shadow 0.3s ease;
+    
+    &-name{
+        background-color: #e63946;
+    }
+
+    .extra-info {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      background-color: $background;
+      color: white;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+  
+
+    &:hover .extra-info {
+      max-height: 6rem;
+    }
+  }
+
+  .clickable-recipe-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .img-container {
+    width: 100%;
+    height: 10rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
