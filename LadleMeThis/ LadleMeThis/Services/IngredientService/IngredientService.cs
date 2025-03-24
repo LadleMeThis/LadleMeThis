@@ -1,4 +1,5 @@
-﻿using LadleMeThis.Models.CategoryModels;
+﻿using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Repositories.IngredientRepository;
 

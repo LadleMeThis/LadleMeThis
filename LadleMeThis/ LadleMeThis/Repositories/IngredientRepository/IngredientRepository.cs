@@ -1,4 +1,5 @@
 ﻿using LadleMeThis.Context;
+using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.TagModels;
 using Microsoft.EntityFrameworkCore;

@@ -1,42 +1,40 @@
-﻿using LadleMeThis.Models.CategoryModels;
+﻿using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
+using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.TagModels;
 using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Repositories.TagRepository;
+using LadleMeThis.Services.RecipeRatingService;
 
 namespace LadleMeThis.Services.RecipeDetailService
 {
     /// <summary>
     /// This class is responsible to retrieve all the Ingredients, Tags and Categories.
     /// </summary>
-    public class RecipeDetailService:IRecipeDetailService
+    public class RecipeDetailService(
+        ITagRepository tagRepo,
+        IIngredientRepository ingredientRepo,
+        ICategoryRepository categoryRepo,
+        IRecipeRatingService recipeRatingService)
+        : IRecipeDetailService
     {
-        ITagRepository _tagRepository;
-        IIngredientRepository _ingredientRepository;
-        ICategoryRepository _categoryRepository;
-
-        public RecipeDetailService(ITagRepository tagRepo, IIngredientRepository ingredientRepo, ICategoryRepository categoryRepo)
-        {
-            _tagRepository = tagRepo;
-            _categoryRepository = categoryRepo;
-            _ingredientRepository = ingredientRepo;
-
-        }
+        IRecipeRatingService _recipeRatingService = recipeRatingService;
 
         public async Task<IEnumerable<Tag>> GetTagsByIds(int[] tagIds)
         {
-            return await _tagRepository.GetManyByIdAsync(tagIds);
+            return await tagRepo.GetManyByIdAsync(tagIds);
         }
 
         public async Task<IEnumerable<Category>> GetCategoriesByIds(int[] categoryIds)
         {
-            return await _categoryRepository.GetManyByIdAsync(categoryIds);
+            return await categoryRepo.GetManyByIdAsync(categoryIds);
         }
 
         public async Task<IEnumerable<Ingredient>> GetIngredientsByIds(int[] ingredientIds)
         {
-            return await _ingredientRepository.GetManyByIdAsync(ingredientIds);
+            return await ingredientRepo.GetManyByIdAsync(ingredientIds);
         }
 
 
@@ -53,5 +51,8 @@ namespace LadleMeThis.Services.RecipeDetailService
             return categories.Select(category => new CategoryDTO() { Name = category.Name, CategoryId = category.CategoryId });
         }
 
+        public  List<RecipeRatingDTO> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings) => 
+           recipeRatingService.CreateRecipeRatingDtoList(ratings).Result; 
+        
     }
 }

@@ -1,3 +1,4 @@
+﻿using LadleMeThis.Data.Entity;
 ﻿using LadleMeThis.Models.AuthContracts;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.UserRepository;

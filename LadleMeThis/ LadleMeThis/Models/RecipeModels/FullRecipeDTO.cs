@@ -12,7 +12,7 @@ public record FullRecipeDTO(
 	int PrepTime,
 	int CookTime,
 	int ServingSize,
-	int UserId,
+	string UserId,
 	List<CategoryDTO> Categories,
 	List<TagDTO> Tags,
 	List<IngredientDTO> Ingredients,
