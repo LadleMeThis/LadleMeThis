@@ -1,4 +1,6 @@
-﻿using LadleMeThis.Models.UserModels;
+﻿using LadleMeThis.Models.AuthContracts;
+using LadleMeThis.Models.UserModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace LadleMeThis.Services.UserService
 {
@@ -6,9 +8,11 @@ namespace LadleMeThis.Services.UserService
     {
         Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync();
         Task<IEnumerable<UserReviewDTO>> GetAllUsersInReviewFormatAsync();
-        Task<UserResponseDTO> GetUserByIdAsync(int id);
-        Task CreateUserAsync(UserDTO userDto);
-        Task UpdateUserAsync(int id, UserDTO userDto);
-        Task DeleteUserAsync(int id);
+        Task<UserResponseDTO> GetUserByIdAsync(string id);
+        Task<IdentityResult> CreateUserAsync(UserDTO userDto);
+        Task<IdentityResult> UpdateUserAsync(string id, UserDTO userDto);
+        Task<IdentityResult> DeleteUserAsync(string id);
+        Task<AuthResult> RegisterAsync(RegistrationRequest registerRequest, string role);
+        Task<AuthResult> LoginAsync(AuthRequest authRequest);
     }
 }
