@@ -9,8 +9,8 @@ namespace LadleMeThis.Services.UserService
         Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync();
         Task<IEnumerable<UserReviewDTO>> GetAllUsersInReviewFormatAsync();
         Task<UserResponseDTO> GetUserByIdAsync(string id);
-        Task<IdentityResult> CreateUserAsync(UserDTO userDto);
-        Task<IdentityResult> UpdateUserAsync(string id, UserDTO userDto);
+        Task<IdentityResult> CreateUserAsync(RegistrationRequest registrationRequest);
+        Task<IdentityResult> UpdateUserAsync(string id, UserUpdateDTO userUpdateDto);
         Task<IdentityResult> DeleteUserAsync(string id);
         Task<AuthResult> RegisterAsync(RegistrationRequest registerRequest, string role);
         Task<AuthResult> LoginAsync(AuthRequest authRequest);

@@ -1,7 +1,6 @@
 ﻿using LadleMeThis.Data.Entity;
 ﻿using LadleMeThis.Models.AuthContracts;
 using LadleMeThis.Models.UserModels;
-using LadleMeThis.Repositories.UserRepository;
 using LadleMeThis.Services.TokenService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +13,7 @@ namespace LadleMeThis.Services.UserService
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITokenService _tokenService;
 
-
-
-
-
-
-        public UserService(IUserRepository userRepository, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService)
+        public UserService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -36,8 +30,6 @@ namespace LadleMeThis.Services.UserService
                 UserId = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
-                //   DisplayName = user.FirstName,             if we want a normal name to be displayed, we have to extend the identity user or create a custom user class
-                //   DateCreated = user.                       same with this
             }).ToList();
 
         }
@@ -50,7 +42,6 @@ namespace LadleMeThis.Services.UserService
             return users.Select(user => new UserReviewDTO
             {
                 UserId = user.Id,
-                //  DisplayName = user.DisplayName         no such thing atm
             });
         }
 
@@ -68,53 +59,47 @@ namespace LadleMeThis.Services.UserService
                 UserId = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
-                //DisplayName = user.DisplayName,
-                //DateCreated = user.DateCreated,
             };
         }
 
-        public async Task<IdentityResult> CreateUserAsync(UserDTO userDto)
+     
+        public async Task<IdentityResult> CreateUserAsync(RegistrationRequest registrationRequest)
         {
             var user = new IdentityUser
             {
-                UserName = userDto.Username,
-                Email = userDto.Email,
-                //FirstName = userDto.FirstName,
-                //LastName = userDto.LastName,
-                //DateCreated = DateTime.UtcNow
-            };
+                UserName = registrationRequest.Username,
+                Email = registrationRequest.Email,
 
-            // Create the user and hash password automatically
-            var result = await _userManager.CreateAsync(user, userDto.PasswordHash); // why is this called pw hash? here its not hashed yet
+            };
+            
+            var result = await _userManager.CreateAsync(user, registrationRequest.Password);
 
             if (!result.Succeeded)
             {
-                return result; // this should automatically return errors depending on our settings, pw not long enough etc...
+                return result;
             }
 
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(string userId, UserDTO userDto)
+        public async Task<IdentityResult> UpdateUserAsync(string userId, UserUpdateDTO userUpdateDto)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null) throw new KeyNotFoundException("User with given id not found!");
 
-            user.UserName = userDto.Username;
-            user.Email = userDto.Email;
-            //user.DisplayName = userDto.DisplayName;
-
-            // if empty, i assume the user dont want to change their pw
-            if (!string.IsNullOrEmpty(userDto.PasswordHash))
+            user.UserName = userUpdateDto.Username;
+            user.Email = userUpdateDto.Email;
+            
+            if (!string.IsNullOrEmpty(userUpdateDto.NewPasssword))
             {
                 var passwordValidator = new PasswordValidator<IdentityUser>();
-                var passwordValidationResult = await passwordValidator.ValidateAsync(_userManager, user, userDto.PasswordHash);
+                var passwordValidationResult = await passwordValidator.ValidateAsync(_userManager, user, userUpdateDto.NewPasssword);
 
                 if (!passwordValidationResult.Succeeded)
                     return passwordValidationResult;
 
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userDto.PasswordHash);
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userUpdateDto.NewPasssword);
             }
 
 
@@ -139,8 +124,6 @@ namespace LadleMeThis.Services.UserService
             {
                 UserName = request.Username,
                 Email = request.Email,
-                //FirstName = request.FirstName,
-                //LastName = request.LastName
             };
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -168,16 +151,16 @@ namespace LadleMeThis.Services.UserService
 
         public async Task<AuthResult> LoginAsync(AuthRequest authRequest)
         {
-            var user = await _userManager.FindByEmailAsync(authRequest.Email) ?? await _userManager.FindByNameAsync(authRequest.Email);  // opportunity for the user to enter either the email or username (not the best naming)
+            var user = await _userManager.FindByEmailAsync(authRequest.EmailOrUsername) ?? await _userManager.FindByNameAsync(authRequest.EmailOrUsername);  // opportunity for the user to enter either the email or username (not the best naming)
             if (user == null)
             {
-                return InvalidEmail(authRequest.Email);
+                return InvalidEmail(authRequest.EmailOrUsername);
             }
 
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, authRequest.Password);
             if (!isPasswordValid)
             {
-                return InvalidPassword(authRequest.Email, user.UserName);
+                return InvalidPassword(authRequest.EmailOrUsername, user.UserName);
             }
 
 

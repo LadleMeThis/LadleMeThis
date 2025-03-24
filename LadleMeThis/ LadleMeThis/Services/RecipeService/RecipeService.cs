@@ -56,10 +56,10 @@ public class RecipeService(IRecipeRepository recipeRepository,
         return recipes.Select(CreateRecipeCard).ToList();
     }
 
-    public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId, string userId)
+    public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId)
     {
         var recipe = await recipeRepository.GetByRecipeId(recipeId);
-        return CreateFullRecipeDto(recipe, userId);
+        return CreateFullRecipeDto(recipe);
     }
 
     public async Task<bool> DeleteRecipe(int recipeId)
@@ -161,7 +161,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
          await userManager.FindByIdAsync(userId);
     
 
-    private FullRecipeDTO CreateFullRecipeDto(Recipe recipe, string userId)
+    private FullRecipeDTO CreateFullRecipeDto(Recipe recipe)
     {
         var categories = recipeDetailService.GetCategoryDTOsByCategories(recipe.Categories);
         var tags = recipeDetailService.GetTagDTOsByTags(recipe.Tags);
@@ -175,7 +175,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
             recipe.PrepTime,
             recipe.CookTime,
             recipe.ServingSize,
-            userId,
+            recipe.User.UserName,
             categories.ToList(),
             tags.ToList(),
             ingredients.ToList(),

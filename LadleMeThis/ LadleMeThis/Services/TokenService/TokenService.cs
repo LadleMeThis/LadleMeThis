@@ -34,8 +34,8 @@ namespace LadleMeThis.Services.TokenService
         private JwtSecurityToken CreateJwtToken(List<Claim> claims, SigningCredentials credentials,
             DateTime expiration) =>
             new(
-                _configuration["ValidIssuer"],  //issuer
-                _configuration["ValidAudience"], //audience
+                _configuration["ValidIssuer"],
+                _configuration["ValidAudience"], 
                 claims,
                 expires: expiration,
                 signingCredentials: credentials
@@ -49,8 +49,6 @@ namespace LadleMeThis.Services.TokenService
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(DateTime.UtcNow).ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64),
                 new(ClaimTypes.NameIdentifier, user.Id),
-                new(ClaimTypes.Name, user.UserName),
-                new(ClaimTypes.Email, user.Email),
                 new Claim("exp", ((DateTimeOffset)expiration).ToUnixTimeSeconds().ToString()),
            };
 

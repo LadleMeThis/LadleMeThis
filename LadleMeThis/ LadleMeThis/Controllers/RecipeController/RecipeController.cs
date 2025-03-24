@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.RecipeModels;
@@ -5,9 +6,11 @@ using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Services.RecipeService;
 using LadleMeThis.Services.UserService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LadleMeThis.Controllers.RecipeController;
+
 
 [ApiController]
 public class RecipeController(IRecipeService recipeService, IUserService userService) : ControllerBase
@@ -21,7 +24,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 	{
 		try
 		{
-			var recipes = await _recipeService.GetALlRecipeCards();
+			var recipes = await _recipeService.GetAllRecipeCards();
 			return Ok(recipes);
 		}
 		catch (Exception ex)
@@ -81,8 +84,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 	{
 		try
 		{
-			var user = new User();
-			var recipe = await _recipeService.GetRecipeByRecipeId(recipeId, user);
+			var recipe = await _recipeService.GetRecipeByRecipeId(recipeId);
 			return Ok(recipe);
 		}
 		catch (Exception ex)
@@ -91,14 +93,14 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 			return NotFound(ErrorMessages.NotFoundMessage);
 		}
 	}
-	
-	[HttpPost("/recipes/{userId:int}")]
+	[Authorize]
+	[HttpPost("/recipes")]
 	public async Task<ActionResult<int>> CreateRecipe(CreateRecipeDTO createRecipeDto)
 	{
 		try
 		{
-			var user = new User();
-			var recipeId = await _recipeService.Create(createRecipeDto, user);
+			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			var recipeId = await _recipeService.Create(createRecipeDto, userId);
 			return Ok(recipeId);
 		}
 		catch (Exception ex)

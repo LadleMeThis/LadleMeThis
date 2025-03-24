@@ -17,7 +17,7 @@ namespace LadleMeThis.Controllers.SavedRecipeController
         }
 
         [HttpGet("/savedrecipes")]
-        public async Task<ActionResult> GetSavedRecipes(int userId)
+        public async Task<ActionResult> GetSavedRecipes(string userId)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace LadleMeThis.Controllers.SavedRecipeController
         }
 
         [HttpPost("/savedrecipe/{userId}")]
-        public async Task<ActionResult> SaveRecipe(int userId, [FromBody] SavedRecipeDTO request)
+        public async Task<ActionResult> SaveRecipe(string userId, [FromBody] SavedRecipeDTO request)
         {
             try
             {
@@ -44,13 +44,12 @@ namespace LadleMeThis.Controllers.SavedRecipeController
             catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
-
                 return BadRequest(ErrorMessages.BadRequestMessage);
             }
         }
 
         [HttpDelete("/savedrecipe/{userId}/{recipeId}")]
-        public async Task<ActionResult> DeleteSavedRecipe(int userId, int recipeId)
+        public async Task<ActionResult> DeleteSavedRecipe(string userId, int recipeId)
         {
             try
             {
