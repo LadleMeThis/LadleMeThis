@@ -1,0 +1,102 @@
+.ingredient-search {
+  background-color: $background;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 700px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  height: 100%;
+
+  .ingredient-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: $primary;
+    margin-bottom: 1rem;
+  }
+
+  .ingredient-subtitle {
+    font-size: 1rem;
+    color: $text-shade;
+    margin-bottom: 1.5rem;
+  }
+
+  .ingredient-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .ingredient-item {
+      background-color: $primary-shade;
+      color: $text-shade;
+      padding: 1rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+        background-color: $primary;
+      }
+
+      &.selected {
+        color: $background;
+        background-color: $accent;
+      }
+
+      .ingredient-icon {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .search-button {
+    background-color: $accent;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  
+    &:hover {
+      background-color: $primary;
+    }
+  
+    &:disabled {
+      background-color: $accent-shade;
+      cursor: not-allowed;
+    }
+  
+    .search-button-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+  
+      h1 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: $background;
+      }
+  
+      svg {
+        font-size: 1.5rem;
+        color: $background;
+      }
+    }
+  }
+  
+}
