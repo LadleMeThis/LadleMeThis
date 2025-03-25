@@ -56,6 +56,7 @@ export default function Home() {
     <div className="recipe-card-wrapper">
         {/* {recipes.map(recipe => <RecipeCard key={recipe.RecipeId} recipe={recipe} />)} */}
     </div>
+
   );
 }
 

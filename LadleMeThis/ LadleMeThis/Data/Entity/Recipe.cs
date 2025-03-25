@@ -15,7 +15,7 @@ public class Recipe
 	public int CookTime { get; set; }
 	public int ServingSize { get; set; }
 	public DateTime DateCreated { get; } = DateTime.UtcNow;
-	public IdentityUser User { get; set; } 
+	public IdentityUser User { get; set; }
 	public ICollection<Category> Categories { get; set; } = [];
 	public ICollection<Tag> Tags { get; set; } = [];
 	public ICollection<Ingredient> Ingredients { get; set; } = [];
