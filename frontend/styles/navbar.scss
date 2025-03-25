@@ -3,9 +3,9 @@
   justify-content: space-between;
   align-items: center;
   height: 5rem;
-  background-color: $accent-shade;
+  background-color: $primary-shade;
   padding: 0 2rem 0 2rem;
-  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -26,10 +26,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-  width: 19rem;
+  width: 24rem;
   background-color: $background;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
 
   svg {
     color: $text-shade;
@@ -41,7 +41,7 @@
     height: 2rem;
     padding: 0.5rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     line-height: 1.1;
 
     &:focus {
@@ -61,14 +61,15 @@
 .login-logout button {
   font-size: 1.25rem;
   font-weight: 700;
-  background-color: $primary;
+  background-color: $accent;
   border: none;
   padding: 0.6rem 1.5rem;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
+  font-family: $heading-font;
 
   &:hover {
-    background-color: darken($primary, 10%);
+    background-color: $primary;
   }
 }
 
@@ -80,11 +81,12 @@
 .dropdown {
   position: relative;
   margin: 0 15px;
-  width: 9rem;
+  width: 10rem;
+  
 
   &:hover {
     .dropbtn {
-      border-radius: 5px 5px 0 0;
+      border-radius: 25px 25px 0 0;
       background-color: $accent;
     }
   }
@@ -100,8 +102,9 @@
   font-weight: 700;
   width: 100%;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 25px;
   transition: background-color 0.4s ease, border-radius 0.4s ease;
+  font-family: $heading-font;
 }
 
 
@@ -111,7 +114,7 @@
   opacity: 0;
   position: absolute;
   background: $accent;
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 25px 25px;
   overflow: hidden;
   left: 50%;
   transform: translate(-50%);

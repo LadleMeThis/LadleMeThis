@@ -1,5 +1,5 @@
 .recipe-card {
-    background-color: $primary;
+    background-color: $primary-shade;
     border-radius: 15px;
     width: 20rem;
     height: 15rem;
@@ -9,18 +9,20 @@
     align-items: center;
     position: relative;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.486);
-    transition: height 0.3s ease, box-shadow 0.3s ease;
+    transition: height 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 
 
     &:hover{
         transform: scale(1.1);
+        background-color: $primary;
+
     }
 
     .extra-info {
         display: block;
         position: absolute;
         bottom: 0;
-        background-color: $accent-shade2;
+        background-color: $accent-shade;
         padding: 1rem;
         width: 95%;
         text-align: center;

@@ -125,3 +125,12 @@ button{
         padding-inline: 0.75rem;
     }
 }
+
+.main-title{
+    width: 100%;
+    text-align: center;
+    font-size: x-large;
+    h1{
+        color: $primary
+    }
+}

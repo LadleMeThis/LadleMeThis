@@ -1,4 +1,5 @@
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
+import IngredientSearch from "@/components/ingredientSearch/IngredientSearch";
 
 
 const recipes = [
@@ -53,10 +54,15 @@ const recipes = [
 
 export default function Home() {
   return (
-    <div className="recipe-card-wrapper">
-        {/* {recipes.map(recipe => <RecipeCard key={recipe.RecipeId} recipe={recipe} />)} */}
-    </div>
-
+    <>
+      <IngredientSearch />
+      <div className="main-title wrapper">
+        <h1>VERY GOOD VERY NICE TOP 5</h1>
+      </div>
+      <div className="recipe-card-wrapper wrapper">
+        {recipes.map(recipe => <RecipeCard key={recipe.RecipeId} recipe={recipe} />)}
+      </div>
+    </>
   );
 }
 
