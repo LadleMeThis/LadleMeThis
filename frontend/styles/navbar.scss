@@ -1,0 +1,59 @@
+
+// $background: #333333;
+// $background-shade: #222222e5;
+// $primary: #3D62A4;
+// $primary-shade: #3d63a468;
+// $accent: #F9D342;
+// $accent-shade: #f9d4424b;
+// $text: #F4F4F4;
+// $text-shade: #f4f4f42b;
+// $heading-text: #FCFCFC;
+// $font: sans-serif;
+// $error: #e63946;
+
+
+// $button-color: #007BFF;
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 5rem;
+  background-color: $accent-shade;
+  padding: 0 2rem 0 2rem;
+  color: white;
+}
+
+.logo{
+    width: 4rem;
+    height: 4rem;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-bar input {
+  width: 100%;
+  height: 2rem;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+}
+
+.login button {
+  background-color: $primary;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: darken($primary, 10%);
+  }
+}

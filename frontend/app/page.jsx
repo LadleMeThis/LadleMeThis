@@ -53,8 +53,7 @@ const recipes = [
 
 export default function Home() {
   return (
-    <div >
-      
+    <div className="recipe-card-wrapper">
         {recipes.map(recipe => <RecipeCard key={recipe.RecipeId} recipe={recipe} />)}
     </div>
   );
