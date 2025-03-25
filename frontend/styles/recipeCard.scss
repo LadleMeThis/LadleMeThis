@@ -1,0 +1,72 @@
+.recipe-card {
+    background-color: $primary;
+    border-radius: 15px;
+    width: 20rem;
+    height: 15rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.486);
+    transition: height 0.3s ease, box-shadow 0.3s ease;
+
+
+    &:hover{
+        transform: scale(1.1);
+    }
+
+    .extra-info {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        background-color: $accent-shade2;
+        padding: 1rem;
+        width: 95%;
+        text-align: center;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.35s ease, backdrop-filter 0.35s ease, opacity 0.35s ease;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.486);
+        opacity: 0;
+        padding: 1.5rem;
+    }
+
+
+    &:hover .extra-info {
+        opacity: 1;
+        backdrop-filter: blur(25px) brightness(1.3);
+        height: 60%;
+    }
+}
+
+.clickable-recipe-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-container {
+    border-radius: 10px;
+    width: 100%;
+    height: 10rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.recipe-card-wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
