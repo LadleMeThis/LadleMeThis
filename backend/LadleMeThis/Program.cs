@@ -1,5 +1,6 @@
 using System.Text;
 using LadleMeThis.Context;
+using LadleMeThis.Data.Seeder;
 using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Repositories.RecipeRatingRepository;
@@ -38,6 +39,23 @@ AddServices(builder);
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+	var db = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+	db.Database.Migrate();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+	var services = scope.ServiceProvider;
+	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+	var context = services.GetRequiredService<LadleMeThisContext>();
+
+	var seeder = new DataSeeder(userManager, roleManager, context);
+	await seeder.SeedAsync();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -64,7 +82,7 @@ void AddServices(WebApplicationBuilder webApplicationBuilder)
 	webApplicationBuilder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 	webApplicationBuilder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 	webApplicationBuilder.Services.AddScoped<IRecipeRatingRepository, RecipeRatingRepository>();
-	webApplicationBuilder.Services.AddScoped<ISavedRecipeRepository, SavedRecipeRepository>();
+	// webApplicationBuilder.Services.AddScoped<ISavedRecipeRepository, SavedRecipeRepository>();
 	webApplicationBuilder.Services.AddScoped<IIngredientService, IngredientService>();
 	webApplicationBuilder.Services.AddScoped<ITagService, TagService>();
 	webApplicationBuilder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -73,14 +91,14 @@ void AddServices(WebApplicationBuilder webApplicationBuilder)
 	webApplicationBuilder.Services.AddScoped<IRecipeRatingService, RecipeRatingService>();
 	webApplicationBuilder.Services.AddScoped<IUserService, UserService>();
 	webApplicationBuilder.Services.AddScoped<ITokenService, TokenService>();
-	webApplicationBuilder.Services.AddScoped<ISavedRecipeService, SavedRecipeService>();
+	// webApplicationBuilder.Services.AddScoped<ISavedRecipeService, SavedRecipeService>();
 }
 
 void AddDb(WebApplicationBuilder builder1)
 {
 	builder1.Services.AddDbContext<LadleMeThisContext>(options =>
 	{
-		options.UseNpgsql(
+		options.UseSqlServer(
 			builder1.Configuration["DbConnectionString"]);
 	});
 }

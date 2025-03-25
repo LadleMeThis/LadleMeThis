@@ -4,6 +4,7 @@ namespace LadleMeThis.Data.Entity;
 
 public class SavedRecipe
 {
+	public int SavedRecipeId { get; set; }
 	public DateTime DateSaved { get; set; } = DateTime.UtcNow; 
 
 	public string UserId { get; set; }

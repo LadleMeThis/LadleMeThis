@@ -75,6 +75,26 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
 		}
 	}
 	
+	[HttpGet($"/recipes/ingredients")]
+	public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByIngredientIds([FromQuery] List<int> ingredientIds)
+	{
+		if (ingredientIds == null || !ingredientIds.Any())
+		{
+			return BadRequest("Ingredient IDs must be provided.");
+		}
+
+		try
+		{
+			var recipes = await recipeService.GetRecipesByIngredientIds(ingredientIds);
+			return Ok(recipes);
+		}
+		catch (Exception ex)
+		{
+			Console.Error.WriteLine(ex.Message);
+			return NotFound(ErrorMessages.NotFoundMessage);
+		}
+	}
+	
 	[HttpGet("/recipe/{recipeId:int}")]
 	public async Task<ActionResult<FullRecipeDTO>> GetRecipeByRecipeId(int recipeId)
 	{

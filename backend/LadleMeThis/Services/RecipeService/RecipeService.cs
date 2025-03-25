@@ -56,6 +56,12 @@ public class RecipeService(IRecipeRepository recipeRepository,
         return recipes.Select(CreateRecipeCard).ToList();
     }
 
+    public async Task<List<RecipeCardDTO>> GetRecipesByIngredientIds(List<int> ingredientIds)
+    {
+        var recipes = await recipeRepository.GetByIngredientIds(ingredientIds);
+        return recipes.Select(CreateRecipeCard).ToList();
+    }
+
     public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId)
     {
         var recipe = await recipeRepository.GetByRecipeId(recipeId);

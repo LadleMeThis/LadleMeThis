@@ -125,13 +125,7 @@ namespace LadleMeThis.Services.UserService
                 UserName = request.Username,
                 Email = request.Email,
             };
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
-            {
-                return FailedRegistration(result, request.Email, request.Username);
-            }
-
+            
             var roleExists = await _roleManager.RoleExistsAsync(role);
             if (!roleExists)
             {
@@ -140,7 +134,14 @@ namespace LadleMeThis.Services.UserService
                     ErrorMessages = { { "RoleError", "The specified role does not exist." } }
                 };
             }
+            
+            var result = await _userManager.CreateAsync(user, request.Password);
 
+            if (!result.Succeeded)
+            {
+                return FailedRegistration(result, request.Email, request.Username);
+            }
+            
             await _userManager.AddToRoleAsync(user, role);
             return new AuthResult(true, request.Email, request.Username, "");
         }

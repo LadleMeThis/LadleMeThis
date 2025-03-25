@@ -46,6 +46,16 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext):IRecipeRepo
             .Where(r => r.Ingredients.Any(i => i.IngredientId == ingredientId))
             .ToListAsync();
 
+    public async Task<List<Recipe>> GetByIngredientIds(List<int> ingredientIds) =>
+        await ladleMeThisContext.Recipes
+            .Include(r => r.Categories)
+            .Include(r => r.Tags)
+            .Include(r => r.Ingredients)
+            .Include(r => r.Ratings)
+            .Include(r => r.User)
+            .Where(r => r.Ingredients.Any(i => ingredientIds.Contains(i.IngredientId)))
+            .ToListAsync();
+
     public async Task<List<Recipe>> GetByUserId(string userId) =>
         await ladleMeThisContext.Recipes
             .Include(r => r.Categories)

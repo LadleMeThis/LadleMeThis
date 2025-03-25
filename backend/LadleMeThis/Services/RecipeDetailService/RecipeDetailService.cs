@@ -44,7 +44,7 @@ namespace LadleMeThis.Services.RecipeDetailService
         }
         public IEnumerable<IngredientDTO> GetIngredientDTOsByIngredients(IEnumerable<Ingredient> ingredients)
         {
-            return ingredients.Select(ingredient => new IngredientDTO() { Name = ingredient.Name, IngredientId = ingredient.IngredientId });
+            return ingredients.Select(ingredient => new IngredientDTO() { Name = ingredient.Name, IngredientId = ingredient.IngredientId, Unit = ingredient.Unit });
         }
         public IEnumerable<CategoryDTO> GetCategoryDTOsByCategories(IEnumerable<Category> categories)
         {
