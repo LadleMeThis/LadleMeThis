@@ -1,3 +1,5 @@
+"use client"
+import { useEffect } from "react";
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
 import IngredientSearch from "@/components/ingredientSearch/IngredientSearch";
 
@@ -50,9 +52,30 @@ const recipes = [
   }
 ];
 
-
-
 export default function Home() {
+
+
+  useEffect(() => {
+    const test = async () => {
+      const response = await fetch(
+        "/api/categories",
+        {
+          method: "GET",
+          headers: {},
+        }
+      );
+      if (!response.ok) {
+        console.log(response);
+        return;
+      }
+
+      console.log(await response.json());
+    };
+
+    test()
+
+  }, [])
+
   return (
     <>
       <IngredientSearch />

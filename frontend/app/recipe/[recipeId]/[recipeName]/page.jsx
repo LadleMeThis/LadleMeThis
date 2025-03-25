@@ -6,50 +6,23 @@ import RecipeInfo from "@/components/recipe/RecipeInfo";
 import RecipeCategoryTags from "@/components/recipe/RecipeCategoryTags";
 import RecipeIngredients from "@/components/recipe/RecipeIngredients";
 import RecipeRatings from "@/components/recipe/RecipeRatings";
+import { fetchRecipeById } from "@/scripts/scripts";
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null);
   const { recipeId } = useParams();
 
   useEffect(() => {
-    const fetchRecipe = async () => {
-      const recipeData = {
-        RecipeId: 1,
-        Name: "Spaghetti Carbonara",
-        Instructions: "Cook pasta, make sauce, combine...",
-        PrepTime: 10,
-        CookTime: 15,
-        ServingSize: 4,
-        Categories: [
-          { CategoryId: 1, Name: "Italian" },
-          { CategoryId: 2, Name: "Pasta" }
-        ],
-        Tags: [
-          { TagId: 1, Name: "Easy" },
-          { TagId: 2, Name: "Quick" }
-        ],
-        Ingredients: [
-          { IngredientId: 1, Name: "Spaghetti", Unit: "g" },
-          { IngredientId: 2, Name: "Eggs", Unit: "pcs" }
-        ],
-        Ratings: [
-          {
-            RatingId: 1,
-            Review: "Delicious!",
-            Rating: 5,
-            DateCreated: new Date().toISOString(),
-            User: { UserId: "1", UserName: "UserOne" }
-          }
-        ]
-      };
-
-      setTimeout(() => {
-        setRecipe(recipeData);
-      }, 1000);
+    const handleRecipe = async () => {
+      const data = await fetchRecipeById(recipeId)
+      setRecipe(data)
     };
 
-    fetchRecipe();
-  }, [recipeId]);
+    handleRecipe()
+
+  }, [recipeId])
+  
+  console.log(recipe);
 
   if (!recipe) {
     return <div>Loading...</div>;
@@ -59,17 +32,18 @@ const Recipe = () => {
     <div className="recipe wrapper">
       <RecipeImage />
       <div className="recipe-header">
-        <h1 className="recipe-title">{recipe.Name}</h1>
+        <h1 className="recipe-title">{recipe.name}</h1>
         <RecipeInfo
-          prepTime={recipe.PrepTime}
-          cookTime={recipe.CookTime}
-          servingSize={recipe.ServingSize}
+          prepTime={recipe.prepTime}
+          cookTime={recipe.cookTime}
+          servingSize={recipe.servingSize}
         />
       </div>
 
-      <RecipeCategoryTags categories={recipe.Categories} tags={recipe.Tags} />
-      <RecipeIngredients ingredients={recipe.Ingredients} />
-      <RecipeRatings ratings={recipe.Ratings} />
+      <RecipeCategoryTags categories={recipe.categories} tags={recipe.tags} />
+      <p className="recipe-instructions">{recipe.instructions}</p>
+      <RecipeIngredients ingredients={recipe.ingredients} />
+      <RecipeRatings ratings={recipe.ratings} />
     </div>
   );
 };

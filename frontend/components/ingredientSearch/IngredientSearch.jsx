@@ -1,33 +1,37 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IngredientList from "./IngredientList";
 import SearchButton from "./IngredientSearchButton";
+import { fetchIngredients, fetchRecipesByIngredients } from "@/scripts/scripts";
 
 const IngredientSearch = () => {
-    const dummyIngredients = [
-        "Tomato",
-        "Cheese",
-        "Basil",
-        "Chicken",
-        "Garlic",
-        "Mushroom",
-    ];
+    const [ingredients, setIngredients] = useState([])
+
+    useEffect(() => {
+        const handleIngredients = async () => {          
+          const data = await fetchIngredients()
+          setIngredients(data)
+        };
+    
+        handleIngredients()
+    
+      }, [])
 
     const [selectedIngredients, setSelectedIngredients] = useState([]);
 
     const toggleIngredient = (ingredient) => {
         setSelectedIngredients((prev) =>
             prev.includes(ingredient)
-                ? prev.filter((item) => item !== ingredient)
+                ? prev.filter((item) => item.ingredientId !== ingredient.ingredientId)
                 : [...prev, ingredient]
         );
     };
 
-    const searchRecipes = () => {
-        console.log("Searching recipes with ingredients:", selectedIngredients);
-        setTimeout(() => {
-            alert(`Recipes fetched for: ${selectedIngredients.join(", ")}`);
-        }, 1000);
+    const searchRecipes = async() => {
+        const ids = selectedIngredients.map(i => i.ingredientId)
+        const data = await fetchRecipesByIngredients(ids)
+        console.log(data);
+
     };
 
     return (
@@ -37,7 +41,7 @@ const IngredientSearch = () => {
                 Select the ingredients you have to find matching recipes.
             </p>
             <IngredientList
-                ingredients={dummyIngredients}
+                ingredients={ingredients}
                 selectedIngredients={selectedIngredients}
                 toggleIngredient={toggleIngredient}
             />
