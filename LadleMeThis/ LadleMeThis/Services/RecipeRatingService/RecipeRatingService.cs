@@ -15,7 +15,7 @@ public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,
 	private static readonly UserReviewDTO DummyUser = new UserReviewDTO
 	{
 		UserId = "dummyUs3r1d",
-		DisplayName = "Dummy User"
+		UserName = "DummyUser"
 	};
 	
 	public async Task<List<RecipeRatingDTO>> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings)

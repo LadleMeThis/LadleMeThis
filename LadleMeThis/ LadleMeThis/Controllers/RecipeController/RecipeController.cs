@@ -13,18 +13,14 @@ namespace LadleMeThis.Controllers.RecipeController;
 
 
 [ApiController]
-public class RecipeController(IRecipeService recipeService, IUserService userService) : ControllerBase
+public class RecipeController(IRecipeService recipeService) : ControllerBase
 {
-	private readonly IRecipeService _recipeService = recipeService;
-	private readonly IUserService _userService = userService;
-		
-	
 	[HttpGet("/recipes")]
 	public async Task<ActionResult<List<RecipeCardDTO>>> GetAllRecipes()
 	{
 		try
 		{
-			var recipes = await _recipeService.GetAllRecipeCards();
+			var recipes = await recipeService.GetAllRecipeCards();
 			return Ok(recipes);
 		}
 		catch (Exception ex)
@@ -39,7 +35,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 	{
 		try
 		{
-			var recipes = await _recipeService.GetRecipesByCategoryId(categoryId);
+			var recipes = await recipeService.GetRecipesByCategoryId(categoryId);
 			return Ok(recipes);
 		}
 		catch (Exception ex)
@@ -54,7 +50,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 	{
 		try
 		{
-			var recipes = await _recipeService.GetRecipesByTagId(tagId);
+			var recipes = await recipeService.GetRecipesByTagId(tagId);
 			return Ok(recipes);
 		}
 		catch (Exception ex)
@@ -69,7 +65,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 	{
 		try
 		{
-			var recipes = await _recipeService.GetRecipesByIngredientId(ingredientId);
+			var recipes = await recipeService.GetRecipesByIngredientId(ingredientId);
 			return Ok(recipes);
 		}
 		catch (Exception ex)
@@ -79,12 +75,12 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		}
 	}
 	
-	[HttpGet("/recipe/{recipeId}")]
-	public async Task<ActionResult<Recipe>> GetRecipeByRecipeId(int recipeId)
+	[HttpGet("/recipe/{recipeId:int}")]
+	public async Task<ActionResult<FullRecipeDTO>> GetRecipeByRecipeId(int recipeId)
 	{
 		try
 		{
-			var recipe = await _recipeService.GetRecipeByRecipeId(recipeId);
+			var recipe = await recipeService.GetRecipeByRecipeId(recipeId);
 			return Ok(recipe);
 		}
 		catch (Exception ex)
@@ -100,7 +96,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 		try
 		{
 			var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-			var recipeId = await _recipeService.Create(createRecipeDto, userId);
+			var recipeId = await recipeService.Create(createRecipeDto, userId);
 			return Ok(recipeId);
 		}
 		catch (Exception ex)
@@ -119,7 +115,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 				return BadRequest("Recipe ID mismatch");
 			
 
-			await _recipeService.UpdateRecipe(updateRecipeDto);
+			await recipeService.UpdateRecipe(updateRecipeDto);
 
 			return NoContent();
 		}
@@ -135,7 +131,7 @@ public class RecipeController(IRecipeService recipeService, IUserService userSer
 	{
 		try
 		{ 
-			await _recipeService.DeleteRecipe(recipeId);
+			await recipeService.DeleteRecipe(recipeId);
 
 			return NoContent();
 		}
