@@ -1,0 +1,6 @@
+@LadleMeThis_HostAddress = http://localhost:5111
+
+GET {{LadleMeThis_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

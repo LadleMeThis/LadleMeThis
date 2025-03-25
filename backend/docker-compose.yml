@@ -1,0 +1,21 @@
+﻿services:
+  ladlemethis:
+    image: ladlemethis
+    build:
+      context: .
+      dockerfile: LadleMeThis/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DbConnectionString=DbConnectionString
+  db:
+    image: postgres:latest
+    container_name: ladlemethis_db
+    environment:
+      - POSTGRES_USER=MyUser
+      - POSTGRES_PASSWORD=MyPassword
+      - POSTGRES_DB=MyDb
+    ports:
+      - "5432:5432"
