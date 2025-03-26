@@ -37,5 +37,50 @@ export const fetchRecipesByIngredients = async (ingredientIds) => {
 		console.log(response);
 		return;
 	}
-	return await response.json();
+	const data = await response.json();
+	return data;
 };
+
+
+export async function fetchRecipesByCategory(categoryId) {
+	const response = await fetch(`/api/recipes/category/${categoryId}`, {
+		method: "GET",
+		headers: {},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+	const data = await response.json();
+	return data;
+}
+
+
+export async function fetchCategories() {
+	const response = await fetch(`/api/categories`, {
+		method: "GET",
+		headers: {},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+	const data = await response.json();
+	return data;
+}
+
+export async function fetchTags() {
+	const response = await fetch(`/api/tags`, {
+		method: "GET",
+		headers: {},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+	const data = await response.json();
+	return data;
+}
