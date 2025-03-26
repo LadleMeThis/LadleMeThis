@@ -10,14 +10,14 @@ export default function RecipeCard({ recipe }) {
                     <img src="/bacon2.jpg" alt="Picture of the current food" />
                 </div>
                 <div className="recipe-name">
-                    <h4>{recipe.Name}</h4>
+                    <h4>{recipe.name}</h4>
                 </div>
                 <div className="extra-info">
-                    <FaClock /> {recipe.FullTime} min prep  <br />
-                    <FaUtensils /> Serves {recipe.ServingSize} <br />
-                    <FaStar /> {recipe.Rating} / 5 <br />
-                    <FaTags /> {recipe.Tags.join(", ")} <br />
-                    <BiCategory /> {recipe.Categories.join(", ")}
+                    <FaClock /> {recipe.fullTime} min prep  <br />
+                    <FaUtensils /> Serves {recipe.servingSize} <br />
+                    <FaStar /> {recipe.rating} / 5 <br />
+                    <FaTags /> {recipe.tags.join(", ")} <br />
+                    <BiCategory /> {recipe.categories.join(", ")}
                 </div>
             </Link>
         </div>
