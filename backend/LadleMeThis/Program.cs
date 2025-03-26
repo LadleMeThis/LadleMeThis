@@ -39,22 +39,22 @@ AddServices(builder);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-	var db = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
-	db.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//	var db = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+//	db.Database.Migrate();
+//}
 
-using (var scope = app.Services.CreateScope())
-{
-	var services = scope.ServiceProvider;
-	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-	var context = services.GetRequiredService<LadleMeThisContext>();
+//using (var scope = app.Services.CreateScope())
+//{
+//	var services = scope.ServiceProvider;
+//	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+//	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+//	var context = services.GetRequiredService<LadleMeThisContext>();
 
-	var seeder = new DataSeeder(userManager, roleManager, context);
-	await seeder.SeedAsync();
-}
+//	var seeder = new DataSeeder(userManager, roleManager, context);
+//	await seeder.SeedAsync();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
