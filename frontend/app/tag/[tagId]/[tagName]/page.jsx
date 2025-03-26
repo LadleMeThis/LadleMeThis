@@ -1,24 +1,24 @@
 "use client"
 
-import { fetchRecipesByCategory } from "@/scripts/scripts";
+import { fetchRecipesByTag } from "@/scripts/scripts";
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react"
 
-export default function Category() {
+export default function Tag() {
     const [recipes, setRecipes] = useState([]);
-    const { categoryId } = useParams();
+    const { tagId } = useParams();
 
 
 
 
     useEffect(() => {
         const getRecipes = async () => {
-            const data = await fetchRecipesByCategory(categoryId)
+            const data = await fetchRecipesByTag(tagId)
             setRecipes(data)
         }
         getRecipes();
-    }, [categoryId])
+    }, [tagId])
 
 
 

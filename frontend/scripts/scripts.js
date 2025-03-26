@@ -84,3 +84,17 @@ export async function fetchTags() {
 	const data = await response.json();
 	return data;
 }
+
+export async function fetchRecipesByTag(tagId) {
+	const response = await fetch(`/api/recipes/tag/${tagId}`, {
+		method: "GET",
+		headers: {},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+	const data = await response.json();
+	return data;
+}
