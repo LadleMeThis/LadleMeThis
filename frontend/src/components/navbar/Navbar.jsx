@@ -92,7 +92,7 @@ export default function Navbar() {
     );
 }
 
-
+//search bar should work differently, depending on the current path
 
 
 // category + tags  => takes you to the "cards" with the filtered values
