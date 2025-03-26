@@ -98,3 +98,34 @@ export async function fetchRecipesByTag(tagId) {
 	const data = await response.json();
 	return data;
 }
+
+
+export async function fetchRecipes() {
+	const response = await fetch(`/api/recipes`, {
+		method: "GET",
+		headers: {},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+	const data = await response.json();
+	return data;
+}
+
+
+export async function login(loginData) {
+	const response = await fetch(`/api/login`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(loginData)
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+}
