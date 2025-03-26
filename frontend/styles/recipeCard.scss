@@ -12,7 +12,16 @@
     transition: height 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 
 
-    &:hover{
+    // @include respond(tablet-landscape){
+    //     background-color: fuchsia;
+    // }
+
+    // @include respond(phone){
+    //     background-color: firebrick;
+    // }
+
+
+    &:hover {
         transform: scale(1.1);
         background-color: $primary;
 
@@ -67,8 +76,23 @@
 }
 
 
-.recipe-card-wrapper{
+.recipe-card-wrapper {
     display: flex;
     flex-direction: row;
     gap: 2rem;
 }
+
+
+//order matters
+
+// @include respond (tablet-landscape) {
+//     .recipe-card {
+//         background-color: green;
+//     }
+// }
+
+// @include respond (phone) {
+//     .recipe-card {
+//         background-color: firebrick;
+//     }
+// }
