@@ -1,32 +1,40 @@
 "use client"
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
+import { fetchCategories, fetchTags } from "@/scripts/scripts";
 
 
 
 
 export default function Navbar() {
+    const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
 
 
-    const categories = [
-        "Fruits & Vegetables",
-        "Meat & Poultry",
-        "Seafood",
-        "Dairy & Eggs",
-        "Grains & Cereals",
-        "Snacks & Appetizers"
-    ];
 
-    const tags = [
-        "Spicy",
-        "Sweet",
-        "Vegan",
-        "Gluten-Free",
-        "Low-Carb",
-        "Nut-Free"
-    ];
+
+    useEffect(() => {
+        const getCatgories = async () => {
+            const data = await fetchCategories()
+            setCategories(data)
+            console.log(categories)
+        }
+        getCatgories();
+
+
+        const getTags = async () => {
+            const data = await fetchTags()
+            setTags(data)
+            console.log(categories)
+        }
+        getTags();
+
+
+    }, [])
+
+
 
     const [user, setUser] = useState(false); // this is just for demonstration
 
@@ -58,19 +66,19 @@ export default function Navbar() {
                 <input value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleSearch} placeholder="Search a recipe..." />
-                    <FaSearch />
+                <FaSearch />
             </div>
             <div className="dropdowns">
                 <div className="dropdown">
                     <span className="dropbtn">Categories</span>
                     <div className="dropdown-content">
-                        {categories.map(category => <Link key={category} href={`/recipes?categoryname=${encodeURIComponent(category)}`}>{category}</Link>)}
+                        {categories.map(category => <Link key={category.categoryId} href={`/category/${category.categoryId}/${encodeURIComponent(category.name)}`}>{category.name}</Link>)}
                     </div>
                 </div>
                 <div className="dropdown">
                     <span className="dropbtn">Tags</span>
                     <div className="dropdown-content">
-                        {tags.map(tag => <Link key={tag} href={`/recipes?tagname=${encodeURIComponent(tag)}`}>{tag}</Link>)}
+                        {tags.map(tag => <Link key={tag.tagId} href={`/tag/${tag.tagId}/${encodeURIComponent(tag.name)}`}>{tag.name}</Link>)}
 
                     </div>
                 </div>
@@ -84,7 +92,7 @@ export default function Navbar() {
     );
 }
 
-
+//search bar should work differently, depending on the current path
 
 
 // category + tags  => takes you to the "cards" with the filtered values

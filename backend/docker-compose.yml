@@ -9,13 +9,12 @@
     depends_on:
       - db
     environment:
-      - DbConnectionString=DbConnectionString
+      - DbConnectionString=${DbConnectionString}
   db:
-    image: postgres:latest
+    image: mcr.microsoft.com/mssql/server:latest
     container_name: ladlemethis_db
     environment:
-      - POSTGRES_USER=MyUser
-      - POSTGRES_PASSWORD=MyPassword
-      - POSTGRES_DB=MyDb
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "1433:1433"

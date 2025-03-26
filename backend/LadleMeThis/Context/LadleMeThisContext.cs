@@ -21,6 +21,7 @@ public class LadleMeThisContext(DbContextOptions options) : IdentityDbContext<Id
 	public DbSet<Category> Categories { get; set; }
 	public DbSet<RecipeRating> Ratings { get; set; }
 	public DbSet<SavedRecipe> SavedRecipes { get; set; }
+	
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
@@ -28,5 +29,10 @@ public class LadleMeThisContext(DbContextOptions options) : IdentityDbContext<Id
 			.HasOne(r => r.User)
 			.WithMany()
 			.IsRequired(false);
+
+		modelBuilder.Entity<RecipeRating>()
+			.HasKey(r => r.RatingId);
+		
+		base.OnModelCreating(modelBuilder);
 	}
 }

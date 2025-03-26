@@ -11,6 +11,7 @@ public interface IRecipeService
 	Task<List<RecipeCardDTO>> GetRecipesByCategoryId(int categoryId);
 	Task<List<RecipeCardDTO>> GetRecipesByTagId(int tagId);
 	Task<List<RecipeCardDTO>> GetRecipesByIngredientId(int ingredientId);
+	Task<List<RecipeCardDTO>> GetRecipesByIngredientIds(List<int> ingredientIds);
 	Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId);
 	Task<bool> DeleteRecipe(int recipeId);
 	Task<int> Create(CreateRecipeDTO createRecipeDto, string userId);

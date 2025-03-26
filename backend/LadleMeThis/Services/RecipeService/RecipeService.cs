@@ -14,7 +14,7 @@ namespace LadleMeThis.Services.RecipeService;
 
 public class RecipeService(IRecipeRepository recipeRepository,
     IRecipeDetailService recipeDetailService,
-    UserManager<IdentityUser> userManager):IRecipeService
+    UserManager<IdentityUser> userManager) : IRecipeService
 {
     public async Task<List<RecipeCardDTO>> GetAllRecipeCards()
     {
@@ -56,6 +56,12 @@ public class RecipeService(IRecipeRepository recipeRepository,
         return recipes.Select(CreateRecipeCard).ToList();
     }
 
+    public async Task<List<RecipeCardDTO>> GetRecipesByIngredientIds(List<int> ingredientIds)
+    {
+        var recipes = await recipeRepository.GetByIngredientIds(ingredientIds);
+        return recipes.Select(CreateRecipeCard).ToList();
+    }
+
     public async Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId)
     {
         var recipe = await recipeRepository.GetByRecipeId(recipeId);
@@ -66,7 +72,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
     {
         return await recipeRepository.Delete(recipeId);
     }
-    
+
     public async Task<int> Create(CreateRecipeDTO createRecipeDto, string userId)
     {
         var user = await GetUserById(userId);
@@ -77,22 +83,22 @@ public class RecipeService(IRecipeRepository recipeRepository,
     public async Task<bool> UpdateRecipe(UpdateRecipeDTO updateRecipeDto)
     {
         var recipe = await recipeRepository.GetByRecipeId(updateRecipeDto.RecipeId);
-        
-        if (updateRecipeDto.Name != null) 
+
+        if (updateRecipeDto.Name != null)
             recipe.Name = updateRecipeDto.Name;
-        if (updateRecipeDto.Instructions != null) 
+        if (updateRecipeDto.Instructions != null)
             recipe.Instructions = updateRecipeDto.Instructions;
-        if (updateRecipeDto.PrepTime.HasValue) 
+        if (updateRecipeDto.PrepTime.HasValue)
             recipe.PrepTime = updateRecipeDto.PrepTime.Value;
-        if (updateRecipeDto.CookTime.HasValue) 
+        if (updateRecipeDto.CookTime.HasValue)
             recipe.CookTime = updateRecipeDto.CookTime.Value;
-        if (updateRecipeDto.ServingSize.HasValue) 
+        if (updateRecipeDto.ServingSize.HasValue)
             recipe.ServingSize = updateRecipeDto.ServingSize.Value;
-        
+
         if (updateRecipeDto.Tags != null)
         {
             var newTags = await recipeDetailService.GetTagsByIds(updateRecipeDto.Tags);
-            
+
             if (!recipe.Tags.SequenceEqual(newTags))
                 recipe.Tags = (ICollection<Tag>)newTags;
         }
@@ -100,7 +106,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
         if (updateRecipeDto.Ingredients != null)
         {
             var newIngredients = await recipeDetailService.GetIngredientsByIds(updateRecipeDto.Ingredients);
-            
+
             if (!recipe.Ingredients.SequenceEqual(newIngredients))
                 recipe.Ingredients = (ICollection<Ingredient>)newIngredients;
         }
@@ -109,7 +115,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
         if (updateRecipeDto.Categories != null)
         {
             var newCategories = await recipeDetailService.GetCategoriesByIds(updateRecipeDto.Categories);
-            
+
             if (!recipe.Categories.SequenceEqual(newCategories))
                 recipe.Categories = (ICollection<Category>)newCategories;
         }
@@ -125,14 +131,17 @@ public class RecipeService(IRecipeRepository recipeRepository,
 
         var fullTime = recipe.PrepTime + recipe.CookTime;
 
+        var tags = recipeDetailService.GetTagDTOsByTags(recipe.Tags).ToList();
+        var categories = recipeDetailService.GetCategoryDTOsByCategories(recipe.Categories).ToList();
+
         return new RecipeCardDTO(
             recipe.RecipeId,
             recipe.Name,
             fullTime,
             recipe.ServingSize,
             averageRating,
-            recipe.Tags?.ToArray() ?? Array.Empty<Tag>(),
-            recipe.Categories?.ToArray() ?? Array.Empty<Category>()
+            tags,
+            categories
         );
     }
 
@@ -141,7 +150,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
         var tags = recipeDetailService.GetTagsByIds(recipeDto.Tags).Result;
         var ingredients = recipeDetailService.GetIngredientsByIds(recipeDto.Ingredients).Result;
         var categories = recipeDetailService.GetCategoriesByIds(recipeDto.Categories).Result;
-        
+
         return new Recipe()
         {
             Name = recipeDto.Name,
@@ -149,7 +158,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
             PrepTime = recipeDto.PrepTime,
             CookTime = recipeDto.CookTime,
             ServingSize = recipeDto.ServingSize,
-            User = user, 
+            User = user,
             Categories = categories.ToList(),
             Tags = tags.ToList(),
             Ingredients = ingredients.ToList()
@@ -159,7 +168,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
 
     private async Task<IdentityUser> GetUserById(string userId) =>
          await userManager.FindByIdAsync(userId);
-    
+
 
     private FullRecipeDTO CreateFullRecipeDto(Recipe recipe)
     {

@@ -82,7 +82,7 @@
   position: relative;
   margin: 0 15px;
   width: 10rem;
-  
+
 
   &:hover {
     .dropbtn {
@@ -97,13 +97,13 @@
 .dropbtn {
   display: inline-block;
   cursor: pointer;
-  padding: 0.6rem 1.5rem;
+  padding: 1rem 1.5rem;
   font-size: 1.25rem;
   font-weight: 700;
   width: 100%;
   text-align: center;
-  border-radius: 25px;
-  transition: background-color 0.4s ease, border-radius 0.4s ease;
+  border-radius: 25px 25px 0 0;
+  transition: background-color 0.4s ease, border-radius 0.3s ease;
   font-family: $heading-font;
 }
 
@@ -121,6 +121,7 @@
   transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
   text-align: center;
   visibility: hidden;
+  padding: 0 0.5rem 1.25rem 0.5rem;
 }
 
 .dropdown-content a {
@@ -130,6 +131,8 @@
 
 .dropdown-content a:hover {
   background-color: $primary;
+  border-radius: 12.5px;
+  // transform: translate(-50 ,-50);
 }
 
 .dropbtn:hover+.dropdown-content,
