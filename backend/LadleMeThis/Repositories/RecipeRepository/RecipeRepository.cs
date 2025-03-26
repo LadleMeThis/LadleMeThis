@@ -142,7 +142,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
-            .Where(r => r.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+            .Where(r => r.Name.ToLower().Contains(name.ToLower()))
             .ToListAsync();
 
     }
