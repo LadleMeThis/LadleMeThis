@@ -44,8 +44,23 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
 			return BadRequest(ErrorMessages.BadRequestMessage);
 		}
 	}
-	
-	[HttpGet("/recipes/tag/{tagId}")]
+
+    [HttpGet("/recipes/{recipeName}")]
+    public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByName(string recipeName)
+    {
+        try
+        {
+            var recipes = await recipeService.GetRecipesByName(recipeName);
+            return Ok(recipes);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
+        }
+    }
+
+    [HttpGet("/recipes/tag/{tagId}")]
 	public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByTagId(int tagId)
 	{
 		try

@@ -25,6 +25,15 @@ public class RecipeService(IRecipeRepository recipeRepository,
 
         return recipes.Select(CreateRecipeCard).ToList();
     }
+    public async Task<List<RecipeCardDTO>> GetRecipesByName(string recipeName)
+    {
+        var recipes = await recipeRepository.GetByName(recipeName);
+
+        if (recipes.Count == 0)
+            return new List<RecipeCardDTO>();
+
+        return recipes.Select(CreateRecipeCard).ToList();
+    }
 
     public async Task<List<RecipeCardDTO>> GetRecipesByCategoryId(int categoryId)
     {
@@ -191,4 +200,5 @@ public class RecipeService(IRecipeRepository recipeRepository,
             ratings
         );
     }
+
 }
