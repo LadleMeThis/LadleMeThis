@@ -9,7 +9,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
-  height: 90%;
+  max-height: 95%;
+
+  @include respond(tablet-landscape){
+    height: fit-content;
+    overflow: scroll;
+}
 
   .ingredient-title {
     font-size: 2rem;

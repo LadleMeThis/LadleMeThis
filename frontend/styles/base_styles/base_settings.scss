@@ -141,8 +141,27 @@ button{
     display: flex;
     justify-content: center;
     gap: 2rem;
-    overflow: hidden;
-    height: 100%;
+    overflow: hidden;  
+    height: 100%; 
+    
+    
+    @include respond(tablet-landscape) {
+        // padding-top: 3rem;  
+        // flex-direction: column;
+        // max-width: 100%;
+        // overflow: scroll;  
+        // background-color: aqua;
+    }
+    
+    @include respond(phone) {
+        display: block;
+        padding-top: 2rem;   
+        padding: 1rem;
+        max-width: 100%;
+        overflow: scroll;
+        background-color: firebrick;
+    }
+    
 }
 
 .layout{
