@@ -146,4 +146,16 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .ToListAsync();
 
     }
+
+    public async Task<List<Recipe>> GetByCategoryIdAndName(int categoryId, string recipeName)
+    {
+        return await ladleMeThisContext.Recipes
+            .Include(r => r.Categories)
+            .Include(r => r.Tags)
+            .Include(r => r.Ingredients)
+            .Include(r => r.Ratings)
+            .Include(r => r.User)
+            .Where(r => r.Name.ToLower().Contains(recipeName.ToLower()) && r.Categories.Any(c => c.CategoryId == categoryId))
+            .ToListAsync();
+    }
 }

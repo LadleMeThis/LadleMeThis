@@ -201,4 +201,16 @@ public class RecipeService(IRecipeRepository recipeRepository,
         );
     }
 
+    public async Task<List<RecipeCardDTO>> GetRecipesByCategroryIdAndName(int categoryId, string recipeName)
+    {
+        if( recipeName == null)
+        {
+            return await GetRecipesByCategoryId(categoryId);
+        }
+
+        var recipes = await  recipeRepository.GetByCategoryIdAndName(categoryId, recipeName);
+
+        return recipes.Select(CreateRecipeCard).ToList();
+
+    }
 }

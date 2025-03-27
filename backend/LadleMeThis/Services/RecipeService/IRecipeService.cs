@@ -10,7 +10,8 @@ public interface IRecipeService
 	Task<List<RecipeCardDTO>> GetAllRecipeCards();
     Task<List<RecipeCardDTO>> GetRecipesByName(string name);
     Task<List<RecipeCardDTO>> GetRecipesByCategoryId(int categoryId);
-	Task<List<RecipeCardDTO>> GetRecipesByTagId(int tagId);
+    Task<List<RecipeCardDTO>> GetRecipesByCategroryIdAndName(int categroryId, string recipeName);
+    Task<List<RecipeCardDTO>> GetRecipesByTagId(int tagId);
 	Task<List<RecipeCardDTO>> GetRecipesByIngredientId(int ingredientId);
 	Task<List<RecipeCardDTO>> GetRecipesByIngredientIds(List<int> ingredientIds);
 	Task<FullRecipeDTO> GetRecipeByRecipeId(int recipeId);
