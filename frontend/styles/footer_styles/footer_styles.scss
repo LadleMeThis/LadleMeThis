@@ -1,0 +1,49 @@
+.footer {
+    background-color: $primary-shade;
+    padding: 0.25rem;
+    text-align: center;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    
+    &-content {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 0 auto;
+    }
+  
+    &-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1rem 0;
+  
+      & a {
+        color: $text;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+  
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  
+    &-copy {
+      color: $text-shade;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+  
+      & a {
+        color: $primary;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+  
+        &:hover {
+          color: $accent;
+        }
+      }
+    }
+  
+  }
+  
