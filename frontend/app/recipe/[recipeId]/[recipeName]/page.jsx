@@ -33,7 +33,6 @@ const Recipe = () => {
     };
 
   }, [recipeId])
-  
 
   if (loading)
     return <Loader />
