@@ -2,37 +2,10 @@
 import React, { useState, useEffect } from "react";
 import IngredientList from "./IngredientList";
 import SearchButton from "./IngredientSearchButton";
-import { fetchIngredients, fetchRecipesByIngredients } from "@/scripts/scripts";
 
-const IngredientSearch = () => {
-    const [ingredients, setIngredients] = useState([])
 
-    useEffect(() => {
-        const handleIngredients = async () => {          
-          const data = await fetchIngredients()
-          setIngredients(data)
-        };
-    
-        handleIngredients()
-    
-      }, [])
+const IngredientSearch = ({ingredients, selectedIngredients,toggleIngredient,searchRecipes}) => {
 
-    const [selectedIngredients, setSelectedIngredients] = useState([]);
-
-    const toggleIngredient = (ingredient) => {
-        setSelectedIngredients((prev) =>
-            prev.includes(ingredient)
-                ? prev.filter((item) => item.ingredientId !== ingredient.ingredientId)
-                : [...prev, ingredient]
-        );
-    };
-
-    const searchRecipes = async() => {
-        const ids = selectedIngredients.map(i => i.ingredientId)
-        const data = await fetchRecipesByIngredients(ids)
-        console.log(data);
-
-    };
 
     return (
         <div className="ingredient-search">
