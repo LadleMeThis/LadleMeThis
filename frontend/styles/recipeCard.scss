@@ -9,23 +9,7 @@
     align-items: center;
     position: relative;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.486);
-    transition: height 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-
-
-    // @include respond(tablet-landscape){
-    //     background-color: fuchsia;
-    // }
-
-    // @include respond(phone){
-    //     background-color: firebrick;
-    // }
-
-
-    &:hover {
-        transform: scale(1.1);
-        background-color: $primary;
-
-    }
+    transition: height 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
 
     .extra-info {
         display: block;
@@ -82,14 +66,40 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     padding: 2rem;
-    max-height: 85%;
+    max-height: 100%;
     overflow-y: auto;
     position: relative;
     scrollbar-width: none; 
     scrollbar-color: transparent transparent; 
 
-    & > .recipe-card:nth-child(even) {
-        margin-top: 1rem;
+    & > .recipe-card {
+       
+        &:nth-child(even) {
+            margin-top: 1rem;
+        }
+
+        &:nth-child(4n + 1) {
+            transform: skew(1deg);
+        }
+
+        &:nth-child(4n + 2) {
+            transform: skew(-1.5deg);
+        }
+
+        &:nth-child(4n + 3) {
+            transform: skew(0.5deg);
+            margin-top: 0.5rem;
+        }
+
+        &:nth-child(4n) {
+            transform: skew(-0.5deg);
+            margin-top: 1rem;
+        }
+
+        &:hover {
+            transform: scale(1.1) skew(0deg);
+            background-color: $primary;
+        }
     }
   
     &::-webkit-scrollbar {
