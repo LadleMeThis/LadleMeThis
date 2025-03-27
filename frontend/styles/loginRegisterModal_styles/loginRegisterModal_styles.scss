@@ -50,6 +50,8 @@
     margin-bottom: 2rem;
     font-size: 1.25rem;
     font-weight: 700;
+    gap: 2rem;
+
     button {
         font-size: 1.25rem;
         font-weight: 700;
@@ -59,13 +61,13 @@
         border-radius: 25px;
         cursor: pointer;
         font-family: $heading-font;
-        
+
         &:hover {
             background-color: $primary;
         }
     }
 
-    .active-btn{
+    .active-btn {
         background-color: $primary;
     }
 }
@@ -142,7 +144,7 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .register-btn {

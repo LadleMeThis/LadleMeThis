@@ -52,7 +52,7 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
                         </div>
                     </div>
                     <div className="buttons">
-                        <button type="submit" className="submit-btn" onClick={(e) => handleLogin(e)}>Login</button>
+                        <button type="submit" className="submit-btn" onClick={(e) => handleLogin(e)}>Submit</button>
                     </div>
                 </form>
             </div>

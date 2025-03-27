@@ -56,7 +56,7 @@ export default function RegisterMode({ onClose, setIsLoginMode }) {
                         </div>
                     </div>
                     <div className="buttons">
-                        <button type="submit" className="submit-btn" onClick={(e) => handleRegister(e)}>Register</button>
+                        <button type="submit" className="submit-btn" onClick={(e) => handleRegister(e)}>Submit</button>
                     </div>
                 </form>
             </div>
