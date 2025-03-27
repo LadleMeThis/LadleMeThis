@@ -131,6 +131,22 @@ button{
     text-align: center;
     font-size: x-large;
     h1{
+        margin-bottom: 0;
         color: $primary
     }
+}
+.main-container {
+    max-width: 1650px;
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    overflow: hidden;
+    height: 100%;
+}
+
+.layout{
+    display: flex;
+    flex-direction: column;
+    height: 100svh;
 }
