@@ -1,7 +1,7 @@
 .recipe-card {
     background-color: $primary-shade;
     border-radius: 15px;
-    width: 20rem;
+    width: 100%;
     height: 15rem;
     padding: 0.5rem;
     display: flex;
@@ -27,13 +27,6 @@
 
     }
 
-    &-wrapper{
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        padding: 3rem;
-    }
-
     .extra-info {
         display: block;
         position: absolute;
@@ -55,7 +48,8 @@
     &:hover .extra-info {
         opacity: 1;
         backdrop-filter: blur(25px) brightness(1.3);
-        height: 60%;
+        min-height: 60%;
+        height: fit-content;
     }
 }
 
@@ -84,10 +78,27 @@
 
 
 .recipe-card-wrapper {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    padding: 2rem;
+    max-height: 85%;
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: none; 
+    scrollbar-color: transparent transparent; 
+
+    & > .recipe-card:nth-child(even) {
+        margin-top: 1rem;
+    }
+  
+    &::-webkit-scrollbar {
+        display: none; 
+    }
 }
+
+
+
 
 
 //order matters
