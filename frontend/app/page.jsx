@@ -3,19 +3,24 @@ import { useEffect, useState } from "react";
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
 import IngredientSearch from "@/components/ingredientSearch/IngredientSearch";
 import { fetchRecipes, login } from "@/scripts/scripts";
+import Loader from "@/components/loader/Loader";
 
 
 
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
-
+  const [loading, setLoading] = useState(true);
 
 
 
   useEffect(() => {
     const getRecipes = async () => {
       setRecipes(await fetchRecipes());
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
     };
 
     getRecipes()
@@ -28,7 +33,14 @@ export default function Home() {
     }
 
     loginUser();
+    return () => {
+      setRecipes(null);
+      setLoading(true); 
+    };
   }, [])
+
+  if (loading)
+    return <Loader />
 
   return (
     <>
