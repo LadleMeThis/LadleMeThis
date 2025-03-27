@@ -21,7 +21,7 @@ const Recipe = () => {
     handleRecipe()
 
   }, [recipeId])
-  
+
   console.log(recipe);
 
   if (!recipe) {
