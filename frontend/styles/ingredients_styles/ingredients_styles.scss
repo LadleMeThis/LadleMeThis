@@ -11,6 +11,11 @@
   justify-content: space-between; 
   max-height: 95%;
 
+  @include respond(tablet-landscape){
+    height: fit-content;
+    overflow: scroll;
+}
+
   .ingredient-title {
     font-size: 2rem;
     font-weight: bold;
