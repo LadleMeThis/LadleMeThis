@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 import { fetchCategories, fetchTags } from "@/scripts/scripts";
+import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 
 
 
@@ -11,6 +12,10 @@ import { fetchCategories, fetchTags } from "@/scripts/scripts";
 export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
 
 
@@ -84,17 +89,13 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="login-logout">
-                {user ?
-                    <button onClick={logout}>Logout</button>
-                    : <button onClick={login} >Login</button>}
+                {
+                    user ? <button>Logout</button> :
+                        <button onClick={openModal}>Login</button>
+                }
             </div>
+            <LoginRegisterModal isOpen={isModalOpen} onClose={closeModal} />
+
         </nav>
     );
 }
-
-//search bar should work differently, depending on the current path
-
-
-// category + tags  => takes you to the "cards" with the filtered values
-
-// instead of the a tag, use the Link
