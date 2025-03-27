@@ -4,6 +4,7 @@ import { fetchRecipesByCategory, fetchRecipesByName } from "@/scripts/scripts";
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
+import Loader from "@/components/loader/Loader";
 
 export default function Category() {
     const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export default function Category() {
     const [recipes, setRecipes] = useState([]);
     const [displayedRecipes, setDisplayedRecipes] = useState([]);
     const { categoryId } = useParams();
+    const [loading, setLoading] = useState(true);
 
 
 
@@ -19,7 +21,6 @@ export default function Category() {
 
 
         const getRecipes = async () => {
-
             if (recipeName) {
                 setDisplayedRecipes( recipes.filter(recipe =>
                     recipe.name.toLowerCase().includes(recipeName.toLowerCase())
@@ -30,17 +31,26 @@ export default function Category() {
                 setDisplayedRecipes(data)
             }
 
+            const data = await fetchRecipesByCategory(categoryId)
+            setRecipes(data)
 
+            setTimeout(() => {
+                setLoading(false);
+              }, 1500);
         }
+
         getRecipes();
-
-        
+  
+        return () => {
+            setRecipes(null);
+            setLoading(true); 
+          };
     }, [categoryId, recipeName])
-    
-    
-    console.log("recipes", recipes)
 
 
+
+    if (loading)
+        return <Loader />
 
     return (
         <>
