@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
-  height: 90%;
+  max-height: 95%;
 
   .ingredient-title {
     font-size: 2rem;
