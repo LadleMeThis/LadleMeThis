@@ -1,3 +1,4 @@
+import { Exception } from "sass";
 
 export const fetchRecipeById = async (recipeId) => {
 	const response = await fetch(`/api/recipe/${recipeId}`, {
@@ -125,8 +126,21 @@ export async function login(loginData) {
 	});
 
 	if (!response.ok) {
-		console.log(response);
-		return;
+		throw new Exception("error during login!") //later will be more meaningful!
+	}
+}
+
+export async function register(registerData) {
+	const response = await fetch(`/api/register`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(registerData)
+	});
+
+	if (!response.ok) {
+		throw new Exception("error during registering!") //later will be more meaningful!
 	}
 }
 
