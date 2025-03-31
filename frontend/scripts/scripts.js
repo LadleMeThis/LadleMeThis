@@ -1,4 +1,8 @@
 
+import { FaTags } from "react-icons/fa";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { TbLadle } from "react-icons/tb";
+
 export const fetchRecipeById = async (recipeId) => {
 	const response = await fetch(`/api/recipe/${recipeId}`, {
 		method: "GET",
@@ -129,3 +133,46 @@ export async function login(loginData) {
 		return;
 	}
 }
+
+export async function fetchCreate(recipe) {
+	const response = await fetch(`/api/recipes`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		credentials: "include",
+		body: JSON.stringify(recipe)
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+}
+
+export const getIdForActiveTab = (activeTab) => {
+	switch (activeTab) {
+	  case "ingredients":
+		return "ingredientId";
+	  case "categories":
+		return "categoryId";
+	  case "tags":
+		return "tagId";
+	  default:
+		return null;
+	}
+  };
+
+  export const getIconForActiveTab = (activeTab) => {
+	switch (activeTab) {
+	  case "ingredients":
+		return <TbLadle />;
+	  case "categories":
+		return <BiSolidCategoryAlt />;
+	  case "tags":
+		return <FaTags />;
+	  default:
+		return <TbLadle />;
+	}
+  };
+  
