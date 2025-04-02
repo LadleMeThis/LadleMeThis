@@ -17,6 +17,21 @@ export const fetchRecipeById = async (recipeId) => {
 	return await response.json();
 };
 
+export const updateRecipe = async (recipeId, recipeData) => {
+	const response = await fetch(`/api/recipe/${recipeId}`, {
+		method: "PUT",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(recipeData)
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+};
+
 export const fetchIngredients = async () => {
 	const response = await fetch("/api/ingredients", {
 		method: "GET",
@@ -47,7 +62,7 @@ export const fetchRecipesByIngredients = async (ingredientIds) => {
 };
 
 
-export async function fetchRecipesByCategory(categoryId, recipeName="") {
+export async function fetchRecipesByCategory(categoryId, recipeName = "") {
 	const response = await fetch(`/api/recipes/category/${categoryId}?recipeName=${recipeName}`, {
 		method: "GET",
 		headers: {},
@@ -159,8 +174,8 @@ export async function fetchRecipesByName(recipeName) {
 		console.log(response);
 		return;
 	}
-  
-  	const data = await response.json();
+
+	const data = await response.json();
 	return data;
 }
 
@@ -182,27 +197,34 @@ export async function fetchCreate(recipe) {
 
 export const getIdForActiveTab = (activeTab) => {
 	switch (activeTab) {
-	  case "ingredients":
-		return "ingredientId";
-	  case "categories":
-		return "categoryId";
-	  case "tags":
-		return "tagId";
-	  default:
-		return null;
+		case "ingredients":
+			return "ingredientId";
+		case "categories":
+			return "categoryId";
+		case "tags":
+			return "tagId";
+		default:
+			return null;
 	}
-  };
+};
 
-  export const getIconForActiveTab = (activeTab) => {
+export const getIconForActiveTab = (activeTab) => {
 	switch (activeTab) {
-	  case "ingredients":
-		return <TbLadle />;
-	  case "categories":
-		return <BiSolidCategoryAlt />;
-	  case "tags":
-		return <FaTags />;
-	  default:
-		return <TbLadle />;
+		case "ingredients":
+			return <TbLadle />;
+		case "categories":
+			return <BiSolidCategoryAlt />;
+		case "tags":
+			return <FaTags />;
+		default:
+			return <TbLadle />;
 	}
-  };
- 
+};
+
+export function formatRecipeToUpdate(data) {
+	delete data.ratings
+	data.ingredients = data.ingredients?.map(i => i.ingredientId);
+	data.tags = data.tags?.map(i => i.tagId);
+	data.categories = data.categories?.map(i => i.categoryId);
+	return data;
+}
