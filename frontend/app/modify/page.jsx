@@ -1,12 +1,11 @@
 "use client";
 import React, { useState, useEffect, act } from "react";
-import { fetchCategories, fetchIngredients, fetchRecipeById, fetchTags, updateRecipe } from "@/scripts/scripts";
+import { fetchCategories, fetchIngredients, fetchRecipeById, fetchTags, formatRecipeToUpdate, updateRecipe } from "@/scripts/scripts";
 import Loader from "@/components/loader/Loader";
 import CreateFormGroup from "@/components/create/CreateFormGroup";
 import Tabs from "@/components/create/Tabs";
 import TabContent from "@/components/create/TabContent";
 import { useSearchParams } from "next/navigation";
-import { getIdForActiveTab } from "@/scripts/scripts";
 
 const ModifyRecipe = () => {
     const [formData, setFormData] = useState({
@@ -31,7 +30,8 @@ const ModifyRecipe = () => {
     useEffect(() => {
         try {
             async function getRecipe() {
-                let data = await fetchRecipeById(recipeId);
+                const rawData = await fetchRecipeById(recipeId);
+                const data = formatRecipeToUpdate(rawData);
                 setFormData(data);
             }
             getRecipe();
@@ -39,8 +39,6 @@ const ModifyRecipe = () => {
             console.log(e);
         }
     }, [recipeId])
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,22 +63,14 @@ const ModifyRecipe = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleItemClick = (clickedId) => {
-        const activeTabId = getIdForActiveTab(activeTab);
+    const handleItemClick = (id, field) => {
         setFormData((prev) => {
-            const isSelected = prev[activeTab].some((i) => {
-                const currentId = i[activeTabId] ?? i;
-                return currentId === clickedId
-            });
-            console.log(prev[activeTab])
+            const isSelected = prev[field].some((i) => i === id);
             return {
                 ...prev,
-                [activeTab]: isSelected
-                    ? prev[activeTab].filter((i) => {
-                        const currentId = i[activeTabId] ?? i;
-                        return currentId !== clickedId
-                    })
-                    : [...prev[activeTab], clickedId],
+                [field]: isSelected
+                    ? prev[field].filter((i) => i !== id)
+                    : [...prev[field], id],
             };
         });
     };

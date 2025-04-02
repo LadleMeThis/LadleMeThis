@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchCategories, fetchIngredients, fetchTags } from "@/scripts/scripts";
+import { fetchCategories, fetchCreate, fetchIngredients, fetchTags } from "@/scripts/scripts";
 import Loader from "@/components/loader/Loader";
 import CreateFormGroup from "@/components/create/CreateFormGroup";
 import Tabs from "@/components/create/Tabs";
@@ -45,11 +45,6 @@ const CreateRecipe = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // setFormData((prev) => {
-    //   const updatedFormData = { ...prev, [name]: value };
-    //   console.log("he",updatedFormData);  // Log the updated state
-    //   return updatedFormData;
-    // });
   };
 
   const handleItemClick = (id, field) => {
@@ -64,10 +59,10 @@ const CreateRecipe = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Data:", formData);
-    // Add your submit logic here
+    await fetchCreate(formData)
+    //no submit if categories tags is missing 
   };
 
   const renderTabContent = () => {
@@ -148,8 +143,8 @@ const CreateRecipe = () => {
           <Tabs
             tabs={[
               { id: "ingredients", label: "Ingredients", count: formData.ingredients.length },
-              { id: "tags", label: "Tags",count: formData.tags.length },
-              { id: "categories", label: "Categories",count: formData.categories.length },
+              { id: "tags", label: "Tags", count: formData.tags.length },
+              { id: "categories", label: "Categories", count: formData.categories.length },
             ]}
             activeTab={activeTab}
             onTabChange={setActiveTab}

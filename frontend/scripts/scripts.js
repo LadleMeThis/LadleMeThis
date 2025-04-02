@@ -17,7 +17,7 @@ export const fetchRecipeById = async (recipeId) => {
 	return await response.json();
 };
 
-export const updateRecipe = async (recipeId,recipeData) => {
+export const updateRecipe = async (recipeId, recipeData) => {
 	const response = await fetch(`/api/recipe/${recipeId}`, {
 		method: "PUT",
 		headers: {
@@ -221,3 +221,10 @@ export const getIconForActiveTab = (activeTab) => {
 	}
 };
 
+export function formatRecipeToUpdate(data) {
+	delete data.ratings
+	data.ingredients = data.ingredients?.map(i => i.ingredientId);
+	data.tags = data.tags?.map(i => i.tagId);
+	data.categories = data.categories?.map(i => i.categoryId);
+	return data;
+}

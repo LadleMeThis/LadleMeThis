@@ -10,10 +10,8 @@ const TabContent = ({ currentData, formData, activeTab, handleItemClick }) => {
   return (
     <div className="tab-content">
       {currentData.map((item) => {
-        const isSelected = currentSelectedItems.some((i) => {
-          const currentId = i[id] ?? i;
-          return currentId === item[id];
-        });
+        const isSelected = currentSelectedItems.some((i) =>
+          i === item[id]);
 
         return (
           <div
