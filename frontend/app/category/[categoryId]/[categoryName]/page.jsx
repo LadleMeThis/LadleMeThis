@@ -16,36 +16,40 @@ export default function Category() {
 
 
 
- 
+
     useEffect(() => {
-
-
         const getRecipes = async () => {
-            if (recipeName) {
-                setDisplayedRecipes( recipes.filter(recipe =>
-                    recipe.name.toLowerCase().includes(recipeName.toLowerCase())
-                ));
-            } else {
-                const data = await fetchRecipesByCategory(categoryId)
-                setRecipes(data)
-                setDisplayedRecipes(data)
-            }
-
             const data = await fetchRecipesByCategory(categoryId)
             setRecipes(data)
+            setDisplayedRecipes(data);
 
             setTimeout(() => {
                 setLoading(false);
-              }, 1500);
+            }, 1500);
         }
 
         getRecipes();
-  
+
         return () => {
             setRecipes(null);
-            setLoading(true); 
-          };
-    }, [categoryId, recipeName])
+            setLoading(true);
+        };
+    }, [categoryId])
+
+
+    useEffect(() => {
+        async function filterRecipes() {
+            if (recipeName) {
+                setDisplayedRecipes(recipes.filter(recipe =>
+                    recipe.name.toLowerCase().includes(recipeName.toLowerCase())
+                ));
+            } else {
+                setDisplayedRecipes(recipes);
+            }
+        }
+
+        filterRecipes();
+    }, [recipeName])
 
 
 

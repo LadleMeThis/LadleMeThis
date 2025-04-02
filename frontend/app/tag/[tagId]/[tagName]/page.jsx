@@ -2,7 +2,7 @@
 
 import { fetchRecipesByTag } from "@/scripts/scripts";
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
 import Loader from "@/components/loader/Loader";
 
@@ -10,24 +10,44 @@ export default function Tag() {
     const [recipes, setRecipes] = useState([]);
     const { tagId } = useParams();
     const [loading, setLoading] = useState(true);
+    const searchParams = useSearchParams();
+    const recipeName = searchParams.get("recipeName");
+    const [displayedRecipes, setDisplayedRecipes] = useState([]);
 
 
     useEffect(() => {
         const getRecipes = async () => {
             const data = await fetchRecipesByTag(tagId)
             setRecipes(data)
+            setDisplayedRecipes(data);
 
             setTimeout(() => {
                 setLoading(false);
-              }, 1500);
+            }, 1500);
         }
         getRecipes();
 
         return () => {
             setRecipes(null);
-            setLoading(true); 
-          };
+            setLoading(true);
+        };
     }, [tagId])
+
+
+    useEffect(() => {
+        async function filterRecipes() {
+            if (recipeName) {
+                setDisplayedRecipes(recipes.filter(recipe =>
+                    recipe.name.toLowerCase().includes(recipeName.toLowerCase())
+                ));
+            }else{
+                setDisplayedRecipes(recipes);
+            }
+        }
+
+        filterRecipes();
+    }, [recipeName])
+
 
 
     if (loading)
@@ -38,7 +58,7 @@ export default function Tag() {
     return (
         <>
             <div className="recipe-card-wrapper wrapper">
-                {recipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
+                {displayedRecipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
             </div>
         </>
     )

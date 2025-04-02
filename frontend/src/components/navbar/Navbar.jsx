@@ -58,7 +58,7 @@ export default function Navbar() {
             const updatedParams = new URLSearchParams(window.location.search);
             updatedParams.set("recipeName", searchQuery);
 
-            if(searchQuery === ""){
+            if (searchQuery === "") {
                 updatedParams.delete("recipeName");
             }
 
