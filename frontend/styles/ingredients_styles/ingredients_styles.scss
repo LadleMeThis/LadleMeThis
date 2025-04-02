@@ -4,12 +4,16 @@
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  max-width: 650px;
-  margin: 2rem auto;
+  min-width: 50%;
+  max-width: 55%; 
+  margin: 2rem 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
   max-height: 95%;
+  overflow-y: scroll;
+  scrollbar-width: none; 
+  scrollbar-color: transparent transparent; 
 
   @include respond(tablet-landscape){
     height: fit-content;

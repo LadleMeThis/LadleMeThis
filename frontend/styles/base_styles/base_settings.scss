@@ -100,12 +100,14 @@ table {
     border-spacing: 0;
 }
 
-input {
+input,
+textarea {
     border-radius: 0;
     color: $text;
+    font-family: $font;
 }
 
-button{
+button {
     color: $text;
     border: none;
     margin: 0;
@@ -126,25 +128,31 @@ button{
     }
 }
 
-.main-title{
+.main-title {
     width: 100%;
     text-align: center;
     font-size: x-large;
-    h1{
+
+    h1 {
         margin-bottom: 0;
         color: $primary
     }
 }
+
 .main-container {
-    max-width: 1650px;
+    max-width: 97%;
     margin-inline: auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-between; 
+    align-items: flex-start; 
     gap: 2rem;
-    overflow: hidden;  
-    height: 100%; 
-    
-    
+    overflow: hidden;
+    height: 100%;
+
+    &-cards{
+        height: 100%;
+    }
+
     @include respond(tablet-landscape) {
         // padding-top: 3rem;  
         // flex-direction: column;
@@ -152,19 +160,19 @@ button{
         // overflow: scroll;  
         // background-color: aqua;
     }
-    
+
     @include respond(phone) {
         display: block;
-        padding-top: 2rem;   
+        padding-top: 2rem;
         padding: 1rem;
         max-width: 100%;
         overflow: scroll;
         background-color: firebrick;
     }
-    
+
 }
 
-.layout{
+.layout {
     display: flex;
     flex-direction: column;
     height: 100svh;
