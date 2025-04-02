@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LadleMeThis.Repositories.RecipeRepository;
 
-public class RecipeRepository(LadleMeThisContext ladleMeThisContext):IRecipeRepository
+public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRepository
 {
     public async Task<List<Recipe>> GetAll() =>
         await ladleMeThisContext.Recipes
@@ -132,5 +132,30 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext):IRecipeRepo
             Console.WriteLine($"Error deleting recipe: {ex.Message}");
             throw new InvalidOperationException("An error occurred while deleting the recipe");
         }
+    }
+
+    public async Task<List<Recipe>> GetByName(string name)
+    {
+        return await ladleMeThisContext.Recipes
+            .Include(r => r.Categories)
+            .Include(r => r.Tags)
+            .Include(r => r.Ingredients)
+            .Include(r => r.Ratings)
+            .Include(r => r.User)
+            .Where(r => r.Name.ToLower().Contains(name.ToLower()))
+            .ToListAsync();
+
+    }
+
+    public async Task<List<Recipe>> GetByCategoryIdAndName(int categoryId, string recipeName)
+    {
+        return await ladleMeThisContext.Recipes
+            .Include(r => r.Categories)
+            .Include(r => r.Tags)
+            .Include(r => r.Ingredients)
+            .Include(r => r.Ratings)
+            .Include(r => r.User)
+            .Where(r => r.Name.ToLower().Contains(recipeName.ToLower()) && r.Categories.Any(c => c.CategoryId == categoryId))
+            .ToListAsync();
     }
 }

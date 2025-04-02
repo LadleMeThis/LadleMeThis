@@ -1,17 +1,32 @@
 "use client"
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 import { fetchCategories, fetchTags } from "@/scripts/scripts";
+import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 
 
+
+// search bar should work differently, depending on the current path
+
+// on any page that displays recipes should work as a filter
+
+// on any other page should work as a simple search
 
 
 export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+    const [user, setUser] = useState(false); // this is just for demonstration
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const router = useRouter();
+    const pathname = usePathname();
+    const recipeDisplayPaths = ["/category", "/tag"] // pages where search bar should function as a filter
 
 
 
@@ -36,16 +51,36 @@ export default function Navbar() {
 
 
 
-    const [user, setUser] = useState(false); // this is just for demonstration
+    useEffect(() => {
 
-    const [searchQuery, setSearchQuery] = useState("");
-    const router = useRouter();
+        const currentParams = new URLSearchParams(window.location.search);
+        if (currentParams.get("recipeName") !== searchQuery) {
+            const updatedParams = new URLSearchParams(window.location.search);
+            updatedParams.set("recipeName", searchQuery);
+
+            if(searchQuery === ""){
+                updatedParams.delete("recipeName");
+            }
+
+
+
+            if (recipeDisplayPaths.some(path => pathname.includes(path))) {
+                router.replace(`${pathname}?${updatedParams.toString()}`, { scroll: false });
+            }
+        }
+    }, [searchQuery]);
+
+
+
 
     function handleSearch(e) {
-        if (e.key === "Enter" && searchQuery.trim()) {
-            router.push(`/recipes?recipename=${encodeURIComponent(searchQuery)}`);
+        if (e.key === "Enter" && !recipeDisplayPaths.some(path => pathname.includes(path))) {
+            const updatedParams = new URLSearchParams();
+            updatedParams.set("recipeName", searchQuery);
+            router.push(`/recipes?${updatedParams.toString()}`, { scroll: false });
         }
-    };
+    }
+
 
     function login() {
         setUser(true);
@@ -65,7 +100,8 @@ export default function Navbar() {
             <div className="search-bar">
                 <input value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch} placeholder="Search a recipe..." />
+                    onKeyDown={handleSearch}
+                    placeholder="Search a recipe..." />
                 <FaSearch />
             </div>
             <div className="dropdowns">
@@ -84,17 +120,13 @@ export default function Navbar() {
                 </div>
             </div>
             <div className="login-logout">
-                {user ?
-                    <button onClick={logout}>Logout</button>
-                    : <button onClick={login} >Login</button>}
+                {
+                    user ? <button>Logout</button> :
+                        <button onClick={openModal}>Login</button>
+                }
             </div>
+            <LoginRegisterModal isOpen={isModalOpen} onClose={closeModal} />
+
         </nav>
     );
 }
-
-//search bar should work differently, depending on the current path
-
-
-// category + tags  => takes you to the "cards" with the filtered values
-
-// instead of the a tag, use the Link

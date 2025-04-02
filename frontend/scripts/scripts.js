@@ -1,3 +1,4 @@
+import { Exception } from "sass";
 
 import { FaTags } from "react-icons/fa";
 import { BiSolidCategoryAlt } from "react-icons/bi";
@@ -46,8 +47,8 @@ export const fetchRecipesByIngredients = async (ingredientIds) => {
 };
 
 
-export async function fetchRecipesByCategory(categoryId) {
-	const response = await fetch(`/api/recipes/category/${categoryId}`, {
+export async function fetchRecipesByCategory(categoryId, recipeName="") {
+	const response = await fetch(`/api/recipes/category/${categoryId}?recipeName=${recipeName}`, {
 		method: "GET",
 		headers: {},
 	});
@@ -129,9 +130,38 @@ export async function login(loginData) {
 	});
 
 	if (!response.ok) {
+		throw new Exception("error during login!") //later will be more meaningful!
+	}
+}
+
+export async function register(registerData) {
+	const response = await fetch(`/api/register`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(registerData)
+	});
+
+	if (!response.ok) {
+		throw new Exception("error during registering!") //later will be more meaningful!
+	}
+}
+
+
+export async function fetchRecipesByName(recipeName) {
+	const response = await fetch(`/api/recipes/${recipeName}`, {
+		method: "GET",
+		headers: {},
+	});
+
+	if (!response.ok) {
 		console.log(response);
 		return;
 	}
+  
+  	const data = await response.json();
+	return data;
 }
 
 export async function fetchCreate(recipe) {
@@ -175,4 +205,4 @@ export const getIdForActiveTab = (activeTab) => {
 		return <TbLadle />;
 	}
   };
-  
+ 
