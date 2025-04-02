@@ -47,14 +47,14 @@ const CreateRecipe = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleItemClick = (id, field) => {
+  const handleItemClick = (id) => {
     setFormData((prev) => {
-      const isSelected = prev[field].some((i) => i === id);
+      const isSelected = prev[activeTab].some((i) => i === id);
       return {
         ...prev,
-        [field]: isSelected
-          ? prev[field].filter((i) => i !== id)
-          : [...prev[field], id],
+        [activeTab]: isSelected
+          ? prev[activeTab].filter((i) => i !== id)
+          : [...prev[activeTab], id],
       };
     });
   };
@@ -63,6 +63,7 @@ const CreateRecipe = () => {
     e.preventDefault();
     await fetchCreate(formData)
     //no submit if categories tags is missing 
+
   };
 
   const renderTabContent = () => {

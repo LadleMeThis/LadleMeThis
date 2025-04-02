@@ -18,7 +18,7 @@ const TabContent = ({ currentData, formData, activeTab, handleItemClick }) => {
             key={item[id] + item.name}
             className={`tab-item ${isSelected ? "selected" : ""}`}
             onClick={() =>
-              handleItemClick(item[id], activeTab)
+              handleItemClick(item[id]) 
             }
           >
             <span className="tab-item-icon">
