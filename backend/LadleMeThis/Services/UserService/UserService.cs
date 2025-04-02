@@ -152,7 +152,9 @@ namespace LadleMeThis.Services.UserService
 
         public async Task<AuthResult> LoginAsync(AuthRequest authRequest)
         {
-            var user = await _userManager.FindByEmailAsync(authRequest.EmailOrUsername) ?? await _userManager.FindByNameAsync(authRequest.EmailOrUsername);  // opportunity for the user to enter either the email or username (not the best naming)
+            var user = await _userManager.FindByEmailAsync(authRequest.EmailOrUsername) ??
+                       await _userManager.FindByNameAsync(authRequest.EmailOrUsername);  
+            
             if (user == null)
             {
                 return InvalidEmail(authRequest.EmailOrUsername);
@@ -164,8 +166,7 @@ namespace LadleMeThis.Services.UserService
                 return InvalidPassword(authRequest.EmailOrUsername, user.UserName);
             }
 
-
-
+            
             var accessToken = await _tokenService.CreateToken(user);
 
             return new AuthResult(true, user.Email, user.UserName, accessToken);

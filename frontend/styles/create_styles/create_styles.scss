@@ -1,0 +1,265 @@
+.create-recipe {
+    background-color: $background;
+    color: $text;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 1200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &-header {
+        text-align: center;
+        margin-bottom: 2rem;
+
+        &-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: $primary;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        &-subtitle {
+            font-size: 1rem;
+            color: $text-shade;
+        }
+    }
+
+    &-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        flex-grow: 1;
+        overflow: hidden;
+
+        @include respond(phone) {
+            grid-template-columns: 1fr;
+        }
+
+        &-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+
+            label {
+                font-size: 1rem;
+                color: $text-shade;
+                font-weight: bold;
+            }
+
+            input,
+            select,
+            textarea {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: 1px solid $text-shade;
+                border-radius: 10px;
+                background-color: $background-shade;
+                color: $text;
+                font-size: 1rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+                &:focus {
+                    border-color: $primary;
+                    box-shadow: 0 4px 10px rgba($primary, 0.3);
+                    outline: none;
+                }
+            }
+
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+              background-color: $primary-shade; 
+              color: $text; 
+              border-radius: 5px; 
+            }
+            
+
+            input[type="number"] {
+              appearance: textfield; 
+            }
+
+
+
+            textarea {
+                resize: none;
+                height: 150px;
+
+                @include respond(phone) {
+                    height: 120px;
+                }
+            }
+        }
+
+        &-dropdowns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+
+            .dropdown-group {
+                flex: 1;
+
+                select {
+                    width: 100%;
+                }
+
+                label {
+                    margin-bottom: 0.5rem;
+                    display: block;
+                }
+            }
+
+            @include respond(phone) {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+
+
+    .btn-submit {
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: $background;
+        background-color: $primary;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+
+        &:hover {
+            background-color: $primary-shade;
+            transform: scale(1.05);
+        }
+
+        &:disabled {
+            background-color: $text-shade;
+            cursor: not-allowed;
+        }
+    }
+
+
+    &-form-group {
+        margin-bottom: 1.5rem;
+
+
+    }
+
+    &-form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid $text-shade;
+        border-radius: 10px;
+        background-color: $background-shade;
+        color: $text;
+        font-size: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+        select {
+            width: 100%;
+            height: 35px;
+        }
+
+        option {
+            padding: 0.5rem;
+        }
+    }
+
+    &-form-control:focus {
+        border-color: $primary;
+        box-shadow: 0 4px 10px rgba($primary, 0.3);
+    }
+
+    &-tabs {
+        flex-grow: 1;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 2rem;
+
+        .tabs-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            padding: 0.5rem;
+
+            .tab-button {
+                font-size: 1.1rem;
+                font-weight: bold;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                color: $text-shade;
+                transition: color 0.3s ease, transform 0.3s ease;
+                text-transform: capitalize;
+
+                &:hover {
+                    color: $primary;
+                }
+
+                &.active {
+                    color: $primary;
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        .tab-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            padding: 1rem;
+
+            .tab-item {
+                background-color: $primary-shade;
+                color: $text-shade;
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+
+                &:hover {
+                    transform: scale(1.1);
+                    background-color: $primary;
+                    color: $background;
+
+                    .tab-item-icon svg {
+                        color: $background;
+                    }
+                }
+
+                &.selected {
+                    background-color: $accent;
+                    color: $background;
+
+                    .tab-item-icon svg {
+                        color: $background;
+                    }
+                }
+
+                .tab-item-icon svg {
+                    font-size: 1.5rem;
+                    color: $text-shade;
+                    transition: transform 0.3s ease, color 0.3s ease;
+                }
+            }
+        }
+    }
+
+
+
+
+}
