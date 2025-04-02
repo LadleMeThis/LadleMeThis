@@ -45,21 +45,16 @@ const CreateRecipe = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // setFormData((prev) => {
-    //   const updatedFormData = { ...prev, [name]: value };
-    //   console.log("he",updatedFormData);  // Log the updated state
-    //   return updatedFormData;
-    // });
   };
 
-  const handleItemClick = (id, field) => {
+  const handleItemClick = (id) => {
     setFormData((prev) => {
-      const isSelected = prev[field].some((i) => i === id);
+      const isSelected = prev[activeTab].some((i) => i === id);
       return {
         ...prev,
-        [field]: isSelected
-          ? prev[field].filter((i) => i !== id)
-          : [...prev[field], id],
+        [activeTab]: isSelected
+          ? prev[activeTab].filter((i) => i !== id)
+          : [...prev[activeTab], id],
       };
     });
   };
@@ -67,7 +62,6 @@ const CreateRecipe = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitted Data:", formData);
-    // Add your submit logic here
   };
 
   const renderTabContent = () => {

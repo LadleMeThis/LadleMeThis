@@ -75,7 +75,7 @@ export default function Home() {
       selectedIngredients={selectedIngredients}
       toggleIngredient={toggleIngredient}
       searchRecipes={searchRecipes}/>
-      <div>
+      <div className="main-container-cards">
         <div className="main-title">
           <h1>VERY GOOD VERY NICE </h1>
         </div>
