@@ -228,3 +228,34 @@ export function formatRecipeToUpdate(data) {
 	data.categories = data.categories?.map(i => i.categoryId);
 	return data;
 }
+
+export async function fetchUpdateProfile(userId, updatedProfile) {
+	const response = await fetch(`/api/user/${userId}`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		credentials: "include",
+		body: JSON.stringify(updatedProfile)
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+}
+
+export async function fetchProfile(userId) {
+	const response = await fetch(`/api/user/${userId}`, {
+		method: "GET",
+		headers: {},
+		credentials: "include",
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+
+	return await response.json();
+}
