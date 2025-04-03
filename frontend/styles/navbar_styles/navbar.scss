@@ -1,4 +1,7 @@
 .navbar {
+
+  // on smaller screens, it doesnt fill up the whole space
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,6 +9,15 @@
   background-color: $primary-shade;
   padding: 0 2rem 0 2rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  & svg {
+    cursor: pointer;
+  }
+
+  //this doesnt work either
+  @include respond(phone){
+    width: 100%;
+  }
 }
 
 .logo {
@@ -60,7 +72,7 @@
   flex-direction: row;
   gap: 1rem;
 
-  @include respond(phone) {
+  @include respond(tablet-landscape) {
     flex-direction: column;
   }
 }
@@ -95,14 +107,7 @@
   }
 }
 
-.dropdowns {
-  display: flex;
-  flex-direction: row;
 
-  @include respond(phone) {
-    flex-direction: column;
-  }
-}
 
 .dropdown {
   position: relative;
@@ -117,6 +122,11 @@
     }
   }
 
+
+
+  @include respond(tablet-landscape) {
+    width: fit-content;
+  }
 }
 
 
@@ -135,8 +145,9 @@
 
 
 .dropdown-content {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  display: block;
   opacity: 0;
   position: absolute;
   background: $accent;
@@ -149,6 +160,17 @@
   visibility: hidden;
   padding: 0 0.5rem 1.25rem 0.5rem;
   z-index: 20;
+
+  @include respond(tablet-landscape) {
+    font-family: $heading-font;
+    border-radius: 5%;
+    background-color: $primary;
+    width: 50dvw;
+  }
+
+  @include respond(phone) {
+    width: 100dvw;
+  }
 }
 
 .dropdown-content a {
@@ -178,7 +200,7 @@
   border-radius: 0 0 10% 10%;
   width: 100%;
 
-  @include respond(phone) {
+  @include respond(tablet-landscape) {
     background-color: $accent;
     position: absolute;
     flex-direction: column;
@@ -198,16 +220,21 @@
 .hamburger {
   display: none;
 
-  @include respond(phone) {
+  @include respond(tablet-landscape) {
     display: block;
   }
 }
 
-@include respond(phone) {
+@include respond(tablet-landscape) {
   .nav-links.open {
+    display: flex;
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
+
+    & span {
+      width: fit-content;
+    }
   }
 
   .nav-links.closing {
@@ -217,17 +244,3 @@
     visibility: hidden;
   }
 }
-
-
-
-// $background: #F9F6F0;
-// $background-shade: #f1ece2e5;
-// $primary: #F2A900;
-// $primary-shade: #f2a90068;
-// $accent: #F1C15C;
-// $accent-shade: #f1c15c4b;
-// $text: #2D2D2D;
-// $text-shade: #2d2d2d69;
-// $heading-text: #3F3F3F;
-// $font: Inter, Arial, sans-serif;
-// $heading-font: Gluten, 'Times New Roman', serif;

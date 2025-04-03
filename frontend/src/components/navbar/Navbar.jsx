@@ -20,10 +20,7 @@ export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
     const [user, setUser] = useState(true); // this is just for demonstration
-
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
@@ -34,6 +31,8 @@ export default function Navbar() {
     //home btn, create, modify, my recipes
     //after pressing a btn, dont forget to close the hamburger menu
 
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
 
     function toggleMenu() {
@@ -116,7 +115,8 @@ export default function Navbar() {
 
 
     function handleHomeClick() {
-
+        closeMenu();
+        router.push("/");
     }
 
     return (
@@ -136,33 +136,30 @@ export default function Navbar() {
                         placeholder="Search a recipe..." />
                     <FaSearch />
                 </div>
-                <button className="secondary-btn" onClick={() => router.push("/")}>
+                <button className="secondary-btn" onClick={handleHomeClick}>
                     Home
                 </button>
                 {
                     user &&
-                    <div className="create-modify-btns">
-                        <button className="secondary-btn">Create Recipe</button>
-                        <button className="secondary-btn">My Recipes</button>
-                    </div>
+                    <button className="secondary-btn">Create Recipe</button>
+                    &&
+                    <button className="secondary-btn">My Recipes</button>
                 }
-                <div className="dropdowns">
-                    <div className="dropdown">
-                        <span className="dropbtn">Categories</span>
-                        <div className="dropdown-content">
-                            {categories.map(category => <Link onClick={closeMenu} key={category.categoryId} href={`/category/${category.categoryId}/${encodeURIComponent(category.name)}`}>{category.name}</Link>)}
-                        </div>
+                <div className="dropdown">
+                    <span className="dropbtn">Categories</span>
+                    <div className="dropdown-content">
+                        {categories.map(category => <Link onClick={closeMenu} key={category.categoryId} href={`/category/${category.categoryId}/${encodeURIComponent(category.name)}`}>{category.name}</Link>)}
                     </div>
-                    <div className="dropdown">
-                        <span className="dropbtn">Tags</span>
-                        <div className="dropdown-content">
-                            {tags.map(tag => <Link onClick={closeMenu} key={tag.tagId} href={`/tag/${tag.tagId}/${encodeURIComponent(tag.name)}`}>{tag.name}</Link>)}
-                        </div>
+                </div>
+                <div className="dropdown">
+                    <span className="dropbtn">Tags</span>
+                    <div className="dropdown-content">
+                        {tags.map(tag => <Link onClick={closeMenu} key={tag.tagId} href={`/tag/${tag.tagId}/${encodeURIComponent(tag.name)}`}>{tag.name}</Link>)}
                     </div>
                 </div>
                 <div className="login-logout">
                     {
-                        user ? <button className="primary-btn" onClick={logout}>Logout</button> :
+                        user ? <button className="primary-btn" onClick={() => logout()}>Logout</button> :
                             <button className="primary-btn" onClick={openModal}>Login</button>
                     }
                 </div>
