@@ -74,7 +74,7 @@ public class UserController : ControllerBase
             await _userService.UpdateUserAsync(userId, userUpdateDto);
             return NoContent();
         }
-        catch (Exception ex)
+        catch (Exception ex)    
         {
             Console.Error.WriteLine(ex.Message);
 
