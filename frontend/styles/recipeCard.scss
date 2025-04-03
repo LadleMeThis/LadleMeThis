@@ -10,6 +10,7 @@
     position: relative;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.486);
     transition: height 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(10px);
 
     .extra-info {
         display: block;
@@ -34,6 +35,10 @@
         backdrop-filter: blur(25px) brightness(1.3);
         min-height: 60%;
         height: fit-content;
+    }
+
+    &:hover{
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.486);
     }
 }
 
@@ -61,10 +66,16 @@
 }
 
 
+.recipe-card-container{
+    width: 100%;
+    padding: 0rem 7rem;
+    margin-inline: auto;
+    overflow: visible;
+}
 .recipe-card-wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3rem;
     padding: 2rem 2rem 7rem 2rem;
     height: 100%;
     overflow-y: scroll !important;

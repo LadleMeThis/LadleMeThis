@@ -57,10 +57,10 @@ export default function Category() {
         return <Loader />
 
     return (
-        <>
-            <div className="recipe-card-wrapper wrapper">
+        <div className="recipe-card-container">
+            <div className="recipe-card-wrapper">
                 {displayedRecipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
             </div>
-        </>
+        </div>
     )
 }
