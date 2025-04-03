@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import { fetchCategories, fetchTags } from "@/scripts/scripts";
 import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
+import Image from "next/image";
 
 
 
@@ -35,7 +36,7 @@ export default function Navbar() {
 
 
 
-    const toggleMenu = () => {
+    function toggleMenu() {
         if (menuOpen) {
             setIsAnimating(true);
             setTimeout(() => {
@@ -47,7 +48,7 @@ export default function Navbar() {
         }
     };
 
-    const closeMenu = () => {
+    function closeMenu() {
         setMenuOpen(false);
         setIsAnimating(false);
     };
@@ -113,17 +114,19 @@ export default function Navbar() {
         setUser(false);
     }
 
+
+    function handleHomeClick() {
+
+    }
+
     return (
         <nav className="navbar">
-            <div className="logo">
-                <Link href="/">
-                    <img src="laddleME.webp" alt="The site's cool logo" />
-                </Link>
+            <div className="logo" onClick={() => router.push("/")}>
+                <Image width={100} height={100} src="/laddleME.webp" alt="The site's cool logo" />
             </div>
             <div className="hamburger" onClick={toggleMenu}>
                 {menuOpen ? <FaTimes /> : <FaBars />}
             </div>
-
             <div className={`nav-links ${menuOpen ? "open" : ""} ${isAnimating ? "closing" : ""}`}>
 
                 <div className="search-bar">
@@ -133,14 +136,14 @@ export default function Navbar() {
                         placeholder="Search a recipe..." />
                     <FaSearch />
                 </div>
-                <button className="primary-btn">
+                <button className="secondary-btn" onClick={() => router.push("/")}>
                     Home
                 </button>
                 {
                     user &&
                     <div className="create-modify-btns">
-                        <button className="primary-btn">Create Recipe</button>
-                        <button className="primary-btn">My Recipes</button>
+                        <button className="secondary-btn">Create Recipe</button>
+                        <button className="secondary-btn">My Recipes</button>
                     </div>
                 }
                 <div className="dropdowns">
@@ -159,7 +162,7 @@ export default function Navbar() {
                 </div>
                 <div className="login-logout">
                     {
-                        user ? <button className="primary-btn">Logout</button> :
+                        user ? <button className="primary-btn" onClick={logout}>Logout</button> :
                             <button className="primary-btn" onClick={openModal}>Login</button>
                     }
                 </div>
