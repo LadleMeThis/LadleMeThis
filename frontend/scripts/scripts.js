@@ -230,9 +230,42 @@ export function formatRecipeToUpdate(data) {
 }
 
 
+
 export async function getMyRecipes() {
 	const response = await fetch(`/api/recipes/my-recipes`, {
 		method: "GET",
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+
+	return await response.json();
+}
+
+export async function fetchUpdateProfile(userId, updatedProfile) {
+	const response = await fetch(`/api/user/${userId}`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		credentials: "include",
+		body: JSON.stringify(updatedProfile)
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+}
+
+export async function fetchProfile(userId) {
+	const response = await fetch(`/api/user/${userId}`, {
+		method: "GET",
+		headers: {},
+		credentials: "include",
+
 	});
 
 	if (!response.ok) {
