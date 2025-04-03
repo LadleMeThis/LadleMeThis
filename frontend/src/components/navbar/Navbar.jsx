@@ -24,7 +24,7 @@ export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
-    const recipeDisplayPaths = ["/category", "/tag"] // pages where search bar should function as a filter
+    const recipeDisplayPaths = ["/category", "/tag", "/my-recipes"] // pages where search bar should function as a filter
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 

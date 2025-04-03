@@ -228,3 +228,17 @@ export function formatRecipeToUpdate(data) {
 	data.categories = data.categories?.map(i => i.categoryId);
 	return data;
 }
+
+
+export async function getMyRecipes() {
+	const response = await fetch(`/api/recipes/my-recipes`, {
+		method: "GET",
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+
+	return await response.json();
+}
