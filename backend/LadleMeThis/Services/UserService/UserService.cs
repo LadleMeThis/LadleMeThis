@@ -91,15 +91,15 @@ namespace LadleMeThis.Services.UserService
             user.UserName = userUpdateDto.Username;
             user.Email = userUpdateDto.Email;
             
-            if (!string.IsNullOrEmpty(userUpdateDto.NewPasssword))
+            if (!string.IsNullOrEmpty(userUpdateDto.NewPassword))
             {
                 var passwordValidator = new PasswordValidator<IdentityUser>();
-                var passwordValidationResult = await passwordValidator.ValidateAsync(_userManager, user, userUpdateDto.NewPasssword);
+                var passwordValidationResult = await passwordValidator.ValidateAsync(_userManager, user, userUpdateDto.NewPassword);
 
                 if (!passwordValidationResult.Succeeded)
                     return passwordValidationResult;
 
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userUpdateDto.NewPasssword);
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userUpdateDto.NewPassword);
             }
 
 
