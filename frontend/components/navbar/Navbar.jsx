@@ -1,36 +1,29 @@
 "use client"
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
-import { fetchCategories, fetchTags } from "@/scripts/scripts";
+import { fetchCategories, fetchTags, logout } from "@/scripts/scripts";
 import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 import Image from "next/image";
 import logo from "@/imgs/logo.png"
-
-
-
-// search bar should work differently, depending on the current path
-
-// on any page that displays recipes should work as a filter
-
-// on any other page should work as a simple search
 
 
 export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [user, setUser] = useState(true); // this is just for demonstration
+    // this is just for demonstration
+    const [user, setUser] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
-    const recipeDisplayPaths = ["/category", "/tag", "/my-recipes"] // pages where search bar should function as a filter
+    // pages where search bar should function as a filter
+    const recipeDisplayPaths = ["/category", "/tag", "/my-recipes"]
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 
-    //home btn, create, modify, my recipes
-    //after pressing a btn, dont forget to close the hamburger menu
+
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -42,7 +35,7 @@ export default function Navbar() {
             setTimeout(() => {
                 setMenuOpen(false);
                 setIsAnimating(false);
-            }, 300); // Match transition duration
+            }, 300);
         } else {
             setMenuOpen(true);
         }
@@ -104,16 +97,6 @@ export default function Navbar() {
             router.push(`/recipes?${updatedParams.toString()}`, { scroll: false });
         }
     }
-
-
-    function login() {
-        setUser(true);
-    }
-
-    function logout() {
-        setUser(false);
-    }
-
 
     function navigateTo(path) {
         closeMenu();

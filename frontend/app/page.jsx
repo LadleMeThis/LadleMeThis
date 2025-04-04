@@ -2,12 +2,8 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "@/components/recipeCard/RecipeCard";
 import IngredientSearch from "@/components/ingredientSearch/IngredientSearch";
-import { fetchRecipes, login,fetchIngredients, fetchRecipesByIngredients  } from "@/scripts/scripts";
+import { fetchRecipes, login, fetchIngredients, fetchRecipesByIngredients } from "@/scripts/scripts";
 import Loader from "@/components/loader/Loader";
-
-
-
-
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
@@ -16,11 +12,11 @@ export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   const toggleIngredient = (ingredient) => {
-      setSelectedIngredients((prev) =>
-          prev.includes(ingredient)
-              ? prev.filter((item) => item.ingredientId !== ingredient.ingredientId)
-              : [...prev, ingredient]
-      );
+    setSelectedIngredients((prev) =>
+      prev.includes(ingredient)
+        ? prev.filter((item) => item.ingredientId !== ingredient.ingredientId)
+        : [...prev, ingredient]
+    );
   };
 
   const handleIngredients = async () => {
@@ -28,14 +24,12 @@ export default function Home() {
     setIngredients(data)
   };
 
-  const searchRecipes = async() => {
+  const searchRecipes = async () => {
     const ids = selectedIngredients.map(i => i.ingredientId)
     const data = await fetchRecipesByIngredients(ids)
     setRecipes(data)
 
-};
-
-
+  };
 
   useEffect(() => {
     const getRecipes = async () => {
@@ -51,14 +45,6 @@ export default function Home() {
     getRecipes()
     handleIngredients()
 
-
-
-    const loginUser = async () => {
-      const loginResponse = await login({ EmailOrUsername: "admin@example.com", Password: "Admin@123" })
-      console.log("loginResp", loginResponse)
-    }
-
-    loginUser();
     return () => {
       setRecipes(null);
       setLoading(true);
@@ -72,9 +58,9 @@ export default function Home() {
   return (
     <div className="main-container wrapper">
       <IngredientSearch ingredients={ingredients}
-      selectedIngredients={selectedIngredients}
-      toggleIngredient={toggleIngredient}
-      searchRecipes={searchRecipes}/>
+        selectedIngredients={selectedIngredients}
+        toggleIngredient={toggleIngredient}
+        searchRecipes={searchRecipes} />
       <div className="main-container-cards">
         <div className="main-title">
           <h1>VERY GOOD VERY NICE </h1>
