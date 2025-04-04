@@ -1,5 +1,5 @@
 "use client"
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeCard from "@/src/components/recipeCard/RecipeCard";
 import IngredientSearch from "@/components/ingredientSearch/IngredientSearch";
 import { fetchRecipes, login,fetchIngredients, fetchRecipesByIngredients  } from "@/scripts/scripts";
