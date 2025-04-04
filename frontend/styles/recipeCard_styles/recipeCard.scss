@@ -1,4 +1,5 @@
 .recipe-card {
+    cursor: pointer;
     background-color: $primary-shade;
     border-radius: 15px;
     width: 100%;
@@ -42,12 +43,6 @@
     }
 }
 
-.clickable-recipe-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
 .img-container {
     border-radius: 10px;
