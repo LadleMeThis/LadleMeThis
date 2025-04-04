@@ -275,3 +275,18 @@ export async function fetchProfile(userId) {
 
 	return await response.json();
 }
+
+
+export async function logout() {
+	const response = await fetch(`/api/logout`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+}
