@@ -8,25 +8,31 @@ import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterMod
 import Image from "next/image";
 import logo from "@/imgs/logo.png"
 
-
 export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // this is just for demonstration
     const [user, setUser] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
-    // pages where search bar should function as a filter
     const recipeDisplayPaths = ["/category", "/tag", "/my-recipes"]
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
 
 
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const checkAuthentication = async () => {
+        const authenticated = 
+            fetch("/api/check-auth")
+                .then(data => data.json())
+                .catch(err => console.error(err))
+
+        setIsAuthenticated(authenticated)
+    }
 
 
     function toggleMenu() {
@@ -48,12 +54,12 @@ export default function Navbar() {
 
 
     useEffect(() => {
-        const getCatgories = async () => {
+        const getCategories = async () => {
             const data = await fetchCategories()
             setCategories(data)
             console.log(categories)
         }
-        getCatgories();
+        getCategories();
 
 
         const getTags = async () => {
@@ -62,6 +68,8 @@ export default function Navbar() {
             console.log(categories)
         }
         getTags();
+
+        checkAuthentication()
 
 
     }, [])
@@ -103,6 +111,12 @@ export default function Navbar() {
         router.push(path);
     }
 
+    const handleLogout = () => {
+        logout()
+        setIsModalOpen(false)
+        setIsAuthenticated(false)
+    }
+
     return (
         <nav className="navbar">
             <div className="logo" onClick={() => router.push("/")}>
@@ -124,7 +138,7 @@ export default function Navbar() {
                     Home
                 </button>
                 {
-                    user &&
+                    isAuthenticated &&
                     <button className="secondary-btn" onClick={() => navigateTo("/create")} >Create Recipe</button>
                     &&
                     <button className="secondary-btn" onClick={() => navigateTo("/my-recipes")}>My Recipes</button>
@@ -143,7 +157,7 @@ export default function Navbar() {
                 </div>
                 <div className="login-logout">
                     {
-                        user ? <button className="primary-btn" onClick={() => logout()}>Logout</button> :
+                        isAuthenticated ? <button className="primary-btn" onClick={() => handleLogout()}>Logout</button> :
                             <button className="primary-btn" onClick={openModal}>Login</button>
                     }
                 </div>
