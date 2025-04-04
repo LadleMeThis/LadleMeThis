@@ -46,6 +46,24 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
         }
     }
 
+    [Authorize]
+    [HttpGet("/recipes/my-recipes")]
+    public async Task<ActionResult<List<RecipeCardDTO>>> GetLoggedInUserRecipes()
+    {
+        try
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var recipes = await recipeService.GetRecipesByUserId(userId);
+            return Ok(recipes);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
+        }
+    }
+
     [HttpGet("/recipes/{recipeName}")]
     public async Task<ActionResult<List<RecipeCardDTO>>> GetRecipesByName(string recipeName)
     {
