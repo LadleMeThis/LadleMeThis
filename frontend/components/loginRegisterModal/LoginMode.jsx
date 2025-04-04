@@ -23,14 +23,10 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
         try {
             e.preventDefault();
             await login({ EmailOrUsername: emailOrUsername, Password: password })
-            console.log("successfully logged in!");
         } catch (e) {
             console.log(e.message);
         }
     }
-
-    // admin@example.com",
-    //  Password = "Admin@123"
 
     return (
         <div className="modal-overlay" onClick={handleClose}>
@@ -40,19 +36,19 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
                 <div className="modal-header">
                     <button className="active-btn" >Login</button><button onClick={changeModalMode} >Register</button>
                 </div>
-                <form className="form-main">
+                <form onSubmit={handleLogin} className="form-main">
                     <div className="form-inputs">
                         <div>
                             <label htmlFor="email">Email or Username</label>
-                            <input onChange={(e) => setEmailOrUsername(e.target.value)} type="email" id="email" placeholder="Enter your email or username" />
+                            <input required onChange={(e) => setEmailOrUsername(e.target.value)} type="text" id="email" placeholder="Enter your email or username" />
                         </div>
                         <div>
                             <label htmlFor="password">Password</label>
-                            <input onChange={(e) => setPassword(e.target.value)} type="password" id="password" placeholder="Enter your password" />
+                            <input required onChange={(e) => setPassword(e.target.value)} type="password" id="password" placeholder="Enter your password" />
                         </div>
                     </div>
                     <div className="buttons">
-                        <button type="submit" className="submit-btn" onClick={(e) => handleLogin(e)}>Submit</button>
+                        <button type="submit" className="submit-btn" >Submit</button>
                     </div>
                 </form>
             </div>
