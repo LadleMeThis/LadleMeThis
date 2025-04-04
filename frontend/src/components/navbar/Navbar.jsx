@@ -24,7 +24,7 @@ export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
-    const recipeDisplayPaths = ["/category", "/tag"] // pages where search bar should function as a filter
+    const recipeDisplayPaths = ["/category", "/tag", "/my-recipes"] // pages where search bar should function as a filter
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 
@@ -114,9 +114,9 @@ export default function Navbar() {
     }
 
 
-    function handleHomeClick() {
+    function navigateTo(path) {
         closeMenu();
-        router.push("/");
+        router.push(path);
     }
 
     return (
@@ -136,14 +136,14 @@ export default function Navbar() {
                         placeholder="Search a recipe..." />
                     <FaSearch />
                 </div>
-                <button className="secondary-btn" onClick={handleHomeClick}>
+                <button className="secondary-btn" onClick={() => navigateTo("/")}>
                     Home
                 </button>
                 {
                     user &&
-                    <button className="secondary-btn">Create Recipe</button>
+                    <button className="secondary-btn" onClick={() => navigateTo("/create")} >Create Recipe</button>
                     &&
-                    <button className="secondary-btn">My Recipes</button>
+                    <button className="secondary-btn" onClick={() => navigateTo("/my-recipes")}>My Recipes</button>
                 }
                 <div className="dropdown">
                     <span className="dropbtn">Categories</span>
