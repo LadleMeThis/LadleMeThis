@@ -1,5 +1,5 @@
 "use client"
-import { register } from "@/scripts/scripts";
+import { login, register } from "@/scripts/scripts";
 import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 
@@ -25,6 +25,8 @@ export default function RegisterMode({ onClose, setIsLoginMode }) {
         try {
             e.preventDefault();
             await register({ Email: email, Username: username, Password: password })
+            await login({ EmailOrUsername: email, Password: password })
+            onClose();
         } catch (e) {
             console.log(e.message)
         }

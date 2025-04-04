@@ -1,9 +1,9 @@
 "use client"
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
-import { fetchCategories, fetchTags } from "@/scripts/scripts";
+import { fetchCategories, fetchTags, logout } from "@/scripts/scripts";
 import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 import Image from "next/image";
 
@@ -13,7 +13,7 @@ export default function Navbar() {
     const [tags, setTags] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     // this is just for demonstration
-    const [user, setUser] = useState(true);
+    const [user, setUser] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
