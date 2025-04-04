@@ -16,6 +16,7 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
         if (e.target === e.currentTarget) {
             onClose();
         }
+
     };
 
 
@@ -23,6 +24,7 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
         try {
             e.preventDefault();
             await login({ EmailOrUsername: emailOrUsername, Password: password })
+            onClose()
         } catch (e) {
             console.log(e.message);
         }
