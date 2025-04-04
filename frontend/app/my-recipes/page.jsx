@@ -60,7 +60,7 @@ export default function MyRecipes() {
         <div className="my-recipes-main">
             {
                 <div className="recipe-card-wrapper wrapper">
-                    {displayedRecipes.map(recipe => <RecipeCard navigateTo={`/modify?${recipe.recipeId}`} key={recipe.recipeId} recipe={recipe} />)}
+                    {displayedRecipes.map(recipe => <RecipeCard navigateTo={`/modify?recipeId=${recipe.recipeId}`} key={recipe.recipeId} recipe={recipe} />)}
                 </div>
             }
         </div>
