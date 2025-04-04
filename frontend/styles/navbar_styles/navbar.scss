@@ -3,6 +3,7 @@
   // on smaller screens, it doesnt fill up the whole space
   width: 100%;
   display: flex;
+  flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
   height: 5rem;
@@ -10,7 +11,7 @@
   padding: 0 2rem 0 2rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
-  &::before{
+  &::before {
     content: '';
     background-color: $background;
     position: absolute;
@@ -26,13 +27,14 @@
     cursor: pointer;
   }
 
-  @include respond(phone){
+  @include respond(phone) {
     width: 100%;
   }
 }
 
 .logo {
-  width: 3.5rem;
+  min-width: 3.5rem;
+  width: auto;
   height: 3.5rem;
   cursor: pointer;
 }
@@ -41,7 +43,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 20%;
 }
 
 .search-bar {
