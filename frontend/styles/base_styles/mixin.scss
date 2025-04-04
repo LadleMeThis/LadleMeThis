@@ -16,4 +16,10 @@
             @content;
         }
     }
+
+    @if $breakpoint == small-monitor {
+        @media screen and (max-width: 1920px){
+            @content;
+        }
+    }
 }

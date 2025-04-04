@@ -40,7 +40,7 @@ export default function Home() {
   useEffect(() => {
     const getRecipes = async () => {
       const data = await fetchRecipes();
-      const finalData = data.slice(0, 5)
+      const finalData = data.slice(0, 15)
       setRecipes(finalData);
 
       setTimeout(() => {
@@ -79,7 +79,7 @@ export default function Home() {
         <div className="main-title">
           <h1>VERY GOOD VERY NICE </h1>
         </div>
-        <div className="recipe-card-wrapper">
+        <div className="recipe-card-wrapper home">
           {recipes.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
         </div>
       </div>

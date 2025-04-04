@@ -9,7 +9,19 @@
   background-color: $primary-shade;
   padding: 0 2rem 0 2rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+
+  &::before{
+    content: '';
+    background-color: $background;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: 4rem;
+    z-index: -1;
+  }
+
+
   & svg {
     cursor: pointer;
   }
