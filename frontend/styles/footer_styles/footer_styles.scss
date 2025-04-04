@@ -5,6 +5,8 @@
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   position: relative;
   backdrop-filter: blur(10px);
+  height: 3.5rem;
+  flex-shrink: 0;
 
   &-content {
       display: flex;
