@@ -1,4 +1,7 @@
 .navbar {
+
+  // on smaller screens, it doesnt fill up the whole space
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,19 +9,28 @@
   background-color: $primary-shade;
   padding: 0 2rem 0 2rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  & svg {
+    cursor: pointer;
+  }
+
+  //this doesnt work either
+  @include respond(phone){
+    width: 100%;
+  }
 }
 
 .logo {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 999px;
-  overflow: hidden;
+  width: 3.5rem;
+  height: 3.5rem;
+  cursor: pointer;
 }
 
 .logo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 20%;
 }
 
 .search-bar {
@@ -55,10 +67,17 @@
 }
 
 
+.create-modify-btns {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 
+  @include respond(tablet-landscape) {
+    flex-direction: column;
+  }
+}
 
-
-.login-logout button {
+.primary-btn {
   font-size: 1.25rem;
   font-weight: 700;
   background-color: $accent;
@@ -73,10 +92,22 @@
   }
 }
 
-.dropdowns {
-  display: flex;
-  flex-direction: row;
+.secondary-btn {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background-color: inherit;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-family: $heading-font;
+
+  &:hover {
+    background-color: $primary;
+  }
 }
+
+
 
 .dropdown {
   position: relative;
@@ -91,6 +122,11 @@
     }
   }
 
+
+
+  @include respond(tablet-landscape) {
+    width: fit-content;
+  }
 }
 
 
@@ -109,8 +145,9 @@
 
 
 .dropdown-content {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  display: block;
   opacity: 0;
   position: absolute;
   background: $accent;
@@ -123,6 +160,17 @@
   visibility: hidden;
   padding: 0 0.5rem 1.25rem 0.5rem;
   z-index: 20;
+
+  @include respond(tablet-landscape) {
+    font-family: $heading-font;
+    border-radius: 5%;
+    background-color: $primary;
+    width: 50dvw;
+  }
+
+  @include respond(phone) {
+    width: 100dvw;
+  }
 }
 
 .dropdown-content a {
@@ -140,4 +188,59 @@
 .dropdown-content:hover {
   opacity: 1;
   visibility: visible;
+}
+
+
+.nav-links {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 0 0 10% 10%;
+  width: 100%;
+
+  @include respond(tablet-landscape) {
+    background-color: $accent;
+    position: absolute;
+    flex-direction: column;
+    top: 65px;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    gap: 1rem;
+    transform: translateY(-10px);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+}
+
+.hamburger {
+  display: none;
+
+  @include respond(tablet-landscape) {
+    display: block;
+  }
+}
+
+@include respond(tablet-landscape) {
+  .nav-links.open {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+
+    & span {
+      width: fit-content;
+    }
+  }
+
+  .nav-links.closing {
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+    visibility: hidden;
+  }
 }
