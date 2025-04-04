@@ -6,6 +6,7 @@ import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import { fetchCategories, fetchTags } from "@/scripts/scripts";
 import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 import Image from "next/image";
+import logo from "@/imgs/logo.png"
 
 
 
@@ -122,7 +123,7 @@ export default function Navbar() {
     return (
         <nav className="navbar">
             <div className="logo" onClick={() => router.push("/")}>
-                <Image width={100} height={100} src="/laddleME.webp" alt="The site's cool logo" />
+                <Image width={200} height={200} src={logo} alt="The site's cool logo" />
             </div>
             <div className="hamburger" onClick={toggleMenu}>
                 {menuOpen ? <FaTimes /> : <FaBars />}

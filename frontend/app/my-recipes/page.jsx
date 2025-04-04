@@ -1,7 +1,7 @@
 "use client";
 import Loader from "@/components/loader/Loader";
 import { getMyRecipes } from "@/scripts/scripts";
-import RecipeCard from "@/src/components/recipeCard/RecipeCard";
+import RecipeCard from "@/components/recipeCard/RecipeCard";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
