@@ -26,7 +26,7 @@ export default function RecipeCard({ recipe, navigateTo }) {
                 <h4>{recipe.name}</h4>
             </div>
             <div className="extra-info">
-                <FaClock /> {recipe.fullTime} min prep  <br />
+                <FaClock /> Total Time: {recipe.fullTime} mins <br />
                 <FaUtensils /> Serves {recipe.servingSize} <br />
                 <FaStar /> {recipe.rating} / 5 <br />
                 <FaTags /> {recipe.tags.map(tag => tag.name).join(", ")} <br />
