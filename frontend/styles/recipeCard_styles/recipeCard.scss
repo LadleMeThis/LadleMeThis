@@ -78,6 +78,14 @@
     scrollbar-width: none; 
     scrollbar-color: transparent transparent; 
 
+    &.home{
+        grid-template-columns: repeat(3, 1fr);
+
+        @include respond(small-monitor){
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
     & > .recipe-card {
        
         &:nth-child(even) {
@@ -122,21 +130,3 @@
         }
     }
 }
-
-
-
-
-
-//order matters
-
-// @include respond (tablet-landscape) {
-//     .recipe-card {
-//         background-color: green;
-//     }
-// }
-
-// @include respond (phone) {
-//     .recipe-card {
-//         background-color: firebrick;
-//     }
-// }
