@@ -1,6 +1,7 @@
 import "./globals.scss";
 import Navbar from "@/src/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
+import { ToastProvider } from "@/context/ToastContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -11,8 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="layout">
+        <ToastProvider>
         <Navbar />
-        {children}
+          {children}
+        </ToastProvider>
         <Footer />
       </body>
     </html>
