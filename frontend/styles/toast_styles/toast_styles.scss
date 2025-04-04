@@ -1,0 +1,146 @@
+.toaster-wrap {
+  position: fixed;
+  bottom: -6em;
+  right: 2em;
+  width: 35em;
+  height: 6em;
+  padding: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  transition: all 0.5s ease-in-out;
+  font-size: 0.7em;
+  visibility: hidden;
+  opacity: 0;
+
+  &.toast-show {
+    visibility: visible; 
+    opacity: 1; 
+    display: flex; 
+  }
+}
+
+.toast {
+  position: absolute;
+  top: -8em;
+  width: 25em;
+  height: 20em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+
+.toast__top {
+  width: 25em;
+  height: 6em;
+  border-radius: 3em;
+  background-color: #ffd493;
+}
+
+.toast__border-top {
+  position: absolute;
+  width: 26.5em;
+  height: 7.5em;
+  top: -0.25em;
+  border-radius: 3.75em;
+  background-color: #af6522;
+  z-index: -1;
+}
+
+.toast__bottom {
+  transform: translateY(-0.2em);
+  width: 20em;
+  height: 13em;
+  border-radius: 0 0 2em 2em;
+  background-color: #ffd493;
+}
+
+.toast__border-bottom {
+  position: absolute;
+  transform: translateY(-0.2em);
+  top: 5.75em;
+  width: 21.5em;
+  height: 14.5em;
+  border-radius: 0 0 2.5em 2.5em;
+  background-color: #af6522;
+  z-index: -1;
+}
+
+.message {
+  position: absolute;
+  width: 80%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.message__text {
+  font-size: 2em;
+  color: #af6522;
+  width: 100%;
+  word-wrap: break-word;
+  word-break: break-word;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.toast-show {
+  animation: shootToast 1s ease-out forwards, bounceToast 0.5s 1s ease-in-out;
+}
+
+.toast-hide {
+  animation: hideToast 1s ease-out forwards;
+}
+
+@keyframes shootToast {
+  0% {
+    transform: translateY(0%) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-60vh) rotate(-25deg);
+  }
+  60% {
+    transform: translateY(-30vh) rotate(10deg);
+  }
+  80% {
+    transform: translateY(-20vh) rotate(-5deg);
+  }
+  100% {
+    transform: translateY(-12vh) rotate(0deg);
+  }
+}
+
+@keyframes bounceToast {
+  0% {
+    transform: translateY(-12vh);
+  }
+  50% {
+    transform: translateY(-14vh);
+  }
+  100% {
+    transform: translateY(-12vh);
+  }
+}
+
+@keyframes hideToast {
+  0% {
+    transform: translateY(-12vh);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12vh);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
