@@ -7,6 +7,7 @@ using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Repositories.TagRepository;
 using LadleMeThis.Services.RecipeRatingService;
+using Microsoft.AspNetCore.Identity;
 
 namespace LadleMeThis.Services.RecipeDetailService
 {
@@ -53,6 +54,9 @@ namespace LadleMeThis.Services.RecipeDetailService
 
         public  List<RecipeRatingDTO> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings) => 
            recipeRatingService.CreateRecipeRatingDtoList(ratings).Result; 
+        
+        public async Task<int> AddRecipeRatingAsync(CreateRecipeRatingDTO recipeRatingDto, IdentityUser user, Recipe recipe) => 
+            await _recipeRatingService.CreateRecipeRating(recipeRatingDto, user, recipe);
         
     }
 }

@@ -1,5 +1,6 @@
 using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.RecipeModels;
+using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
 
@@ -19,4 +20,5 @@ public interface IRecipeService
     Task<int> Create(CreateRecipeDTO createRecipeDto, string userId);
     Task<bool> UpdateRecipe(UpdateRecipeDTO updateRecipeDto);
     Task<List<RecipeCardDTO>> GetRecipesByUserId(string userId);
+    Task<int> CreateRecipeRatingById(int recipeId, string userId, CreateRecipeRatingDTO recipeRatingDto);
 }
