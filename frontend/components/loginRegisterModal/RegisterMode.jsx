@@ -2,11 +2,13 @@
 import { login, register } from "@/scripts/scripts";
 import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
+import { useToast } from "@/context/ToastContext";
 
 export default function RegisterMode({ onClose, setIsLoginMode }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
+    const { showToast } = useToast()
 
 
     function changeModalMode() {
@@ -26,9 +28,10 @@ export default function RegisterMode({ onClose, setIsLoginMode }) {
             e.preventDefault();
             await register({ Email: email, Username: username, Password: password })
             await login({ EmailOrUsername: email, Password: password })
+            showToast("Register and login successful")
             onClose();
         } catch (e) {
-            console.log(e.message)
+            showToast(e.message)
         }
     }
 
