@@ -8,39 +8,43 @@ export default function RecipeCard({ recipe, navigateTo }) {
     const [imageUrl, setImageUrl] = useState(null);
     const router = useRouter();
 
+    console.log("recipe", recipe)
 
+    const getRandomImage = () => {
+        const randomPage = Math.floor(Math.random() * 100) + 1;
+        return `https://api.pexels.com/v1/search?query=food&page=${randomPage}&per_page=1`;
+    };
 
     function handleClick() {
         if (!navigateTo) {
-            router.push(`/recipe/${recipe.recipeId}/${recipe.name}`)
+            router.push(`/recipe/${recipe.recipeId}/${recipe.name}`);
         } else {
-            router.push(navigateTo)
+            router.push(navigateTo);
         }
     }
 
     useEffect(() => {
-        fetch("https://api.pexels.com/v1/search?query=food&per_page=1", {
+        fetch(getRandomImage(), {
             headers: {
-                Authorization: apiKey
+                Authorization: process.env.NEXT_PUBLIC_API_KEY
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.photos && data.photos.length > 0) {
-                setImageUrl(data.photos[0].src.original);
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching food image:", error);
-            setImageUrl("/bacon2.jpg");
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.photos && data.photos.length > 0) {
+                    setImageUrl(data.photos[0].src.original);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching food image:", error);
+                setImageUrl("/bacon2.jpg");
+            });
     }, []);
-
 
     return (
         <div onClick={() => handleClick()} className="recipe-card">
             <div className="img-container">
-                <img src={imageUrl} alt="Picture of the current food" />
+                <img src={imageUrl} alt="Random food" />
             </div>
             <div className="recipe-name">
                 <h4>{recipe.name}</h4>
@@ -53,5 +57,5 @@ export default function RecipeCard({ recipe, navigateTo }) {
                 <BiCategory /> {recipe.categories.map(category => category.name).join(", ")}
             </div>
         </div>
-    )
+    );
 }
