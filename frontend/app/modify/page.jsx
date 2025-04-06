@@ -6,6 +6,7 @@ import CreateFormGroup from "@/components/create/CreateFormGroup";
 import Tabs from "@/components/create/Tabs";
 import TabContent from "@/components/create/TabContent";
 import { useSearchParams } from "next/navigation";
+import { useToast } from "@/context/ToastContext";
 
 const ModifyRecipe = () => {
     const [formData, setFormData] = useState({
@@ -26,6 +27,7 @@ const ModifyRecipe = () => {
     const [activeTab, setActiveTab] = useState("ingredients");
     const searchParams = useSearchParams();
     const recipeId = searchParams.get("recipeId");
+    const { showToast } = useToast();
 
     useEffect(() => {
         try {
@@ -79,13 +81,12 @@ const ModifyRecipe = () => {
         async function handleUpdate() {
             await updateRecipe(recipeId, formData);
         }
-
         try {
             e.preventDefault();
             handleUpdate();
-            console.log("recipeUpdated");
+            showToast("Successful recipe update!");
         } catch (e) {
-            console.log(e);
+            showToast(e.message);
         }
 
     };
