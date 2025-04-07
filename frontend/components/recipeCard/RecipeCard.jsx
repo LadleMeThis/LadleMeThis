@@ -16,11 +16,12 @@ export default function RecipeCard({ recipe, navigateTo }) {
         }
     }
 
+    console.log("recipe", recipe)
 
     return (
         <div onClick={() => handleClick()} className="recipe-card">
             <div className="img-container">
-                <img src="/bacon2.jpg" alt="Picture of the current food" />
+                <img src={recipe.picture || "/bacon2.jpg"} alt="Picture of the current food" />
             </div>
             <div className="recipe-name">
                 <h4>{recipe.name}</h4>

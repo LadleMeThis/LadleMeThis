@@ -121,7 +121,7 @@ const Recipe = () => {
 
   return (
     <div className="recipe wrapper">
-      <RecipeImage />
+      <RecipeImage recipeImage={recipe.picture || "/bacon2.jpg"} />
       <div className="recipe-header">
         <h1 className="recipe-title">{recipe.name}</h1>
         <RecipeInfo
