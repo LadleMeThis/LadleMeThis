@@ -12,7 +12,6 @@ export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [user, setUser] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
@@ -26,13 +25,21 @@ export default function Navbar() {
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const checkAuthentication = async () => {
-        const authenticated = 
-            fetch("/api/check-auth")
-                .then(data => data.json())
-                .catch(err => console.error(err))
+        try {
+            const response = await fetch("/api/check-auth");
+            const data = await response.json();
 
-        setIsAuthenticated(authenticated)
-    }
+            console.log("Auth check response:", data);
+
+            setIsAuthenticated(data);
+
+        } catch (err) {
+            console.error(err);
+
+            setIsAuthenticated(false);
+        }
+    };
+
 
 
     function toggleMenu() {
@@ -95,8 +102,11 @@ export default function Navbar() {
         }
     }, [searchQuery]);
 
-
-
+    useEffect(() => {
+        checkAuthentication()
+        console.log("object");
+    }, [isModalOpen])
+    
 
     function handleSearch(e) {
         if (e.key === "Enter" && !recipeDisplayPaths.some(path => pathname.includes(path))) {
