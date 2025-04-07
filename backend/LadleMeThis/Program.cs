@@ -8,6 +8,7 @@ using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Repositories.SavedRecipeRepository;
 using LadleMeThis.Repositories.TagRepository;
 using LadleMeThis.Services.CategoryService;
+using LadleMeThis.Services.FoodImageService;
 using LadleMeThis.Services.IngredientService;
 using LadleMeThis.Services.RecipeDetailService;
 using LadleMeThis.Services.RecipeRatingService;
@@ -46,16 +47,17 @@ using (var scope = app.Services.CreateScope())
 	db.Database.Migrate();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-	var services = scope.ServiceProvider;
-	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-	var context = services.GetRequiredService<LadleMeThisContext>();
+//using (var scope = app.Services.CreateScope())
+//{
+//	var services = scope.ServiceProvider;
+//	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+//	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+//	var context = services.GetRequiredService<LadleMeThisContext>();
+//	var imageService = new FoodImageService();
 
-	var seeder = new DataSeeder(userManager, roleManager, context);
-	await seeder.SeedAsync();
-}
+//	var seeder = new DataSeeder(userManager, roleManager, context, imageService);
+//	await seeder.SeedAsync();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

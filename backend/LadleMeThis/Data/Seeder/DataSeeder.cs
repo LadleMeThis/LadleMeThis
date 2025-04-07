@@ -1,5 +1,6 @@
 using LadleMeThis.Context;
 using LadleMeThis.Data.Entity;
+using LadleMeThis.Services.FoodImageService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,8 @@ namespace LadleMeThis.Data.Seeder;
 public class DataSeeder(
     UserManager<IdentityUser> userManager,
     RoleManager<IdentityRole> roleManager,
-    LadleMeThisContext context)
+    LadleMeThisContext context,
+    IFoodImageService foodImgService)
 {
     private static readonly string[] RecipeNames = new[]
     {
@@ -429,14 +431,12 @@ public class DataSeeder(
 
         foreach (var recipe in recipes)
         {
-            recipe.RecipePicture
+            if (recipe.RecipePicture == null)
+            {
+                recipe.RecipePicture = await foodImgService.GetRandomFoodImageUrlAsync();
+            }
         }
 
     }
 
-
-    private async Task FetchRecipePicture()
-    {
-
-    }
 }
