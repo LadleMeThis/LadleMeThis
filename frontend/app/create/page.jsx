@@ -5,6 +5,7 @@ import Loader from "@/components/loader/Loader";
 import CreateFormGroup from "@/components/create/CreateFormGroup";
 import Tabs from "@/components/create/Tabs";
 import TabContent from "@/components/create/TabContent";
+import { useToast } from "@/context/ToastContext";
 
 const CreateRecipe = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ const CreateRecipe = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("ingredients");
+  const { showToast } = useToast() 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,10 +62,27 @@ const CreateRecipe = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("asd");
     e.preventDefault();
-    await fetchCreate(formData)
-    //no submit if categories tags is missing 
+    if(formData.categories.length == 0){
+      showToast("Missing categories!")
+      return;
+    }
+    else if(formData.tags.length == 0){
+      showToast("Missing tags!")
+      return;
+    }
+    else if(formData.ingredients.length == 0){
+      showToast("Missing ingredients!")
+      return;
+    }
 
+    try {
+      await fetchCreate(formData)
+      showToast("Successful recipe creation!")
+    } catch (error) {
+      showToast(error.message)
+    }
   };
 
   const renderTabContent = () => {

@@ -2,10 +2,12 @@
 import { login } from "@/scripts/scripts";
 import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
+import { useToast } from "@/context/ToastContext";
 
 export default function LoginMode({ setIsLoginMode, onClose }) {
     const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
+    const { showToast } = useToast()
 
 
     function changeModalMode() {
@@ -16,6 +18,7 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
         if (e.target === e.currentTarget) {
             onClose();
         }
+
     };
 
 
@@ -23,8 +26,10 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
         try {
             e.preventDefault();
             await login({ EmailOrUsername: emailOrUsername, Password: password })
+            showToast("Login successful")
+            onClose()
         } catch (e) {
-            console.log(e.message);
+            showToast(e.message)
         }
     }
 

@@ -203,14 +203,29 @@ public class RecipeService(IRecipeRepository recipeRepository,
 
     public async Task<List<RecipeCardDTO>> GetRecipesByCategroryIdAndName(int categoryId, string recipeName)
     {
-        if( recipeName == null)
+        if (recipeName == null)
         {
             return await GetRecipesByCategoryId(categoryId);
         }
 
-        var recipes = await  recipeRepository.GetByCategoryIdAndName(categoryId, recipeName);
+        var recipes = await recipeRepository.GetByCategoryIdAndName(categoryId, recipeName);
 
         return recipes.Select(CreateRecipeCard).ToList();
 
     }
+
+    public async Task<List<RecipeCardDTO>> GetRecipesByUserId(string userId)
+    {
+        var recipes = await recipeRepository.GetByUserId(userId);
+        return recipes.Select(CreateRecipeCard).ToList();
+    }
+
+    public async Task<int> CreateRecipeRatingById(int recipeId, string userId, CreateRecipeRatingDTO recipeRatingDto)
+    {
+        var recipe = await recipeRepository.GetByRecipeId(recipeId);
+        var user = await userManager.FindByIdAsync(userId);
+        
+        return await recipeDetailService.AddRecipeRatingAsync(recipeRatingDto, user, recipe);
+    }
+
 }

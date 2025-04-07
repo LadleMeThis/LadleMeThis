@@ -1,10 +1,9 @@
 using LadleMeThis.Data.Entity;
-using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRatingRepository;
-using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Services.UserService;
+using Microsoft.AspNetCore.Identity;
 
 namespace LadleMeThis.Services.RecipeRatingService;
 
@@ -40,7 +39,25 @@ public class RecipeRatingService(IRecipeRatingRepository recipeRatingRepository,
 			user ?? DummyUser
 		);
 	}
+	
+	public async Task<int> CreateRecipeRating(CreateRecipeRatingDTO createRecipeRatingDto, IdentityUser user, Recipe recipe)
+	{
+		var recipeRating = CreateRecipeRatingEntity(createRecipeRatingDto, user, recipe);
+		return await _recipeRatingRepository.Create(recipeRating);
+	}
 
 	private async Task<List<RecipeRating>> GetRecipeRatingByIds(int recipeId) => 
-		await _recipeRatingRepository.GetById(recipeId); 
+		await _recipeRatingRepository.GetById(recipeId);
+
+	private RecipeRating CreateRecipeRatingEntity(CreateRecipeRatingDTO createRecipeRatingDto, IdentityUser user, Recipe recipe) =>
+		new RecipeRating()
+		{
+			Review = createRecipeRatingDto.Review,
+			Rating = createRecipeRatingDto.Rating,
+			Recipe = recipe,
+			User = user,
+			DateCreated = DateTime.Today
+		};
+
+
 }

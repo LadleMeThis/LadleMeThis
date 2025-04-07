@@ -2,6 +2,7 @@ using System.Security.Claims;
 using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.RecipeModels;
+using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Services.RecipeService;
@@ -37,6 +38,24 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
         {
             //var recipes = await recipeService.GetRecipesByCategoryId(categoryId);
             var recipes = await recipeService.GetRecipesByCategroryIdAndName(categoryId, recipeName);
+            return Ok(recipes);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return BadRequest(ErrorMessages.BadRequestMessage);
+        }
+    }
+
+    [Authorize]
+    [HttpGet("/recipes/my-recipes")]
+    public async Task<ActionResult<List<RecipeCardDTO>>> GetLoggedInUserRecipes()
+    {
+        try
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var recipes = await recipeService.GetRecipesByUserId(userId);
             return Ok(recipes);
         }
         catch (Exception ex)
@@ -170,6 +189,24 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
             await recipeService.DeleteRecipe(recipeId);
 
             return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            return NotFound(ErrorMessages.NotFoundMessage);
+        }
+    }
+    
+    [Authorize]
+    [HttpPost("/recipe/{recipeId:int}/rating")]
+    public async Task<ActionResult<FullRecipeDTO>> CreateRecipeRating(int recipeId, CreateRecipeRatingDTO createRecipeRatingDto)
+    {
+        try
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var recipeRatingId = await recipeService.CreateRecipeRatingById(recipeId, userId, createRecipeRatingDto);
+            
+            return Ok(recipeRatingId);
         }
         catch (Exception ex)
         {

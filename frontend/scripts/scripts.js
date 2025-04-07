@@ -12,7 +12,7 @@ export const fetchRecipeById = async (recipeId) => {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	return await response.json();
 };
@@ -21,14 +21,14 @@ export const updateRecipe = async (recipeId, recipeData) => {
 	const response = await fetch(`/api/recipe/${recipeId}`, {
 		method: "PUT",
 		headers: {
-			"content-type": "application/json"
+			"content-type": "application/json",
 		},
-		body: JSON.stringify(recipeData)
+		body: JSON.stringify(recipeData),
 	});
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 };
 
@@ -40,7 +40,7 @@ export const fetchIngredients = async () => {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	return await response.json();
 };
@@ -55,12 +55,11 @@ export const fetchRecipesByIngredients = async (ingredientIds) => {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	const data = await response.json();
 	return data;
 };
-
 
 export async function fetchRecipesByCategory(categoryId, recipeName = "") {
 	const response = await fetch(`/api/recipes/category/${categoryId}?recipeName=${recipeName}`, {
@@ -70,12 +69,11 @@ export async function fetchRecipesByCategory(categoryId, recipeName = "") {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	const data = await response.json();
 	return data;
 }
-
 
 export async function fetchCategories() {
 	const response = await fetch(`/api/categories`, {
@@ -85,7 +83,7 @@ export async function fetchCategories() {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	const data = await response.json();
 	return data;
@@ -99,7 +97,7 @@ export async function fetchTags() {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	const data = await response.json();
 	return data;
@@ -113,12 +111,11 @@ export async function fetchRecipesByTag(tagId) {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	const data = await response.json();
 	return data;
 }
-
 
 export async function fetchRecipes() {
 	const response = await fetch(`/api/recipes`, {
@@ -128,24 +125,23 @@ export async function fetchRecipes() {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 	const data = await response.json();
 	return data;
 }
 
-
 export async function login(loginData) {
 	const response = await fetch(`/api/login`, {
 		method: "POST",
 		headers: {
-			"content-type": "application/json"
+			"content-type": "application/json",
 		},
-		body: JSON.stringify(loginData)
+		body: JSON.stringify(loginData),
 	});
 
 	if (!response.ok) {
-		throw new Exception("error during login!") //later will be more meaningful!
+		throw new Exception("error during login!"); //later will be more meaningful!
 	}
 }
 
@@ -153,16 +149,15 @@ export async function register(registerData) {
 	const response = await fetch(`/api/register`, {
 		method: "POST",
 		headers: {
-			"content-type": "application/json"
+			"content-type": "application/json",
 		},
-		body: JSON.stringify(registerData)
+		body: JSON.stringify(registerData),
 	});
 
 	if (!response.ok) {
-		throw new Exception("error during registering!") //later will be more meaningful!
+		throw new Exception("error during registering!"); //later will be more meaningful!
 	}
 }
-
 
 export async function fetchRecipesByName(recipeName) {
 	const response = await fetch(`/api/recipes/${recipeName}`, {
@@ -172,7 +167,7 @@ export async function fetchRecipesByName(recipeName) {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 
 	const data = await response.json();
@@ -183,15 +178,15 @@ export async function fetchCreate(recipe) {
 	const response = await fetch(`/api/recipes`, {
 		method: "POST",
 		headers: {
-			"content-type": "application/json"
+			"content-type": "application/json",
 		},
 		credentials: "include",
-		body: JSON.stringify(recipe)
+		body: JSON.stringify(recipe),
 	});
 
 	if (!response.ok) {
-		console.log(response);
-		return;
+		const errorResponse = await response.json();
+		throw new Error(errorResponse.error?.message || "Something went wrong");
 	}
 }
 
@@ -222,14 +217,12 @@ export const getIconForActiveTab = (activeTab) => {
 };
 
 export function formatRecipeToUpdate(data) {
-	delete data.ratings
-	data.ingredients = data.ingredients?.map(i => i.ingredientId);
-	data.tags = data.tags?.map(i => i.tagId);
-	data.categories = data.categories?.map(i => i.categoryId);
+	delete data.ratings;
+	data.ingredients = data.ingredients?.map((i) => i.ingredientId);
+	data.tags = data.tags?.map((i) => i.tagId);
+	data.categories = data.categories?.map((i) => i.categoryId);
 	return data;
 }
-
-
 
 export async function getMyRecipes() {
 	const response = await fetch(`/api/recipes/my-recipes`, {
@@ -238,7 +231,7 @@ export async function getMyRecipes() {
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 
 	return await response.json();
@@ -248,15 +241,15 @@ export async function fetchUpdateProfile(userId, updatedProfile) {
 	const response = await fetch(`/api/user/${userId}`, {
 		method: "POST",
 		headers: {
-			"content-type": "application/json"
+			"content-type": "application/json",
 		},
 		credentials: "include",
-		body: JSON.stringify(updatedProfile)
+		body: JSON.stringify(updatedProfile),
 	});
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 }
 
@@ -265,28 +258,45 @@ export async function fetchProfile(userId) {
 		method: "GET",
 		headers: {},
 		credentials: "include",
-
 	});
 
 	if (!response.ok) {
 		console.log(response);
-		return;
+		throw new Error("Something went wrong");	
 	}
 
 	return await response.json();
 }
 
-
 export async function logout() {
 	const response = await fetch(`/api/logout`, {
 		method: "POST",
 		headers: {
+			"content-type": "application/json",
+		},
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		throw new Error("Something went wrong");		
+	}
+}
+
+export async function fetchCreateRating(recipeId, recipeRating) {
+	const response = await fetch(`/api/recipe/${recipeId}/rating`, {
+		method: "POST",
+		headers: {
 			"content-type": "application/json"
 		},
+		credentials: "include",
+		body: JSON.stringify(recipeRating)
 	});
 
 	if (!response.ok) {
 		console.log(response);
 		return;
 	}
+
+	return response.json()
 }
+

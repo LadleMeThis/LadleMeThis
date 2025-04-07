@@ -1,7 +1,7 @@
 "use client"
 
 import { fetchRecipesByCategory, fetchRecipesByName } from "@/scripts/scripts";
-import RecipeCard from "@/src/components/recipeCard/RecipeCard";
+import RecipeCard from "@/components/recipeCard/RecipeCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
 import Loader from "@/components/loader/Loader";
