@@ -219,4 +219,13 @@ public class RecipeService(IRecipeRepository recipeRepository,
         var recipes = await recipeRepository.GetByUserId(userId);
         return recipes.Select(CreateRecipeCard).ToList();
     }
+
+    public async Task<int> CreateRecipeRatingById(int recipeId, string userId, CreateRecipeRatingDTO recipeRatingDto)
+    {
+        var recipe = await recipeRepository.GetByRecipeId(recipeId);
+        var user = await userManager.FindByIdAsync(userId);
+        
+        return await recipeDetailService.AddRecipeRatingAsync(recipeRatingDto, user, recipe);
+    }
+
 }

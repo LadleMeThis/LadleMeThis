@@ -281,3 +281,22 @@ export async function logout() {
 		throw new Error("Something went wrong");		
 	}
 }
+
+export async function fetchCreateRating(recipeId, recipeRating) {
+	const response = await fetch(`/api/recipe/${recipeId}/rating`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		credentials: "include",
+		body: JSON.stringify(recipeRating)
+	});
+
+	if (!response.ok) {
+		console.log(response);
+		return;
+	}
+
+	return response.json()
+}
+

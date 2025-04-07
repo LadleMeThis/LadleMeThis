@@ -3,6 +3,7 @@ using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.TagModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace LadleMeThis.Services.RecipeDetailService;
 
@@ -15,4 +16,5 @@ public interface IRecipeDetailService
 	IEnumerable<IngredientDTO> GetIngredientDTOsByIngredients(IEnumerable<Ingredient> ingredients); 
 	IEnumerable<CategoryDTO> GetCategoryDTOsByCategories(IEnumerable<Category> categories);
 	List<RecipeRatingDTO> CreateRecipeRatingDtoList(IEnumerable<RecipeRating> ratings);
+	Task<int> AddRecipeRatingAsync(CreateRecipeRatingDTO recipeRatingDto, IdentityUser user, Recipe recipe);
 }
