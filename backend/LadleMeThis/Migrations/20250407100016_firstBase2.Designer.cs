@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LadleMeThis.Migrations
 {
     [DbContext(typeof(LadleMeThisContext))]
-    [Migration("20250325151703_firstBase")]
-    partial class firstBase
+    [Migration("20250407100016_firstBase2")]
+    partial class firstBase2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,36 @@ namespace LadleMeThis.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CategoryRecipe", b =>
+                {
+                    b.Property<int>("CategoriesCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipesRecipeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesCategoryId", "RecipesRecipeId");
+
+                    b.HasIndex("RecipesRecipeId");
+
+                    b.ToTable("CategoryRecipe");
+                });
+
+            modelBuilder.Entity("IngredientRecipe", b =>
+                {
+                    b.Property<int>("IngredientsIngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipesRecipeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IngredientsIngredientId", "RecipesRecipeId");
+
+                    b.HasIndex("RecipesRecipeId");
+
+                    b.ToTable("IngredientRecipe");
+                });
 
             modelBuilder.Entity("LadleMeThis.Data.Entity.Category", b =>
                 {
@@ -37,12 +67,7 @@ namespace LadleMeThis.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("int");
-
                     b.HasKey("CategoryId");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Categories");
                 });
@@ -59,16 +84,11 @@ namespace LadleMeThis.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IngredientId");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Ingredients");
                 });
@@ -94,6 +114,10 @@ namespace LadleMeThis.Migrations
 
                     b.Property<int>("PrepTime")
                         .HasColumnType("int");
+
+                    b.Property<string>("RecipePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ServingSize")
                         .HasColumnType("int");
@@ -180,12 +204,7 @@ namespace LadleMeThis.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("int");
-
                     b.HasKey("TagId");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Tags");
                 });
@@ -388,18 +407,49 @@ namespace LadleMeThis.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("LadleMeThis.Data.Entity.Category", b =>
+            modelBuilder.Entity("RecipeTag", b =>
                 {
-                    b.HasOne("LadleMeThis.Data.Entity.Recipe", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("RecipeId");
+                    b.Property<int>("RecipesRecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsTagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RecipesRecipeId", "TagsTagId");
+
+                    b.HasIndex("TagsTagId");
+
+                    b.ToTable("RecipeTag");
                 });
 
-            modelBuilder.Entity("LadleMeThis.Data.Entity.Ingredient", b =>
+            modelBuilder.Entity("CategoryRecipe", b =>
                 {
+                    b.HasOne("LadleMeThis.Data.Entity.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LadleMeThis.Data.Entity.Recipe", null)
-                        .WithMany("Ingredients")
-                        .HasForeignKey("RecipeId");
+                        .WithMany()
+                        .HasForeignKey("RecipesRecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IngredientRecipe", b =>
+                {
+                    b.HasOne("LadleMeThis.Data.Entity.Ingredient", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsIngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LadleMeThis.Data.Entity.Recipe", null)
+                        .WithMany()
+                        .HasForeignKey("RecipesRecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LadleMeThis.Data.Entity.Recipe", b =>
@@ -445,13 +495,6 @@ namespace LadleMeThis.Migrations
                     b.Navigation("Recipe");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LadleMeThis.Data.Entity.Tag", b =>
-                {
-                    b.HasOne("LadleMeThis.Data.Entity.Recipe", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("RecipeId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -505,15 +548,24 @@ namespace LadleMeThis.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RecipeTag", b =>
+                {
+                    b.HasOne("LadleMeThis.Data.Entity.Recipe", null)
+                        .WithMany()
+                        .HasForeignKey("RecipesRecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LadleMeThis.Data.Entity.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LadleMeThis.Data.Entity.Recipe", b =>
                 {
-                    b.Navigation("Categories");
-
-                    b.Navigation("Ingredients");
-
                     b.Navigation("Ratings");
-
-                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

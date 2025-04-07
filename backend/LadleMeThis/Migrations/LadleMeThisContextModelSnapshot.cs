@@ -113,6 +113,7 @@ namespace LadleMeThis.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RecipePicture")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ServingSize")
