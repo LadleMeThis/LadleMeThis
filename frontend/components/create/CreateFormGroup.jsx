@@ -20,6 +20,7 @@ const CreateFormGroup = ({ label, name, type, value, onChange, placeholder, rows
           onChange={onChange}
           placeholder={placeholder}
           rows={rows}
+          required
         />
       ) : (
         <input
@@ -30,6 +31,7 @@ const CreateFormGroup = ({ label, name, type, value, onChange, placeholder, rows
           onChange={type === "number" ? handleNumberChange : onChange}
           placeholder={placeholder}
           min="0"
+          required
         />
       )}
     </div>
