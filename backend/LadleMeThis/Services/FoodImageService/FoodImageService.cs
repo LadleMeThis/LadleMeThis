@@ -8,11 +8,11 @@ namespace LadleMeThis.Services.FoodImageService
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         private readonly Random _random;
-        public FoodImageService()
+        public FoodImageService(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
             _random = new Random();
-            _apiKey = Environment.GetEnvironmentVariable("PEXELS_API_KEY");
+            _apiKey = configuration["PEXELS_API_KEY"];
         }
 
         public async Task<string> GetRandomFoodImageUrlAsync()
@@ -24,37 +24,36 @@ namespace LadleMeThis.Services.FoodImageService
 
                 var request = new HttpRequestMessage(
                     HttpMethod.Get,
-                    $"https://api.pexels.com/v1/search?query=food&page=${randomPage}&per_page=1"
+                    $"https://api.pexels.com/v1/search?query=food&page={randomPage}&per_page=1"
                 );
-
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+                
+                request.Headers.Add("Authorization", _apiKey);
 
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
-
+                
                 var content = await response.Content.ReadAsStringAsync();
-
+                
                 using var doc = JsonDocument.Parse(content);
                 var photos = doc.RootElement.GetProperty("photos");
 
-                if (photos.GetArrayLength() > 0)
-                {
-                    var random = new Random();
-                    var index = random.Next(photos.GetArrayLength());
-                    var photo = photos[index];
+                if (photos.GetArrayLength() <= 0) 
+                    return "FallbackLink";
+                
+                var random = new Random();
+                var index = random.Next(photos.GetArrayLength());
+                var photo = photos[index];
+                
+                var src = photo.GetProperty("src");
+                var imageUrl = src.GetProperty("original").GetString();
 
-                    var src = photo.GetProperty("src");
-                    var imageUrl = src.GetProperty("original").GetString();
+                return imageUrl ?? "ImageLink";
 
-                    return imageUrl;
-                }
-
-                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return null;
+                return ex.Message;
             }
         }
 

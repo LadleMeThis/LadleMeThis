@@ -179,7 +179,6 @@ public class DataSeeder(
         await SeedTagsAsync();
         await SeedRecipesAsync();
         await SeedRatingsAsync();
-        await SeedPicturesAsync();
     }
 
     private async Task SeedRolesAsync()
@@ -265,7 +264,7 @@ public class DataSeeder(
             var tags = await context.Tags.ToListAsync();
             if (!tags.Any()) throw new Exception("Tags not found");
 
-            var recipes = RecipeNames.Select(recipeName =>
+            var recipesTasks = RecipeNames.Select(async recipeName =>
             {
                 var numInstructions = Random.Next(1, 8);
                 var randomInstructions = Instructions.OrderBy(x => Guid.NewGuid()).Take(numInstructions).ToList();
@@ -280,6 +279,8 @@ public class DataSeeder(
                     .Take(Random.Next(3, 13))
                     .ToList();
 
+                var img = await foodImgService.GetRandomFoodImageUrlAsync();
+
                 return new Recipe
                 {
                     Name = recipeName,
@@ -290,9 +291,13 @@ public class DataSeeder(
                     User = user,
                     Categories = categoryList,
                     Tags = tagList,
-                    Ingredients = ingredientList
+                    Ingredients = ingredientList,
+                    RecipePicture = img
                 };
-            }).ToList();
+            });
+            
+            var recipesArray = await Task.WhenAll(recipesTasks);
+            var recipes = recipesArray.ToList();
 
             context.Recipes.AddRange(recipes);
             await context.SaveChangesAsync();
@@ -422,21 +427,6 @@ public class DataSeeder(
             context.Ratings.AddRange(ratings);
             await context.SaveChangesAsync();
         }
-    }
-
-    private async Task SeedPicturesAsync()
-    {
-        var recipes = await context.Recipes.ToListAsync();
-        if (!recipes.Any()) throw new Exception("Recipes not found");
-
-        foreach (var recipe in recipes)
-        {
-            if (recipe.RecipePicture == null)
-            {
-                recipe.RecipePicture = await foodImgService.GetRandomFoodImageUrlAsync();
-            }
-        }
-
     }
 
 }
