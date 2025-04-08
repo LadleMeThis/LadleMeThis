@@ -1,4 +1,8 @@
 
+import { FaTags } from "react-icons/fa";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { TbLadle } from "react-icons/tb";
+
 export const formatRecipeToUpdate = (data) => {
     delete data.ratings;
     data.ingredients = data.ingredients?.map((i) => i.ingredientId);
