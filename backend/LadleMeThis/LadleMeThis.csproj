@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>LadleMeThis</RootNamespace>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>458b67ea-11de-43fe-8229-b240e8c7cf39</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
       <Folder Include="Models\RecipeModels\" />
       <Folder Include="Services\CategoryService\" />
       <Folder Include="Services\IngredientService\" />

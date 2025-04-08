@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function RecipeCard({ recipe, navigateTo }) {
-    const [imageUrl, setImageUrl] = useState(null);
+
+    const recipeImg = recipe.recipeImage;
     const router = useRouter();
 
     const getRandomImage = () => {
@@ -21,28 +22,12 @@ export default function RecipeCard({ recipe, navigateTo }) {
         }
     }
 
-    useEffect(() => {
-        fetch(getRandomImage(), {
-            headers: {
-                Authorization: process.env.NEXT_PUBLIC_API_KEY
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.photos && data.photos.length > 0) {
-                    setImageUrl(data.photos[0].src.original);
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching food image:", error);
-                setImageUrl("/bacon2.jpg");
-            });
-    }, []);
+
 
     return (
         <div onClick={() => handleClick()} className="recipe-card">
             <div className="img-container">
-                <img src={imageUrl} alt="Random food" />
+                <img src={recipeImg.imageUrl || "/bacon2.jpg"} alt={recipeImg.alt} />
             </div>
             <div className="recipe-name">
                 <h4>{recipe.name}</h4>

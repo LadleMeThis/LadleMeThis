@@ -112,6 +112,9 @@ namespace LadleMeThis.Migrations
                     b.Property<int>("PrepTime")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RecipeImageImageId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ServingSize")
                         .HasColumnType("int");
 
@@ -120,9 +123,40 @@ namespace LadleMeThis.Migrations
 
                     b.HasKey("RecipeId");
 
+                    b.HasIndex("RecipeImageImageId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("LadleMeThis.Data.Entity.RecipeImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("Alt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotographerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotographerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("RecipeImages");
                 });
 
             modelBuilder.Entity("LadleMeThis.Data.Entity.RecipeRating", b =>
@@ -447,9 +481,15 @@ namespace LadleMeThis.Migrations
 
             modelBuilder.Entity("LadleMeThis.Data.Entity.Recipe", b =>
                 {
+                    b.HasOne("LadleMeThis.Data.Entity.RecipeImage", "RecipeImage")
+                        .WithMany()
+                        .HasForeignKey("RecipeImageImageId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("RecipeImage");
 
                     b.Navigation("User");
                 });
