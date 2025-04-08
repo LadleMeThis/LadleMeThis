@@ -8,6 +8,7 @@ using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Repositories.SavedRecipeRepository;
 using LadleMeThis.Repositories.TagRepository;
 using LadleMeThis.Services.CategoryService;
+using LadleMeThis.Services.FoodImageService;
 using LadleMeThis.Services.IngredientService;
 using LadleMeThis.Services.RecipeDetailService;
 using LadleMeThis.Services.RecipeRatingService;
@@ -52,8 +53,9 @@ using (var scope = app.Services.CreateScope())
 	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 	var context = services.GetRequiredService<LadleMeThisContext>();
+	var imageService = new FoodImageService(builder.Configuration);
 
-	var seeder = new DataSeeder(userManager, roleManager, context);
+	var seeder = new DataSeeder(userManager, roleManager, context, imageService);
 	await seeder.SeedAsync();
 }
 

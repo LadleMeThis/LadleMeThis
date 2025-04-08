@@ -1,13 +1,9 @@
-import Image from "next/image";
-import recipeImage from "@/imgs/carbonara.webp";
 
-const RecipeImage = () => (
+const RecipeImage = ({recipe}) => (
   <div className="recipe-image">
-    <Image
-      src={recipeImage}
-      alt="Recipe Image"
-      width={500}
-      height={300}
+    <img
+      src={recipe.recipeImage.imageUrl}
+      alt={recipe.recipeImage.alt}
     />
   </div>
 );

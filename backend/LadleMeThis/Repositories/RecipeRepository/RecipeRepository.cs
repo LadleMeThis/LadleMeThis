@@ -14,6 +14,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .ToListAsync();
 
     public async Task<List<Recipe>> GetByCategoryId(int categoryId) =>
@@ -23,6 +24,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.Categories.Any(c => c.CategoryId == categoryId))
             .ToListAsync();
 
@@ -33,6 +35,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.Tags.Any(t => t.TagId == tagId))
             .ToListAsync();
 
@@ -43,6 +46,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.Ingredients.Any(i => i.IngredientId == ingredientId))
             .ToListAsync();
 
@@ -53,6 +57,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.Ingredients.Any(i => ingredientIds.Contains(i.IngredientId)))
             .ToListAsync();
 
@@ -63,6 +68,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.User.Id == userId)
             .ToListAsync();
 
@@ -74,6 +80,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
 
         return recipe ?? throw new KeyNotFoundException("Recipe not found");
@@ -142,6 +149,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.Name.ToLower().Contains(name.ToLower()))
             .ToListAsync();
 
@@ -155,6 +163,7 @@ public class RecipeRepository(LadleMeThisContext ladleMeThisContext) : IRecipeRe
             .Include(r => r.Ingredients)
             .Include(r => r.Ratings)
             .Include(r => r.User)
+            .Include(r => r.RecipeImage)
             .Where(r => r.Name.ToLower().Contains(recipeName.ToLower()) && r.Categories.Any(c => c.CategoryId == categoryId))
             .ToListAsync();
     }
