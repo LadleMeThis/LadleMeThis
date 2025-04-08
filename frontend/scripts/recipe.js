@@ -71,3 +71,12 @@ export const fetchRecipesByName = async (recipeName) => {
 	
     return await response.json();
 };
+
+export async function getMyRecipes() {
+	const response = await fetch(`/api/recipes/my-recipes`);
+
+	if (!response.ok) 
+		throw new Error("Something went wrong");	
+
+	return await response.json();
+}
