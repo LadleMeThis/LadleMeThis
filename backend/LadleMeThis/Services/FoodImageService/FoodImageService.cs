@@ -63,7 +63,6 @@ namespace LadleMeThis.Services.FoodImageService
 
                     results.Add(new RecipeImage()
                     {
-                        ImageId = id,
                         ImageUrl = imageUrl,
                         PhotographerName = photographer,
                         PhotographerUrl = photographerUrl,

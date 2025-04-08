@@ -12,6 +12,8 @@ public class DataSeeder(
     LadleMeThisContext context,
     IFoodImageService foodImgService)
 {
+    const int _desiredNumberOfImages = 100;
+
     private static readonly string[] RecipeNames = new[]
     {
         "Fluffernut Pie",
@@ -295,7 +297,7 @@ public class DataSeeder(
                     Categories = categoryList,
                     Tags = tagList,
                     Ingredients = ingredientList,
-                    RecipeImage = recipeImages[Random.Next(101)]
+                    RecipeImage = recipeImages[Random.Next(_desiredNumberOfImages)]
                 };
             });
 
@@ -434,10 +436,9 @@ public class DataSeeder(
 
     private async Task SeedRecipeImagesAsync()
     {
-        const int desiredNumberOfImages = 100;
-        var recipeImages = await context.RecipeImages.ToListAsync();
-        var foodImages = await foodImgService.GetRandomFoodImagesAsync(desiredNumberOfImages);
-        recipeImages.AddRange(foodImages);
+        var foodImages = await foodImgService.GetRandomFoodImagesAsync(_desiredNumberOfImages);
+        context.RecipeImages.AddRange(foodImages);
+        await context.SaveChangesAsync();
     }
 
 }

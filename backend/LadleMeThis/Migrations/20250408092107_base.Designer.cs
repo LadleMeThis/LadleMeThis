@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LadleMeThis.Migrations
 {
     [DbContext(typeof(LadleMeThisContext))]
-    [Migration("20250408080357_base")]
+    [Migration("20250408092107_base")]
     partial class @base
     {
         /// <inheritdoc />
@@ -115,9 +115,8 @@ namespace LadleMeThis.Migrations
                     b.Property<int>("PrepTime")
                         .HasColumnType("int");
 
-                    b.Property<string>("RecipePicture")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("RecipeImageImageId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ServingSize")
                         .HasColumnType("int");
@@ -126,6 +125,8 @@ namespace LadleMeThis.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RecipeId");
+
+                    b.HasIndex("RecipeImageImageId");
 
                     b.HasIndex("UserId");
 
@@ -483,9 +484,15 @@ namespace LadleMeThis.Migrations
 
             modelBuilder.Entity("LadleMeThis.Data.Entity.Recipe", b =>
                 {
+                    b.HasOne("LadleMeThis.Data.Entity.RecipeImage", "RecipeImage")
+                        .WithMany()
+                        .HasForeignKey("RecipeImageImageId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("RecipeImage");
 
                     b.Navigation("User");
                 });

@@ -223,7 +223,7 @@ namespace LadleMeThis.Migrations
                     PrepTime = table.Column<int>(type: "int", nullable: false),
                     CookTime = table.Column<int>(type: "int", nullable: false),
                     ServingSize = table.Column<int>(type: "int", nullable: false),
-                    RecipePicture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecipeImageImageId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -234,6 +234,11 @@ namespace LadleMeThis.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Recipes_RecipeImages_RecipeImageImageId",
+                        column: x => x.RecipeImageImageId,
+                        principalTable: "RecipeImages",
+                        principalColumn: "ImageId");
                 });
 
             migrationBuilder.CreateTable(
@@ -423,6 +428,11 @@ namespace LadleMeThis.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Recipes_RecipeImageImageId",
+                table: "Recipes",
+                column: "RecipeImageImageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recipes_UserId",
                 table: "Recipes",
                 column: "UserId");
@@ -471,9 +481,6 @@ namespace LadleMeThis.Migrations
                 name: "Ratings");
 
             migrationBuilder.DropTable(
-                name: "RecipeImages");
-
-            migrationBuilder.DropTable(
                 name: "RecipeTag");
 
             migrationBuilder.DropTable(
@@ -496,6 +503,9 @@ namespace LadleMeThis.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "RecipeImages");
         }
     }
 }
