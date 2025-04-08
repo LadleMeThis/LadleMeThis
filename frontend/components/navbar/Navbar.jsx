@@ -3,7 +3,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { FaSearch, FaBars, FaTimes } from "react-icons/fa";
-import { fetchCategories, fetchTags, logout } from "@/scripts/scripts";
+import { fetchCategories } from "@/scripts/categories";
+import { fetchTags } from "@/scripts/tags";
+import { logout } from "@/scripts/auth";
 import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 import Image from "next/image";
 import logo from "@/imgs/logo.png"

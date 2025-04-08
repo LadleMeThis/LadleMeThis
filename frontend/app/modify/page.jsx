@@ -1,6 +1,10 @@
 "use client";
-import React, { useState, useEffect, act } from "react";
-import { fetchCategories, fetchIngredients, fetchRecipeById, fetchTags, formatRecipeToUpdate, updateRecipe } from "@/scripts/scripts";
+import React, { useState, useEffect } from "react";
+import { fetchCategories } from "@/scripts/categories";
+import { fetchIngredients } from "@/scripts/ingredients";
+import { fetchRecipeById, updateRecipe } from "@/scripts/recipe";
+import { fetchTags } from "@/scripts/tags";
+import { formatRecipeToUpdate } from "@/scripts/formatters";
 import Loader from "@/components/loader/Loader";
 import CreateFormGroup from "@/components/create/CreateFormGroup";
 import Tabs from "@/components/create/Tabs";

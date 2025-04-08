@@ -5,11 +5,11 @@ import RecipeImage from "@/components/recipe/recipeImage";
 import RecipeInfo from "@/components/recipe/RecipeInfo";
 import RecipeCategoryTags from "@/components/recipe/RecipeCategoryTags";
 import RecipeIngredients from "@/components/recipe/RecipeIngredients";
-import RecipeRatings from "@/components/recipe/RecipeRatings";
-import { fetchRecipeById } from "@/scripts/scripts";
+import RecipeRatings from "@/components/recipe/RecipeRatings";;
+import { fetchRecipeById } from "@/scripts/recipe";
+import { fetchCreateRating } from "@/scripts/ratings";
 import Loader from "@/components/loader/Loader";
 import CreateRecipeRating from "@/components/recipe/CreateRecipeRating";
-import { fetchCreateRating } from "@/scripts/scripts";
 import { useToast } from "@/context/ToastContext";
 
 const Recipe = () => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { fetchRecipesByCategory, fetchRecipesByName } from "@/scripts/scripts";
+import { fetchRecipesByCategory } from "@/scripts/recipe";
 import RecipeCard from "@/components/recipeCard/RecipeCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
