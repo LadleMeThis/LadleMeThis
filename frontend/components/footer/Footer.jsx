@@ -9,6 +9,7 @@ const Footer = () => {
                     <p>
                         &copy; 2025 Ladle Me This. All Rights Reserved.{' '}
                         <a href="#privacy-policy">Privacy Policy</a>
+                        {" "}Photos provided by: {" "} <a href="https://www.pexels.com">Pexels</a>
                     </p>
                 </div>
             </div>
