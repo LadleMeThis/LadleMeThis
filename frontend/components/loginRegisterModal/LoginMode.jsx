@@ -3,11 +3,13 @@ import { login } from "@/scripts/auth";
 import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginMode({ setIsLoginMode, onClose }) {
     const [emailOrUsername, setEmailOrUsername] = useState("");
     const [password, setPassword] = useState("");
     const { showToast } = useToast()
+    const { checkAuthentication } = useAuth()
 
 
     function changeModalMode() {
@@ -26,10 +28,11 @@ export default function LoginMode({ setIsLoginMode, onClose }) {
         try {
             e.preventDefault();
             await login({ EmailOrUsername: emailOrUsername, Password: password })
+            await  checkAuthentication()
             showToast("Login successful")
             onClose()
         } catch (e) {
-            showToast(e.message)
+            showToast("Login error, try again!")
         }
     }
 

@@ -65,7 +65,6 @@ const CreateRecipe = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("asd");
     e.preventDefault();
     if(formData.categories.length == 0){
       showToast("Missing categories!")

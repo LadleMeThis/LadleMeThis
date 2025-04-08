@@ -13,9 +13,6 @@ export default function MyRecipes() {
     const [displayedRecipes, setDisplayedRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
 
-
-//todo reset the search bar whenever user navigates to a different page
-
     useEffect(() => {
         try {
             async function fetchMyRecipes() {

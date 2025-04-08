@@ -1,5 +1,4 @@
-﻿using LadleMeThis.Models.CategoryModels;
-using LadleMeThis.Models.IngredientsModels;
+﻿using LadleMeThis.Models.IngredientsModels;
 
 namespace LadleMeThis.Services.IngredientService
 {

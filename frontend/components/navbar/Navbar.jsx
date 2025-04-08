@@ -9,33 +9,25 @@ import { logout } from "@/scripts/auth";
 import LoginRegisterModal from "@/components/loginRegisterModal/loginRegisterModal";
 import Image from "next/image";
 import logo from "@/imgs/logo.png"
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
     const [categories, setCategories] = useState([]);
     const [tags, setTags] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [user, setUser] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const pathname = usePathname();
     const recipeDisplayPaths = ["/category", "/tag", "/my-recipes"]
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const { isAuthenticated, setIsAuthenticated, checkAuthentication } = useAuth()
 
 
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-    const checkAuthentication = async () => {
-        const authenticated = 
-            fetch("/api/check-auth")
-                .then(data => data.json())
-                .catch(err => console.error(err))
-
-        setIsAuthenticated(authenticated)
-    }
-
+   
 
     function toggleMenu() {
         if (menuOpen) {
@@ -59,7 +51,6 @@ export default function Navbar() {
         const getCategories = async () => {
             const data = await fetchCategories()
             setCategories(data)
-            console.log(categories)
         }
         getCategories();
 
@@ -67,12 +58,8 @@ export default function Navbar() {
         const getTags = async () => {
             const data = await fetchTags()
             setTags(data)
-            console.log(categories)
         }
         getTags();
-
-        checkAuthentication()
-
 
     }, [])
 
@@ -97,8 +84,12 @@ export default function Navbar() {
         }
     }, [searchQuery]);
 
-
-
+    useEffect(() => {
+        if (!isModalOpen)          
+          checkAuthentication();
+        
+      }, [isModalOpen]);
+   
 
     function handleSearch(e) {
         if (e.key === "Enter" && !recipeDisplayPaths.some(path => pathname.includes(path))) {
@@ -113,11 +104,11 @@ export default function Navbar() {
         router.push(path);
     }
 
-    const handleLogout = () => {
-        logout()
-        setIsModalOpen(false)
+    const handleLogout = async () => {
+        await logout()
         setIsAuthenticated(false)
-    }
+        setIsModalOpen(false)
+    }  
 
     return (
         <nav className="navbar">

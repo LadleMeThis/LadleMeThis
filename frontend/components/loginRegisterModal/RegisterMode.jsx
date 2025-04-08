@@ -31,7 +31,7 @@ export default function RegisterMode({ onClose, setIsLoginMode }) {
             showToast("Register and login successful")
             onClose();
         } catch (e) {
-            showToast(e.message)
+            showToast("Something went wrong, try again!")
         }
     }
 

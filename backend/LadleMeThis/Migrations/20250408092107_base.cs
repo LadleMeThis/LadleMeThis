@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LadleMeThis.Migrations
 {
     /// <inheritdoc />
-    public partial class firstBase : Migration
+    public partial class @base : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,62 @@ namespace LadleMeThis.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    IngredientId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeImages",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhotographerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhotographerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeImages", x => x.ImageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.TagId);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,6 +223,7 @@ namespace LadleMeThis.Migrations
                     PrepTime = table.Column<int>(type: "int", nullable: false),
                     CookTime = table.Column<int>(type: "int", nullable: false),
                     ServingSize = table.Column<int>(type: "int", nullable: false),
+                    RecipeImageImageId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -177,45 +234,59 @@ namespace LadleMeThis.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Recipes_RecipeImages_RecipeImageImageId",
+                        column: x => x.RecipeImageImageId,
+                        principalTable: "RecipeImages",
+                        principalColumn: "ImageId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "CategoryRecipe",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RecipeId = table.Column<int>(type: "int", nullable: true)
+                    CategoriesCategoryId = table.Column<int>(type: "int", nullable: false),
+                    RecipesRecipeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                    table.PrimaryKey("PK_CategoryRecipe", x => new { x.CategoriesCategoryId, x.RecipesRecipeId });
                     table.ForeignKey(
-                        name: "FK_Categories_Recipes_RecipeId",
-                        column: x => x.RecipeId,
+                        name: "FK_CategoryRecipe_Categories_CategoriesCategoryId",
+                        column: x => x.CategoriesCategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryRecipe_Recipes_RecipesRecipeId",
+                        column: x => x.RecipesRecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "RecipeId");
+                        principalColumn: "RecipeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ingredients",
+                name: "IngredientRecipe",
                 columns: table => new
                 {
-                    IngredientId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RecipeId = table.Column<int>(type: "int", nullable: true)
+                    IngredientsIngredientId = table.Column<int>(type: "int", nullable: false),
+                    RecipesRecipeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
+                    table.PrimaryKey("PK_IngredientRecipe", x => new { x.IngredientsIngredientId, x.RecipesRecipeId });
                     table.ForeignKey(
-                        name: "FK_Ingredients_Recipes_RecipeId",
-                        column: x => x.RecipeId,
+                        name: "FK_IngredientRecipe_Ingredients_IngredientsIngredientId",
+                        column: x => x.IngredientsIngredientId,
+                        principalTable: "Ingredients",
+                        principalColumn: "IngredientId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IngredientRecipe_Recipes_RecipesRecipeId",
+                        column: x => x.RecipesRecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "RecipeId");
+                        principalColumn: "RecipeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,6 +318,30 @@ namespace LadleMeThis.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RecipeTag",
+                columns: table => new
+                {
+                    RecipesRecipeId = table.Column<int>(type: "int", nullable: false),
+                    TagsTagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeTag", x => new { x.RecipesRecipeId, x.TagsTagId });
+                    table.ForeignKey(
+                        name: "FK_RecipeTag_Recipes_RecipesRecipeId",
+                        column: x => x.RecipesRecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "RecipeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeTag_Tags_TagsTagId",
+                        column: x => x.TagsTagId,
+                        principalTable: "Tags",
+                        principalColumn: "TagId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SavedRecipes",
                 columns: table => new
                 {
@@ -271,25 +366,6 @@ namespace LadleMeThis.Migrations
                         principalTable: "Recipes",
                         principalColumn: "RecipeId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    TagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RecipeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.TagId);
-                    table.ForeignKey(
-                        name: "FK_Tags_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "RecipeId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -332,14 +408,14 @@ namespace LadleMeThis.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_RecipeId",
-                table: "Categories",
-                column: "RecipeId");
+                name: "IX_CategoryRecipe_RecipesRecipeId",
+                table: "CategoryRecipe",
+                column: "RecipesRecipeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ingredients_RecipeId",
-                table: "Ingredients",
-                column: "RecipeId");
+                name: "IX_IngredientRecipe_RecipesRecipeId",
+                table: "IngredientRecipe",
+                column: "RecipesRecipeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ratings_RecipeId",
@@ -352,9 +428,19 @@ namespace LadleMeThis.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Recipes_RecipeImageImageId",
+                table: "Recipes",
+                column: "RecipeImageImageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recipes_UserId",
                 table: "Recipes",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecipeTag_TagsTagId",
+                table: "RecipeTag",
+                column: "TagsTagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SavedRecipes_RecipeId",
@@ -365,11 +451,6 @@ namespace LadleMeThis.Migrations
                 name: "IX_SavedRecipes_UserId",
                 table: "SavedRecipes",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tags_RecipeId",
-                table: "Tags",
-                column: "RecipeId");
         }
 
         /// <inheritdoc />
@@ -391,28 +472,40 @@ namespace LadleMeThis.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CategoryRecipe");
+
+            migrationBuilder.DropTable(
+                name: "IngredientRecipe");
+
+            migrationBuilder.DropTable(
+                name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "RecipeTag");
+
+            migrationBuilder.DropTable(
+                name: "SavedRecipes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
 
             migrationBuilder.DropTable(
-                name: "Ratings");
-
-            migrationBuilder.DropTable(
-                name: "SavedRecipes");
-
-            migrationBuilder.DropTable(
                 name: "Tags");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Recipes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "RecipeImages");
         }
     }
 }

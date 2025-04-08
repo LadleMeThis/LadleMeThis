@@ -1,7 +1,6 @@
 ﻿using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.SavedRecipesModels;
 using LadleMeThis.Services.SavedRecipeService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LadleMeThis.Controllers.SavedRecipeController

@@ -1,12 +1,9 @@
 ﻿using LadleMeThis.Data.Entity;
-using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Repositories.IngredientRepository;
 
 namespace LadleMeThis.Services.IngredientService
 {
-    //note for self : make a parser method DTO -> model, model -> DTO
-
     public class IngredientService : IIngredientService
     {
         IIngredientRepository _ingredientRepository;

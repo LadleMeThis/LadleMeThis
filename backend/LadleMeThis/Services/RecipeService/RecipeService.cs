@@ -149,6 +149,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
             fullTime,
             recipe.ServingSize,
             averageRating,
+            recipe.RecipeImage,
             tags,
             categories
         );
@@ -194,6 +195,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
             recipe.CookTime,
             recipe.ServingSize,
             recipe.User.UserName,
+            recipe.RecipeImage,
             categories.ToList(),
             tags.ToList(),
             ingredients.ToList(),
@@ -201,7 +203,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
         );
     }
 
-    public async Task<List<RecipeCardDTO>> GetRecipesByCategroryIdAndName(int categoryId, string recipeName)
+    public async Task<List<RecipeCardDTO>> GetRecipesByCategoryIdAndName(int categoryId, string recipeName)
     {
         if (recipeName == null)
         {

@@ -1,7 +1,5 @@
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.IngredientsModels;
-using LadleMeThis.Models.TagModels;
-using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Services.IngredientService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;

@@ -1,5 +1,4 @@
-﻿using LadleMeThis.Models.IngredientsModels;
-using LadleMeThis.Models.TagModels;
+﻿using LadleMeThis.Models.TagModels;
 
 namespace LadleMeThis.Services.TagService
 {
