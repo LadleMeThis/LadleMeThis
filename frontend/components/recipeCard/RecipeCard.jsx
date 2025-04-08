@@ -4,6 +4,7 @@ import { BiCategory } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 
 export default function RecipeCard({ recipe, navigateTo }) {
+    const recipeImg = recipe.recipeImage;
     const router = useRouter();
 
 
@@ -21,7 +22,7 @@ export default function RecipeCard({ recipe, navigateTo }) {
     return (
         <div onClick={() => handleClick()} className="recipe-card">
             <div className="img-container">
-                <img src={recipe.picture || "/bacon2.jpg"} alt="Picture of the current food" />
+                <img src={recipeImg.imageUrl || "/bacon2.jpg"} alt={recipeImg.alt} />
             </div>
             <div className="recipe-name">
                 <h4>{recipe.name}</h4>

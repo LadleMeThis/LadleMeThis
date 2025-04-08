@@ -8,6 +8,22 @@
   transition: all 0.3s ease-in-out;
   cursor: default;
 
+  .photo-creator {
+    align-self: center;
+    text-align: center;
+
+    & a {
+      color: $text;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+
   &-image {
     text-align: center;
     margin-bottom: 1.5rem;

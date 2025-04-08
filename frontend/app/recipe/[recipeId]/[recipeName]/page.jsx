@@ -38,7 +38,7 @@ const Recipe = () => {
       setIsAuthenticated(false);
     }
   };
-  
+
   const clearFormdata = () => setFormData({
     rating: 0,
     review: ""
@@ -53,7 +53,7 @@ const Recipe = () => {
 
       updatedRatings.push({
         ratingId: ratingId,
-        user:{
+        user: {
           userName: null
         },
         rating: formData.rating,
@@ -63,7 +63,7 @@ const Recipe = () => {
 
       setRatings(updatedRatings)
       clearFormdata()
-      
+
       showToast("Successfully added rating")
     } catch (error) {
       showToast(error.message)
@@ -93,6 +93,7 @@ const Recipe = () => {
       setRecipe(data)
       setRatings(data.ratings)
       console.log(data.ratings[0]);
+      console.log(data)
 
       setTimeout(() => {
         setLoading(false);
@@ -111,8 +112,8 @@ const Recipe = () => {
   }, [recipeId])
 
   useEffect(() => {
-      console.log(isDisabled());
-    
+    console.log(isDisabled());
+
   }, [isAuthenticated, formData]);
 
   if (loading)
@@ -121,7 +122,10 @@ const Recipe = () => {
 
   return (
     <div className="recipe wrapper">
-      <RecipeImage recipeImage={recipe.picture || "/bacon2.jpg"} />
+      <RecipeImage recipe={recipe} />
+      <div className="photo-creator">
+        Image was made by : <a href={recipe.recipeImage.photographerUrl}>{recipe.recipeImage.photographerName}</a>
+      </div>
       <div className="recipe-header">
         <h1 className="recipe-title">{recipe.name}</h1>
         <RecipeInfo

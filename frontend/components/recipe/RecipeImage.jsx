@@ -1,9 +1,9 @@
 
-const RecipeImage = ({recipeImage}) => (
+const RecipeImage = ({recipe}) => (
   <div className="recipe-image">
     <img
-      src={recipeImage}
-      alt="Recipe Image"
+      src={recipe.recipeImage.imageUrl}
+      alt={recipe.recipeImage.alt}
     />
   </div>
 );
