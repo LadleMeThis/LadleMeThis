@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LadleMeThis.Migrations
 {
     [DbContext(typeof(LadleMeThisContext))]
-    [Migration("20250407100016_firstBase2")]
-    partial class firstBase2
+    [Migration("20250408080357_base")]
+    partial class @base
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,35 @@ namespace LadleMeThis.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("LadleMeThis.Data.Entity.RecipeImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("Alt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotographerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotographerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("RecipeImages");
                 });
 
             modelBuilder.Entity("LadleMeThis.Data.Entity.RecipeRating", b =>

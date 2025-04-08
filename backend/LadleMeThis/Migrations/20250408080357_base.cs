@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LadleMeThis.Migrations
 {
     /// <inheritdoc />
-    public partial class firstBase2 : Migration
+    public partial class @base : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,6 +75,22 @@ namespace LadleMeThis.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ingredients", x => x.IngredientId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeImages",
+                columns: table => new
+                {
+                    ImageId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhotographerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhotographerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeImages", x => x.ImageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -453,6 +469,9 @@ namespace LadleMeThis.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "RecipeImages");
 
             migrationBuilder.DropTable(
                 name: "RecipeTag");

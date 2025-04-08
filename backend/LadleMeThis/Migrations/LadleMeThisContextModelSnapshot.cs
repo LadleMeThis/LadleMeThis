@@ -129,6 +129,35 @@ namespace LadleMeThis.Migrations
                     b.ToTable("Recipes");
                 });
 
+            modelBuilder.Entity("LadleMeThis.Data.Entity.RecipeImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("Alt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotographerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotographerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("RecipeImages");
+                });
+
             modelBuilder.Entity("LadleMeThis.Data.Entity.RecipeRating", b =>
                 {
                     b.Property<int>("RatingId")

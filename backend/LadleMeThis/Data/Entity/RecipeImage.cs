@@ -1,11 +1,14 @@
-﻿namespace LadleMeThis.Data.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LadleMeThis.Data.Entity
 {
     public class RecipeImage
     {
+        [Key]
         public int ImageId { get; set; }
-        string ImageUrl { get; set; }
-        string PhotographerName { get; set; }
-        string PhotographerUrl {  get; set; }
-        string Alt {  get; set; }
+        public string ImageUrl { get; set; }
+        public string PhotographerName { get; set; }
+        public string PhotographerUrl {  get; set; }
+        public string Alt {  get; set; }
     }
 }
