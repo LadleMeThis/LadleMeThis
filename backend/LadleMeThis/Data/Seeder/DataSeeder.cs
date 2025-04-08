@@ -177,6 +177,7 @@ public class DataSeeder(
         await SeedCategoriesAsync();
         await SeedIngredientsAsync();
         await SeedTagsAsync();
+        await SeedRecipeImagesAsync();
         await SeedRecipesAsync();
         await SeedRatingsAsync();
     }
@@ -264,6 +265,9 @@ public class DataSeeder(
             var tags = await context.Tags.ToListAsync();
             if (!tags.Any()) throw new Exception("Tags not found");
 
+            var recipeImages = await context.RecipeImages.ToListAsync();
+            if (!recipeImages.Any()) throw new Exception("Recipe images not found");
+
             var recipesTasks = RecipeNames.Select(async recipeName =>
             {
                 var numInstructions = Random.Next(1, 8);
@@ -279,7 +283,6 @@ public class DataSeeder(
                     .Take(Random.Next(3, 13))
                     .ToList();
 
-                var img = await foodImgService.GetRandomFoodImageUrlAsync();
 
                 return new Recipe
                 {
@@ -292,10 +295,10 @@ public class DataSeeder(
                     Categories = categoryList,
                     Tags = tagList,
                     Ingredients = ingredientList,
-                    RecipePicture = img
+                    RecipeImage = recipeImages[Random.Next(101)]
                 };
             });
-            
+
             var recipesArray = await Task.WhenAll(recipesTasks);
             var recipes = recipesArray.ToList();
 
@@ -427,6 +430,14 @@ public class DataSeeder(
             context.Ratings.AddRange(ratings);
             await context.SaveChangesAsync();
         }
+    }
+
+    private async Task SeedRecipeImagesAsync()
+    {
+        const int desiredNumberOfImages = 100;
+        var recipeImages = await context.RecipeImages.ToListAsync();
+        var foodImages = await foodImgService.GetRandomFoodImagesAsync(desiredNumberOfImages);
+        recipeImages.AddRange(foodImages);
     }
 
 }
