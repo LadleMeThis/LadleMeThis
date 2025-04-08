@@ -1,5 +1,5 @@
 import React from "react";
-import { getIdForActiveTab, getIconForActiveTab } from "@/scripts/scripts";
+import { getIdForActiveTab, getIconForActiveTab } from "@/scripts/formatters";
 
 const TabContent = ({ currentData, formData, activeTab, handleItemClick }) => {
   const currentSelectedItems = formData[activeTab];

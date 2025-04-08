@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { fetchUpdateProfile, fetchProfile } from '@/scripts/scripts';
+import { fetchUpdateProfile, fetchProfile } from '@/scripts/user';
 
 const ProfileUpdateForm = () => {
   const [username, setUsername] = useState('');

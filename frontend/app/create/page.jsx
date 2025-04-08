@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { fetchCategories, fetchCreate, fetchIngredients, fetchTags } from "@/scripts/scripts";
+import { fetchCategories } from "@/scripts/categories";
+import { fetchCreate } from "@/scripts/recipe";
+import { fetchIngredients } from "@/scripts/ingredients";
+import { fetchTags } from "@/scripts/tags";
 import Loader from "@/components/loader/Loader";
 import CreateFormGroup from "@/components/create/CreateFormGroup";
 import Tabs from "@/components/create/Tabs";

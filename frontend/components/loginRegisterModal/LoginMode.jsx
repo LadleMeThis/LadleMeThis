@@ -1,5 +1,5 @@
 "use client"
-import { login } from "@/scripts/scripts";
+import { login } from "@/scripts/auth";
 import { useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useToast } from "@/context/ToastContext";

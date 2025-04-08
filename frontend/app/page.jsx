@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "@/components/recipeCard/RecipeCard";
 import IngredientSearch from "@/components/ingredientSearch/IngredientSearch";
-import { fetchRecipes, login, fetchIngredients, fetchRecipesByIngredients } from "@/scripts/scripts";
+import { fetchRecipes, fetchRecipesByIngredients } from "@/scripts/recipe";
+import { fetchIngredients } from "@/scripts/ingredients";
 import Loader from "@/components/loader/Loader";
 
 export default function Home() {
