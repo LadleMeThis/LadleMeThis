@@ -10,7 +10,7 @@ public record RecipeCardDTO(
     int FullTime,
     int ServingSize,
     int Rating,
-    string Picture,
+    RecipeImage RecipeImage,
     List<TagDTO> Tags,
     List<CategoryDTO> Categories
     );

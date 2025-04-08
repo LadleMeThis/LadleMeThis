@@ -1,3 +1,4 @@
+using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.RecipeRatingsModels;
@@ -13,7 +14,7 @@ public record FullRecipeDTO(
 	int CookTime,
 	int ServingSize,
 	string UserName,
-	string Picture,
+	RecipeImage RecipeImage,
 	List<CategoryDTO> Categories,
 	List<TagDTO> Tags,
 	List<IngredientDTO> Ingredients,
