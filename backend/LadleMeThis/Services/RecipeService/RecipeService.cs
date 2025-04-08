@@ -203,7 +203,7 @@ public class RecipeService(IRecipeRepository recipeRepository,
         );
     }
 
-    public async Task<List<RecipeCardDTO>> GetRecipesByCategroryIdAndName(int categoryId, string recipeName)
+    public async Task<List<RecipeCardDTO>> GetRecipesByCategoryIdAndName(int categoryId, string recipeName)
     {
         if (recipeName == null)
         {

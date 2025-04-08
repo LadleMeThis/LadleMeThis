@@ -1,8 +1,5 @@
 ﻿using LadleMeThis.Models.CategoryModels;
-using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Repositories.CategoryRepository;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using LadleMeThis.Data.Entity;
 
 namespace LadleMeThis.Services.CategoryService
