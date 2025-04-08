@@ -1,6 +1,5 @@
 import React from "react";
 import { getIdForActiveTab, getIconForActiveTab } from "@/scripts/scripts";
-import { ClientPageRoot } from "next/dist/client/components/client-page";
 
 const TabContent = ({ currentData, formData, activeTab, handleItemClick }) => {
   const currentSelectedItems = formData[activeTab];

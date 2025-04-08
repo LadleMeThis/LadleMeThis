@@ -1,5 +1,4 @@
 .navbar {
-
   // on smaller screens, it doesnt fill up the whole space
   width: 100%;
   display: flex;
@@ -20,6 +19,7 @@
     width: inherit;
     height: 4rem;
     z-index: -1;
+
   }
 
 
@@ -211,6 +211,7 @@
   gap: 1rem;
   border-radius: 0 0 10% 10%;
   width: 100%;
+  padding-right: 2rem;
 
   @include respond(tablet-landscape) {
     background-color: $accent;
