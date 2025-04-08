@@ -1,6 +1,4 @@
 .navbar {
-
-  // on smaller screens, it doesnt fill up the whole space
   width: 100%;
   display: flex;
   flex-wrap: nowrap;
@@ -193,7 +191,6 @@
 .dropdown-content a:hover {
   background-color: $primary;
   border-radius: 12.5px;
-  // transform: translate(-50 ,-50);
 }
 
 .dropbtn:hover+.dropdown-content,

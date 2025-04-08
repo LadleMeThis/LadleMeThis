@@ -1,12 +1,8 @@
 using System.Security.Claims;
-using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.RecipeRatingsModels;
-using LadleMeThis.Models.UserModels;
-using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Services.RecipeService;
-using LadleMeThis.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,8 +32,7 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
     {
         try
         {
-            //var recipes = await recipeService.GetRecipesByCategoryId(categoryId);
-            var recipes = await recipeService.GetRecipesByCategroryIdAndName(categoryId, recipeName);
+            var recipes = await recipeService.GetRecipesByCategoryIdAndName(categoryId, recipeName);
             return Ok(recipes);
         }
         catch (Exception ex)

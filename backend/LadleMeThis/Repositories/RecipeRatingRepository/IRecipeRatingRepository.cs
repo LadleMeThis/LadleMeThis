@@ -1,5 +1,4 @@
 using LadleMeThis.Data.Entity;
-using LadleMeThis.Models.RecipeRatingsModels;
 
 namespace LadleMeThis.Repositories.RecipeRatingRepository;
 

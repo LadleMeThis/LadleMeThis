@@ -5,7 +5,6 @@ const CreateRating = ({ rating, onChange }) => {
     const validRating = Math.max(0, Math.min(totalStars, rating));
 
     const handleClick = (index) => {
-        console.log(index);
         const clickedRating = index + 1;
         onChange(clickedRating)
     }

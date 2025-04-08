@@ -57,7 +57,6 @@ export default function Navbar() {
         const getCategories = async () => {
             const data = await fetchCategories()
             setCategories(data)
-            console.log(categories)
         }
         getCategories();
 
@@ -65,7 +64,6 @@ export default function Navbar() {
         const getTags = async () => {
             const data = await fetchTags()
             setTags(data)
-            console.log(categories)
         }
         getTags();
 

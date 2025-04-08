@@ -92,7 +92,6 @@ const Recipe = () => {
       const data = await fetchRecipeById(recipeId)
       setRecipe(data)
       setRatings(data.ratings)
-      console.log(data.ratings[0]);
 
       setTimeout(() => {
         setLoading(false);
@@ -109,11 +108,6 @@ const Recipe = () => {
     };
 
   }, [recipeId])
-
-  useEffect(() => {
-      console.log(isDisabled());
-    
-  }, [isAuthenticated, formData]);
 
   if (loading)
     return <Loader />

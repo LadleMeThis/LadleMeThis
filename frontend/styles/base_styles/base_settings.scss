@@ -155,13 +155,6 @@ button {
         height: 100%;
     }
 
-    @include respond(tablet-landscape) {
-        // padding-top: 3rem;  
-        // flex-direction: column;
-        // max-width: 100%;
-        // overflow: scroll;  
-        // background-color: aqua;
-    }
 
     @include respond(phone) {
         display: block;

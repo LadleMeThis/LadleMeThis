@@ -1,8 +1,5 @@
 using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.ErrorMessages;
-using LadleMeThis.Models.TagModels;
-using LadleMeThis.Repositories.CategoryRepository;
-using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Services.CategoryService;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -67,8 +64,6 @@ public class CategoryController : ControllerBase
         }
 
     }
-
-    //make new class, category create request?
 
     [HttpPost()]
     public async Task<IActionResult> AddAsnyc([FromBody] CategoryCreateRequest categoryCreateRequest)

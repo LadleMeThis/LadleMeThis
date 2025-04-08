@@ -38,7 +38,6 @@ const ProfileUpdateForm = () => {
       newPassword: password,
     };
 
-    console.log('Profile updated:', updatedProfile);
     fetchUpdateProfile(userId, updatedProfile)
   };
 
