@@ -21,6 +21,7 @@ public class LadleMeThisContext(DbContextOptions options) : IdentityDbContext<Id
 	public DbSet<Category> Categories { get; set; }
 	public DbSet<RecipeRating> Ratings { get; set; }
 	public DbSet<SavedRecipe> SavedRecipes { get; set; }
+	public DbSet<RecipeImage> RecipeImages { get; set; }
 	
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
