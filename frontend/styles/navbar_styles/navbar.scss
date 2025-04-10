@@ -54,6 +54,10 @@
   border: none;
   border-radius: 25px;
 
+  @include respond(tablet-landscape) {
+    width: 100%;
+  }
+
   svg {
     color: $text-shade;
   }
@@ -136,7 +140,11 @@
 
 
   @include respond(tablet-landscape) {
-    width: fit-content;
+    width: 100svw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -176,17 +184,24 @@
     font-family: $heading-font;
     border-radius: 5%;
     background-color: $primary;
-    width: 50dvw;
+    max-height: 0; 
+    overflow: hidden; 
+    transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease;
+  
+    &.open {
+      opacity: 1;
+      position: relative;
+      max-height: 500px;
+      visibility: visible;
+    }
   }
-
-  @include respond(phone) {
-    width: 100dvw;
-  }
+  
 }
 
 .dropdown-content a {
   display: block;
   padding: 0.6rem;
+
 }
 
 .dropdown-content a:hover {
@@ -239,7 +254,6 @@
 @include respond(tablet-landscape) {
   .nav-links.open {
     display: flex;
-    transform: translateY(0);
     opacity: 1;
     visibility: visible;
 

@@ -15,8 +15,9 @@
   scrollbar-width: none; 
   scrollbar-color: transparent transparent; 
 
-  @include respond(tablet-landscape){
-    height: fit-content;
+  @include respond(tablet-portrait){
+    min-height: 95%;
+    max-width: 100%;
     overflow: scroll;
 }
 

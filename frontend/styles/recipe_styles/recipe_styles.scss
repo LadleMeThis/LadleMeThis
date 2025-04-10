@@ -11,9 +11,12 @@
   .photo-creator {
     align-self: center;
     text-align: center;
+    color: $text-shade;
+    font-style: italic;   
+    font-size: smaller; 
 
     & a {
-      color: $text;
+      color: $text-shade;
       text-decoration: none;
       font-weight: 500;
       transition: color 0.3s ease;
@@ -31,17 +34,17 @@
     img {
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 100%;
+      max-width: 70%;
       max-height: 1%;
       height: auto;
       object-fit: cover;
 
       @include respond(phone) {
-        max-width: 90%;
+        max-width: 100%;
       }
 
       @include respond(tablet-landscape) {
-        max-width: 80%;
+        max-width: 90%;
       }
     }
   }
