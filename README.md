@@ -12,14 +12,20 @@ Our mission: Make cooking simple, fun, and approachable for everyone. With a spr
 
 Here are some pictures of *LadleMeThis* in action!
 
-![Home page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/home.png)  
+![Home page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/main/showcase/home.png)  
 *Search your fridge for hidden treasures and discover the top-rated recipes, all crafted to delight your taste buds!*
 
-![Fridge Feature](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/ingredientsearch.png)  
+![Fridge Feature](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/main/showcase/ingredientsearch.png)  
 *Discover recipes with what’s in your fridge – a magical way to make the most of your ingredients!*
 
-![Recipe Page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/recipe.png)  
+![Recipe Page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/main/showcase/recipe.png)  
 *Uncover delicious recipes with detailed cook times, ingredients, instructions, and reviews – all in one place!*
+
+![Create Recipe](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/main/showcase/create.png)  
+*Unleash your culinary creativity – craft your own recipe and share your magic with the world!*
+
+![Modify Recipe](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/main/showcase/modify.png)  
+*Perfect your masterpiece – tweak and refine your recipe to make it even more delicious!*
 
 
 ## Installation ⚙️

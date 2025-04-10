@@ -35,7 +35,7 @@ export default function Navbar() {
             setDropdownOpen(text)
     }
 
-   
+
 
     function toggleMenu() {
         if (menuOpen) {
@@ -93,11 +93,11 @@ export default function Navbar() {
     }, [searchQuery]);
 
     useEffect(() => {
-        if (!isModalOpen)          
-          checkAuthentication();
-        
-      }, [isModalOpen]);
-   
+        if (!isModalOpen)
+            checkAuthentication();
+
+    }, [isModalOpen]);
+
 
     function handleSearch(e) {
         if (e.key === "Enter" && !recipeDisplayPaths.some(path => pathname.includes(path))) {
@@ -116,7 +116,7 @@ export default function Navbar() {
         await logout()
         setIsAuthenticated(false)
         setIsModalOpen(false)
-    }  
+    }
 
     return (
         <nav className="navbar">
@@ -139,22 +139,23 @@ export default function Navbar() {
                     Home
                 </button>
                 {
-                    isAuthenticated &&
-                    <button className="secondary-btn" onClick={() => navigateTo("/create")} >Create Recipe</button>
-                    &&
-                    <button className="secondary-btn" onClick={() => navigateTo("/my-recipes")}>My Recipes</button>
-                    &&
-                    <button className="secondary-btn" onClick={() => navigateTo("/profile")}>Profile</button>
+                    isAuthenticated && (
+                        <>
+                            <button className="secondary-btn" onClick={() => navigateTo("/create")}>Create Recipe</button>
+                            <button className="secondary-btn" onClick={() => navigateTo("/my-recipes")}>My Recipes</button>
+                            <button className="secondary-btn" onClick={() => navigateTo("/profile")}>Profile</button>
+                        </>
+                    )
                 }
                 <div className="dropdown">
                     <span className="dropbtn" onClick={() => handleDropdownClick("categories")}>Categories</span>
-                    <div className={`dropdown-content${dropdownOpen == "categories"? " open" : ""}`}>
+                    <div className={`dropdown-content${dropdownOpen == "categories" ? " open" : ""}`}>
                         {categories.map(category => <Link onClick={closeMenu} key={category.categoryId} href={`/category/${category.categoryId}/${encodeURIComponent(category.name)}`}>{category.name}</Link>)}
                     </div>
                 </div>
                 <div className="dropdown">
                     <span className="dropbtn" onClick={() => handleDropdownClick("tags")}>Tags</span>
-                    <div className={`dropdown-content${dropdownOpen == "tags"? " open" : ""}`}>
+                    <div className={`dropdown-content${dropdownOpen == "tags" ? " open" : ""}`}>
                         {tags.map(tag => <Link onClick={closeMenu} key={tag.tagId} href={`/tag/${tag.tagId}/${encodeURIComponent(tag.name)}`}>{tag.name}</Link>)}
                     </div>
                 </div>
