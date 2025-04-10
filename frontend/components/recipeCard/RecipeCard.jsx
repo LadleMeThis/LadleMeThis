@@ -3,6 +3,7 @@ import { FaClock, FaTags, FaUtensils, FaStar } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function RecipeCard({ recipe, navigateTo }) {
 
@@ -27,7 +28,7 @@ export default function RecipeCard({ recipe, navigateTo }) {
     return (
         <div onClick={() => handleClick()} className="recipe-card">
             <div className="img-container">
-                <img src={recipeImg.imageUrl || "/bacon2.jpg"} alt={recipeImg.alt} />
+                <Image src={recipeImg.imageUrl || "/bacon2.jpg"} alt={recipeImg.alt} width={500} height={500} priority={true}/>
             </div>
             <div className="recipe-name">
                 <h4>{recipe.name}</h4>

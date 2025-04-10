@@ -117,9 +117,7 @@ const Recipe = () => {
   return (
     <div className="recipe wrapper">
       <RecipeImage recipe={recipe} />
-      <div className="photo-creator">
-        Image was made by : <a href={recipe.recipeImage.photographerUrl}>{recipe.recipeImage.photographerName}</a>
-      </div>
+
       <div className="recipe-header">
         <h1 className="recipe-title">{recipe.name}</h1>
         <RecipeInfo

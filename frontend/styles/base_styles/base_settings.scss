@@ -153,16 +153,19 @@ button {
 
     &-cards{
         height: 100%;
+
+        @include respond(tablet-landscape) {
+           margin-inline: auto;
+        }
     }
 
 
-    @include respond(phone) {
-        display: block;
+    @include respond(tablet-portrait) {
+        flex-direction: column;
         padding-top: 2rem;
         padding: 1rem;
         max-width: 100%;
         overflow: scroll;
-        background-color: firebrick;
     }
 
 }
