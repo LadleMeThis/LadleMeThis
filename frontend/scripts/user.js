@@ -1,5 +1,5 @@
-export const fetchProfile = async (userId) => {
-    const response = await fetch(`/api/user/${userId}`, {
+export const fetchProfile = async () => {
+    const response = await fetch(`/api/user`, {
       method: "GET",
       credentials: "include",
     });
@@ -10,9 +10,9 @@ export const fetchProfile = async (userId) => {
     return await response.json();
   };
   
-  export const fetchUpdateProfile = async (userId, updatedProfile) => {
-    const response = await fetch(`/api/user/${userId}`, {
-      method: "POST",
+  export const fetchUpdateProfile = async (updatedProfile) => {
+    const response = await fetch(`/api/user`, {
+      method: "PUT",
       headers: { "content-type": "application/json" },
       credentials: "include",
       body: JSON.stringify(updatedProfile),

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { fetchUpdateProfile, fetchProfile } from '@/scripts/user';
+import { useToast } from '@/context/ToastContext';
 
 const ProfileUpdateForm = () => {
   const [username, setUsername] = useState('');
@@ -8,37 +9,44 @@ const ProfileUpdateForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [userId, setUserId] = useState('');
+  const [profileData, setProfileData] = useState({})
+  const { showToast } = useToast();
+
 
   const getProfileData = async () => {
-    const data = await fetchProfile(userId)
-    email = data.email
-    username = data.username
+    const data = await fetchProfile()
+    setProfileData(data)
   }
 
   useEffect(() => {
     getProfileData()
 
-  }, [userId])
+  }, [])
   
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (password !== confirmPassword) {
-      setError('Passwords do not match!');
-      return;
+    try {
+      e.preventDefault();
+      
+      if (password !== confirmPassword) {
+        setError('Passwords do not match!');
+        return;
+      }
+  
+      setError('');
+      
+      const updatedProfile = {
+        username: username,
+        email: email,
+        newPassword: password,
+      };
+  
+      await fetchUpdateProfile(updatedProfile)
+      
+      showToast("Successful update!")
+    } catch (error) {
+      showToast("Something went wrong!")
     }
-
-    setError('');
-    
-    const updatedProfile = {
-      username: username,
-      email: email,
-      newPassword: password,
-    };
-
-    fetchUpdateProfile(userId, updatedProfile)
   };
 
   const canSend = username || email || password;
@@ -53,6 +61,7 @@ const ProfileUpdateForm = () => {
             type="text"
             id="username"
             value={username}
+            placeholder={profileData.username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
@@ -63,6 +72,7 @@ const ProfileUpdateForm = () => {
             type="email"
             id="email"
             value={email}
+            placeholder={profileData.email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
