@@ -12,7 +12,10 @@ Our mission: Make cooking simple, fun, and approachable for everyone. With a spr
 
 Here are some pictures of *LadleMeThis* in action!
 
-![Fridge Feature](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/home.png)  
+![Home page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/home.png)  
+*Search your fridge for hidden treasures and discover the top-rated recipes, all crafted to delight your taste buds!*
+
+![Fridge Feature](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/ingredientsearch.png)  
 *Discover recipes with what’s in your fridge – a magical way to make the most of your ingredients!*
 
 ![Recipe Page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/recipe.png)  
