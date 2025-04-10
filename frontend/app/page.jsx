@@ -11,6 +11,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [ingredients, setIngredients] = useState([])
   const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [recipeTitle, setRecipeTitle] = useState(`Top 15 flavors, kissed by the recipe fairies!`)
 
   const toggleIngredient = (ingredient) => {
     setSelectedIngredients((prev) =>
@@ -29,13 +30,15 @@ export default function Home() {
     const ids = selectedIngredients.map(i => i.ingredientId)
     const data = await fetchRecipesByIngredients(ids)
     setRecipes(data)
+    setRecipeTitle("Magic on a plate, made from your fridge’s finest treasures!")
 
   };
 
   useEffect(() => {
     const getRecipes = async () => {
       const data = await fetchRecipes();
-      const finalData = data.slice(0, 15)
+      const sortedData = data.sort((a, b) => b.rating - a.rating);
+      const finalData = sortedData.slice(0, 15)
       setRecipes(finalData);
 
       setTimeout(() => {
@@ -64,7 +67,7 @@ export default function Home() {
         searchRecipes={searchRecipes} />
       <div className="main-container-cards">
         <div className="main-title">
-          <h1>VERY GOOD VERY NICE </h1>
+          <h1>{recipeTitle}</h1>
         </div>
         <div className="recipe-card-wrapper home">
           {recipes.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
