@@ -201,8 +201,8 @@ public class DataSeeder(
     {
         var users = new[]
         {
-            new { UserName = "admin@example.com", Email = "admin@example.com", Password = "Admin@123", Role = "Admin" },
-            new { UserName = "user@example.com", Email = "user@example.com", Password = "User@123", Role = "User" }
+            new { UserName = "admin_example", Email = "admin@example.com", Password = "Admin@123", Role = "Admin" },
+            new { UserName = "user_example", Email = "user@example.com", Password = "User@123", Role = "User" }
         };
 
         foreach (var userInfo in users)

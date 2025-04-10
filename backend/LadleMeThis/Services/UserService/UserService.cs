@@ -87,8 +87,11 @@ namespace LadleMeThis.Services.UserService
 
             if (user == null) throw new KeyNotFoundException("User with given id not found!");
 
-            user.UserName = userUpdateDto.Username;
-            user.Email = userUpdateDto.Email;
+            if (!string.IsNullOrEmpty(userUpdateDto.Username)) 
+                user.UserName = userUpdateDto.Username;
+            
+            if (!string.IsNullOrEmpty(userUpdateDto.Email))
+                user.Email = userUpdateDto.Email;
             
             if (!string.IsNullOrEmpty(userUpdateDto.NewPassword))
             {
