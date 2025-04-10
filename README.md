@@ -12,11 +12,11 @@ Our mission: Make cooking simple, fun, and approachable for everyone. With a spr
 
 Here are some pictures of *LadleMeThis* in action!
 
-![Recipe Search](https://via.placeholder.com/600x400.png?text=Recipe+Search+Page)  
-*The search functionality allows users to easily find recipes based on ingredients.*
+![Fridge Feature](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/home.png)  
+*Discover recipes with what’s in your fridge – a magical way to make the most of your ingredients!*
 
-![Fridge Feature](https://via.placeholder.com/600x400.png?text=What's+in+My+Fridge%3F)  
-*The "What's in My Fridge?" feature suggests recipes based on available ingredients.*
+![Recipe Page](https://raw.githubusercontent.com/LadleMeThis/LadleMeThis/refs/heads/readme-update/showcase/recipe.png)  
+*Uncover delicious recipes with detailed cook times, ingredients, instructions, and reviews – all in one place!*
 
 
 ## Installation ⚙️
