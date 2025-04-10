@@ -1,4 +1,5 @@
 using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.CategoryModels;
 using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.TagModels;
@@ -173,4 +174,229 @@ public class RecipeDetailServiceTests
             
             Assert.That(result, Is.EqualTo(expectedRecipeRatingDTOs));
         }
+        
+        [Test]
+        public void GetCategoryDTOsByCategories_ShouldReturnCategoryDTOs_WhenCategoriesAreProvided()
+        {
+            var categories = new List<Category>
+            {
+                new Category { CategoryId = 1, Name = "Dessert" },
+                new Category { CategoryId = 2, Name = "Appetizer" }
+            };
+            var expectedCategoryDTOs = new List<CategoryDTO>
+            {
+                new CategoryDTO { CategoryId = 1, Name = "Dessert" },
+                new CategoryDTO { CategoryId = 2, Name = "Appetizer" }
+            };
+            
+            var result = _recipeDetailService.GetCategoryDTOsByCategories(categories).ToList();
+            
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.First().CategoryId, Is.EqualTo(expectedCategoryDTOs.First().CategoryId));
+                Assert.That(result.First().Name, Is.EqualTo(expectedCategoryDTOs.First().Name));
+
+                Assert.That(result.Last().CategoryId, Is.EqualTo(expectedCategoryDTOs.Last().CategoryId));
+                Assert.That(result.Last().Name, Is.EqualTo(expectedCategoryDTOs.Last().Name));
+            });
+        }
+        
+        [Test]
+        public void GetCategoryDTOsByCategories_ShouldReturnEmptyList_WhenCategoriesAreEmpty()
+        {
+            var categories = new List<Category>();
+
+            var result = _recipeDetailService.GetCategoryDTOsByCategories(categories);
+
+            Assert.That(result, Is.Empty);
+        }
+        
+        [Test]
+        public void GetCategoryDTOsByCategories_ShouldThrowArgumentNullException_WhenCategoriesAreNull()
+        {
+            List<Category> categories = null;
+
+            Assert.Throws<ArgumentNullException>(() => _recipeDetailService.GetCategoryDTOsByCategories(categories));
+        }
+        
+        [Test]
+        public void GetCategoryDTOsByCategories_ShouldHandleDuplicateCategories()
+        {
+            var categories = new List<Category>
+            {
+                new Category { CategoryId = 1, Name = "Dessert" },
+                new Category { CategoryId = 1, Name = "Dessert" }
+            };
+
+            var result = _recipeDetailService.GetCategoryDTOsByCategories(categories).ToList();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Count, Is.EqualTo(2));
+                Assert.That(result[0].CategoryId, Is.EqualTo(1));
+                Assert.That(result[0].Name, Is.EqualTo("Dessert"));
+                Assert.That(result[1].CategoryId, Is.EqualTo(1));
+                Assert.That(result[1].Name, Is.EqualTo("Dessert"));
+            });
+        }
+        
+        [Test]
+        public void GetCategoryDTOsByCategories_ShouldHandleCategoriesWithNullProperties()
+        {
+            var categories = new List<Category>
+            {
+                new Category { CategoryId = 1, Name = null },
+                new Category { CategoryId = 2, Name = "Appetizer" }
+            };
+
+            var result = _recipeDetailService.GetCategoryDTOsByCategories(categories).ToList();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result[0].CategoryId, Is.EqualTo(1));
+                Assert.That(result[0].Name, Is.Null);
+
+                Assert.That(result[1].CategoryId, Is.EqualTo(2));
+                Assert.That(result[1].Name, Is.EqualTo("Appetizer"));
+            });
+        }
+        
+        [Test]
+        public async Task AddRecipeRatingAsync_ShouldCallCreateRecipeRating_AndReturnRatingId_WhenValidDataIsProvided()
+        {
+            var recipeRatingDto = new CreateRecipeRatingDTO(5, "Delicious!");
+            var user = new IdentityUser { Id = "user1", UserName = "JohnDoe" };
+            var recipe = new Recipe { RecipeId = 1, Name = "Pasta" };
+
+            _mockRecipeRatingService
+                .Setup(service => service.CreateRecipeRating(recipeRatingDto, user, recipe))
+                .ReturnsAsync(1);
+
+            var result = await _recipeDetailService.AddRecipeRatingAsync(recipeRatingDto, user, recipe);
+
+            Assert.That(result, Is.EqualTo(1));
+            _mockRecipeRatingService.Verify(service => service.CreateRecipeRating(recipeRatingDto, user, recipe), Times.Once);
+        }
+        
+
+        
+        [Test]
+        public async Task AddRecipeRatingAsync_ShouldThrowException_WhenRecipeRatingServiceFails()
+        {
+            var recipeRatingDto = new CreateRecipeRatingDTO(5, "Delicious!");
+            var user = new IdentityUser { Id = "user1", UserName = "JohnDoe" };
+            var recipe = new Recipe { RecipeId = 1, Name = "Pasta" };
+
+            _mockRecipeRatingService
+                .Setup(service => service.CreateRecipeRating(recipeRatingDto, user, recipe))
+                .ThrowsAsync(new Exception("Service failed."));
+
+            var ex = Assert.ThrowsAsync<Exception>(() => _recipeDetailService.AddRecipeRatingAsync(recipeRatingDto, user, recipe));
+            Assert.That(ex.Message, Is.EqualTo("Service failed."));
+        }
+        
+        [Test]
+        public async Task GetTagsByIds_ShouldReturnEmptyList_WhenNoTagIdsAreProvided()
+        {
+            var tagIds = new int[] { };
+            var expectedTags = new List<Tag>();
+
+            _mockTagRepo.Setup(repo => repo.GetManyByIdAsync(tagIds)).ReturnsAsync(expectedTags);
+    
+            var result = await _recipeDetailService.GetTagsByIds(tagIds);
+
+            Assert.That(result, Is.EqualTo(expectedTags));
+        }
+        
+        [Test]
+        public async Task GetIngredientsByIds_ShouldReturnEmptyList_WhenNoIngredientIdsAreProvided()
+        {
+            var ingredientIds = new int[] { };
+            var expectedIngredients = new List<Ingredient>();
+
+            _mockIngredientRepo.Setup(repo => repo.GetManyByIdAsync(ingredientIds)).ReturnsAsync(expectedIngredients);
+    
+            var result = await _recipeDetailService.GetIngredientsByIds(ingredientIds);
+
+            Assert.That(result, Is.EqualTo(expectedIngredients));
+        }
+        
+        [Test]
+        public async Task GetCategoriesByIds_ShouldReturnEmptyList_WhenNoCategoryIdsAreProvided()
+        {
+            var categoryIds = new int[] { };
+            var expectedCategories = new List<Category>();
+
+            _mockCategoryRepo.Setup(repo => repo.GetManyByIdAsync(categoryIds)).ReturnsAsync(expectedCategories);
+    
+            var result = await _recipeDetailService.GetCategoriesByIds(categoryIds);
+
+            Assert.That(result, Is.EqualTo(expectedCategories));
+        }
+        
+        [Test]
+        public void GetTagDTOsByTags_ShouldReturnEmptyList_WhenTagsAreNullOrEmpty()
+        {
+            var tags = new List<Tag>();
+
+            var result = _recipeDetailService.GetTagDTOsByTags(tags).ToList();
+
+            Assert.That(result, Is.Empty);
+        }
+        
+        [Test]
+        public void GetIngredientDTOsByIngredients_ShouldReturnEmptyList_WhenIngredientsAreNullOrEmpty()
+        {
+            var ingredients = new List<Ingredient>();
+
+            var result = _recipeDetailService.GetIngredientDTOsByIngredients(ingredients).ToList();
+
+            Assert.That(result, Is.Empty);
+        }
+        
+        [Test]
+        public void GetTagDTOsByTags_ShouldHandleTagsWithMissingNameOrId()
+        {
+            var tags = new List<Tag>
+            {
+                new Tag { TagId = 1, Name = null },
+                new Tag { TagId = 2, Name = "Gluten-Free" }
+            };
+
+            var result = _recipeDetailService.GetTagDTOsByTags(tags).ToList();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result[0].TagId, Is.EqualTo(1));
+                Assert.That(result[0].Name, Is.Null);
+                Assert.That(result[1].TagId, Is.EqualTo(2));
+                Assert.That(result[1].Name, Is.EqualTo("Gluten-Free"));
+            });
+        }
+        
+        [Test]
+        public void GetIngredientDTOsByIngredients_ShouldHandleIngredientsWithMissingUnit()
+        {
+            var ingredients = new List<Ingredient>
+            {
+                new Ingredient { IngredientId = 1, Name = "Salt", Unit = null },
+                new Ingredient { IngredientId = 2, Name = "Pepper", Unit = "tsp" }
+            };
+
+            var result = _recipeDetailService.GetIngredientDTOsByIngredients(ingredients).ToList();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result[0].IngredientId, Is.EqualTo(1));
+                Assert.That(result[0].Unit, Is.Null);
+                Assert.That(result[1].IngredientId, Is.EqualTo(2));
+                Assert.That(result[1].Unit, Is.EqualTo("tsp"));
+            });
+        }
+    
+
+
+
+
+
 }

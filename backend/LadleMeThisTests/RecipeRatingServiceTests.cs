@@ -1,4 +1,5 @@
 using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.RecipeRatingsModels;
 using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRatingRepository;
 using LadleMeThis.Services.RecipeRatingService;
@@ -120,4 +121,35 @@ public class RecipeRatingServiceTests
 			Assert.That(result[0].Rating, Is.EqualTo(5));
 		});
 	}
+	
+	[Test]
+	public async Task CreateRecipeRating_ShouldReturnRatingId_WhenValidDataIsProvided()
+	{
+		var createRecipeRatingDto = new CreateRecipeRatingDTO(5, "Great recipe!");
+		var user = new IdentityUser { Id = "user1", UserName = "JohnDoe" };
+		var recipe = new Recipe { RecipeId = 1, Name = "Pasta" };
+
+		var recipeRating = new RecipeRating
+		{
+			RatingId = 1,
+			Rating = 5,
+			Review = "Great recipe!",
+			User = user,
+			Recipe = recipe,
+			DateCreated = DateTime.UtcNow
+		};
+
+		_recipeRatingRepositoryMock.Setup(repo => repo.Create(It.IsAny<RecipeRating>())).ReturnsAsync(1);
+		
+		var result = await _recipeRatingService.CreateRecipeRating(createRecipeRatingDto, user, recipe);
+		
+		Assert.That(result, Is.EqualTo(1));
+		_recipeRatingRepositoryMock.Verify(repo => repo.Create(It.Is<RecipeRating>(r => 
+			r.Rating == createRecipeRatingDto.Rating && 
+			r.Review == createRecipeRatingDto.Review && 
+			r.User.Id == user.Id && 
+			r.Recipe.RecipeId == recipe.RecipeId)), Times.Once);
+	}
+	
+
 }
