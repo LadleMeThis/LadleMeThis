@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using Azure.Identity;
+using LadleMeThis.Data.Entity;
 
 namespace LadleMethisIntegrationTests
 {
@@ -16,8 +17,10 @@ namespace LadleMethisIntegrationTests
         private readonly HttpClient _client;
         private readonly UserLogger _userLogger;
         private readonly LadleMeThisFactory _factory;
-        private  const string EMAIL = "admin@example.com";
-        private const string PASSWORD = "Admin@123";
+        private  const string ADMIN_EMAIL = "admin@example.com";
+        private const string ADMIN_PASSWORD = "Admin@123";
+        private const string USER_EMAIL = "user@example.com";
+        private const string USER_PASSWORD = "User@123";
 
         public RecipeControllerTests(LadleMeThisFactory factory)
         {
@@ -90,7 +93,7 @@ namespace LadleMethisIntegrationTests
                 Tags: new int[] { 1, 2 },
                 Categories: new int[] { 1, 3 }
             );
-           await  _userLogger.LoginUser(EMAIL, PASSWORD);
+           await  _userLogger.LoginUser(ADMIN_EMAIL, ADMIN_PASSWORD);
 
 
             // Act
@@ -120,6 +123,51 @@ namespace LadleMethisIntegrationTests
 
             // Act
             var response = await _client.PostAsJsonAsync("/recipes", createRecipeDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetLoggedInUserRecipes_LoggedInUser_ShouldReturnRecipesIfUserHasAny()
+        {
+            // Arrange
+            await _userLogger.LoginUser(ADMIN_EMAIL,ADMIN_PASSWORD);
+
+            // Act
+            var response = await _client.GetAsync("/recipes/my-recipes");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.NotEmpty(recipes);
+        }
+
+        [Fact]
+        public async Task GetLoggedInUserRecipes_LoggedInUser_ShouldReturnEmptyListIfUserHasNone()
+        {
+            // Arrange
+            await _userLogger.LoginUser(USER_EMAIL, USER_PASSWORD);
+
+            // Act
+            var response = await _client.GetAsync("/recipes/my-recipes");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.Empty(recipes);
+        }
+
+
+        [Fact]
+        public async Task GetLoggedInUserRecipes_NotLoggedInUser_ShouldReturnUnauthorized()
+        {
+            // Act
+            var response = await _client.GetAsync("/recipes/my-recipes");
 
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
