@@ -6,14 +6,26 @@ using LadleMeThis.Context;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
+using Azure.Identity;
 
 namespace LadleMethisIntegrationTests
 {
-    public class RecipeControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
+    public class RecipeControllerTests : IClassFixture<LadleMeThisFactory>
     {
-        private readonly HttpClient _client = factory.CreateClient();
-        private readonly WebApplicationFactory<Program> _factory = factory;
+        private readonly HttpClient _client;
+        private readonly UserLogger _userLogger;
+        private readonly LadleMeThisFactory _factory;
+        private  const string EMAIL = "admin@example.com";
+        private const string PASSWORD = "Admin@123";
 
+        public RecipeControllerTests(LadleMeThisFactory factory)
+        {
+            _client = factory.CreateClient();
+            _userLogger = new UserLogger(_client);
+            _factory = factory;
+
+        }
 
         [Fact]
         public async Task GetAllRecipes_ShouldReturnRecipesList()
@@ -64,7 +76,53 @@ namespace LadleMethisIntegrationTests
 
         }
 
+        [Fact]
+        public async Task CreateRecipe_LoggedInUser_ShouldReturnOkAndRecipeId()
+        {
+            // Arrange
+            var createRecipeDto = new CreateRecipeDTO(
+                Name: "Delicious Recipe",
+                PrepTime: 15,
+                CookTime: 30,
+                Instructions: "Mix all ingredients and cook for 30 minutes.",
+                ServingSize: 4,
+                Ingredients: new int[] { 1, 2 },
+                Tags: new int[] { 1, 2 },
+                Categories: new int[] { 1, 3 }
+            );
+           await  _userLogger.LoginUser(EMAIL, PASSWORD);
 
 
+            // Act
+            var response = await _client.PostAsJsonAsync("/recipes", createRecipeDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var recipeId = await response.Content.ReadFromJsonAsync<int>();
+            Assert.True(recipeId > 0);
+        }
+
+
+        [Fact]
+        public async Task CreateRecipe_NotLoggedInUser_ShouldReturnUnauthorized()
+        {
+            // Arrange
+            var createRecipeDto = new CreateRecipeDTO(
+                Name: "Delicious Recipe",
+                PrepTime: 15,
+                CookTime: 30,
+                Instructions: "Mix all ingredients and cook for 30 minutes.",
+                ServingSize: 4,
+                Ingredients: new int[] { 1, 2 },
+                Tags: new int[] { 1, 2 },
+                Categories: new int[] { 1, 3 }
+            );
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/recipes", createRecipeDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
     }
 }
