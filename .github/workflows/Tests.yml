@@ -28,5 +28,7 @@ jobs:
       run: dotnet build --no-restore
       working-directory: ./backend
     - name: Test
+      env:
+        PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
       run: dotnet test --no-build --verbosity normal
       working-directory: ./backend
