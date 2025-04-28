@@ -16,7 +16,7 @@ namespace LadleMethisIntegrationTests
             _client = client;
         }
 
-        public async Task<HttpResponseMessage> LoginUser(string email, string password)
+        public async Task LoginUser(string email, string password)
         {
             var loginRequest = new
             {
@@ -24,10 +24,12 @@ namespace LadleMethisIntegrationTests
                 Password = password
             };
 
-            return await _client.PostAsJsonAsync("/Auth/Login", loginRequest);
+            var response = await _client.PostAsJsonAsync("/Auth/Login", loginRequest);
+
+            AttachAuthCookies(response);
         }
 
-        public void AttachAuthCookies(HttpResponseMessage loginResponse)
+        private void AttachAuthCookies(HttpResponseMessage loginResponse)
         {
             var cookies = loginResponse.Headers.GetValues("Set-Cookie").ToList();
             foreach (var cookie in cookies)
