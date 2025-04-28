@@ -89,9 +89,32 @@
     padding: 0rem 7rem;
     margin-inline: auto;
     overflow: visible;
+    flex-grow: 1;
 
     @include respond(phone) {
         padding: 0rem 1rem;
+    }
+
+    &-title{
+        margin-inline: auto;
+        text-align: center;
+        padding: 1rem 7rem;
+        margin-top: 1rem;
+        background-color: $background;
+        border-radius: 25px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.26);
+        width: fit-content;
+
+        h1{
+            padding: 0;
+            margin: 0;
+        }
+
+        &-name{
+            color: $primary;
+            font-size: 2.5rem;
+            margin-top: 0.5rem !important;
+        }
     }
 }
 
@@ -100,14 +123,16 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 3rem;
     padding: 2rem 2rem 7rem 2rem;
-    height: 100%;
+    height: fit-content;
     overflow-y: scroll !important;
     position: relative;
     scrollbar-width: none;
     scrollbar-color: transparent transparent;
 
     &.home {
+        height: 100%;
         grid-template-columns: repeat(3, 1fr);
+        padding-bottom: 9rem;
 
         @include respond(small-monitor) {
             grid-template-columns: repeat(2, 1fr);

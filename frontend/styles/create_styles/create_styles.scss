@@ -190,6 +190,10 @@
             gap: 1rem;
             padding: 0.5rem;
 
+            @include respond(phone) {
+               flex-direction: column;
+            }
+
             .tab-button {
                 font-size: 1.1rem;
                 font-weight: bold;
