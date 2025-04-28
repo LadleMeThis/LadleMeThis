@@ -5,6 +5,7 @@ import RecipeCard from "@/components/recipeCard/RecipeCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
 import Loader from "@/components/loader/Loader";
+import RecipeContainerTitle from "@/components/recipeContainerTitle/RecipeContainerTitle";
 
 export default function Category() {
     const searchParams = useSearchParams();
@@ -58,10 +59,7 @@ export default function Category() {
 
     return (
         <div className="recipe-card-container">
-            <div className="recipe-card-container-title">
-                <h1>Category:</h1> 
-                <h1 className="recipe-card-container-title-name">{decodeURIComponent(categoryName)}</h1>
-            </div>
+            <RecipeContainerTitle text="Category:" name={decodeURIComponent(categoryName)} />
             <div className="recipe-card-wrapper">
                 {displayedRecipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
             </div>

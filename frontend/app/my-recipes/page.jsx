@@ -4,6 +4,7 @@ import { getMyRecipes } from "@/scripts/recipe";
 import RecipeCard from "@/components/recipeCard/RecipeCard";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import RecipeContainerTitle from "@/components/recipeContainerTitle/RecipeContainerTitle";
 
 
 export default function MyRecipes() {
@@ -55,10 +56,7 @@ export default function MyRecipes() {
 
     return (
         <div className="recipe-card-container">
-            <div className="recipe-card-container-title">
-                <h1>My</h1> 
-                <h1 className="recipe-card-container-title-name">Recipes</h1>
-            </div>
+           <RecipeContainerTitle text="My" name="Recipes" />
             {
                 <div className="recipe-card-wrapper">
                     {displayedRecipes.map(recipe => <RecipeCard navigateTo={`/modify?recipeId=${recipe.recipeId}`} key={recipe.recipeId} recipe={recipe} />)}
