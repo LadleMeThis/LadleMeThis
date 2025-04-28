@@ -5,10 +5,11 @@ import RecipeCard from "@/components/recipeCard/RecipeCard";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react"
 import Loader from "@/components/loader/Loader";
+import RecipeContainerTitle from "@/components/recipeContainerTitle/RecipeContainerTitle";
 
 export default function Tag() {
     const [recipes, setRecipes] = useState([]);
-    const { tagId } = useParams();
+    const { tagId, tagName } = useParams();
     const [loading, setLoading] = useState(true);
     const searchParams = useSearchParams();
     const recipeName = searchParams.get("recipeName");
@@ -40,7 +41,7 @@ export default function Tag() {
                 setDisplayedRecipes(recipes.filter(recipe =>
                     recipe.name.toLowerCase().includes(recipeName.toLowerCase())
                 ));
-            }else{
+            } else {
                 setDisplayedRecipes(recipes);
             }
         }
@@ -56,10 +57,11 @@ export default function Tag() {
 
 
     return (
-        <>
-            <div className="recipe-card-wrapper wrapper">
+        <div className="recipe-card-container">
+            <RecipeContainerTitle text="Tag:" name={decodeURIComponent(tagName)} />
+            <div className="recipe-card-wrapper">
                 {displayedRecipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
             </div>
-        </>
+        </div>
     )
 }

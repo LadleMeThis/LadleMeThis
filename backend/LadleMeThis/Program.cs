@@ -42,7 +42,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 	var db = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
-	db.Database.Migrate();
+	
+	if (db.Database.IsRelational()) 
+		db.Database.Migrate();
 }
 
 using (var scope = app.Services.CreateScope())
@@ -164,3 +166,5 @@ void AddCookiePolicy(WebApplicationBuilder builder3)
 		options.MinimumSameSitePolicy = SameSiteMode.None;
 	});
 }
+
+public partial class Program { }
