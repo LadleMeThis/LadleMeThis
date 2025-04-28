@@ -54,9 +54,13 @@ export default function MyRecipes() {
     }
 
     return (
-        <div className="my-recipes-main">
+        <div className="recipe-card-container">
+            <div className="recipe-card-container-title">
+                <h1>My</h1> 
+                <h1 className="recipe-card-container-title-name">Recipes</h1>
+            </div>
             {
-                <div className="recipe-card-wrapper wrapper">
+                <div className="recipe-card-wrapper">
                     {displayedRecipes.map(recipe => <RecipeCard navigateTo={`/modify?recipeId=${recipe.recipeId}`} key={recipe.recipeId} recipe={recipe} />)}
                 </div>
             }

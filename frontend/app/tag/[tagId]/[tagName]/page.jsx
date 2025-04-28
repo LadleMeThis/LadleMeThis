@@ -8,7 +8,7 @@ import Loader from "@/components/loader/Loader";
 
 export default function Tag() {
     const [recipes, setRecipes] = useState([]);
-    const { tagId } = useParams();
+    const { tagId, tagName } = useParams();
     const [loading, setLoading] = useState(true);
     const searchParams = useSearchParams();
     const recipeName = searchParams.get("recipeName");
@@ -40,7 +40,7 @@ export default function Tag() {
                 setDisplayedRecipes(recipes.filter(recipe =>
                     recipe.name.toLowerCase().includes(recipeName.toLowerCase())
                 ));
-            }else{
+            } else {
                 setDisplayedRecipes(recipes);
             }
         }
@@ -56,10 +56,14 @@ export default function Tag() {
 
 
     return (
-        <>
-            <div className="recipe-card-wrapper wrapper">
+        <div className="recipe-card-container">
+            <div className="recipe-card-container-title">
+                <h1>Tag:</h1>
+                <h1 className="recipe-card-container-title-name">{decodeURIComponent(tagName)}</h1>
+            </div>
+            <div className="recipe-card-wrapper">
                 {displayedRecipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
             </div>
-        </>
+        </div>
     )
 }

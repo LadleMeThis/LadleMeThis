@@ -11,7 +11,7 @@ export default function Category() {
     const recipeName = searchParams.get("recipeName");
     const [recipes, setRecipes] = useState([]);
     const [displayedRecipes, setDisplayedRecipes] = useState([]);
-    const { categoryId } = useParams();
+    const { categoryId, categoryName } = useParams();
     const [loading, setLoading] = useState(true);
 
 
@@ -58,6 +58,10 @@ export default function Category() {
 
     return (
         <div className="recipe-card-container">
+            <div className="recipe-card-container-title">
+                <h1>Category:</h1> 
+                <h1 className="recipe-card-container-title-name">{decodeURIComponent(categoryName)}</h1>
+            </div>
             <div className="recipe-card-wrapper">
                 {displayedRecipes?.map(recipe => <RecipeCard key={recipe.recipeId} recipe={recipe} />)}
             </div>
