@@ -192,33 +192,6 @@ namespace LadleMeThis.Migrations
                     b.ToTable("Ratings");
                 });
 
-            modelBuilder.Entity("LadleMeThis.Data.Entity.SavedRecipe", b =>
-                {
-                    b.Property<int>("SavedRecipeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SavedRecipeId"));
-
-                    b.Property<DateTime>("DateSaved")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("SavedRecipeId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("SavedRecipes");
-                });
-
             modelBuilder.Entity("LadleMeThis.Data.Entity.Tag", b =>
                 {
                     b.Property<int>("TagId")
@@ -505,25 +478,6 @@ namespace LadleMeThis.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LadleMeThis.Data.Entity.SavedRecipe", b =>
-                {
-                    b.HasOne("LadleMeThis.Data.Entity.Recipe", "Recipe")
-                        .WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Recipe");
 
