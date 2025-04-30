@@ -127,7 +127,7 @@ public class TestDataSeeder(
             const string instructions = "Test instructions";
 
 
-            var recipe = new Recipe
+            List<Recipe> recipes = [new Recipe
             {
                 Name = recipeName,
                 Instructions = instructions,
@@ -146,9 +146,51 @@ public class TestDataSeeder(
                     PhotographerUrl = "TestPhotographerUrl",
                     Alt = "TestAlt"
                 }
-            };
+            },
+                new Recipe
+            {
+                Name =  recipeName + "2",
+                Instructions = instructions,
+                PrepTime = Random.Next(5, 31),
+                CookTime = Random.Next(10, 61),
+                ServingSize = Random.Next(1, 11),
+                User = user,
+                Categories = categoryList,
+                Tags = tagList,
+                Ingredients = ingredientList,
+                RecipeImage = new RecipeImage()
+                {
+                    ImageId = 2,
+                    ImageUrl = "TestImageUrl",
+                    PhotographerName = "TestPhotographerName",
+                    PhotographerUrl = "TestPhotographerUrl",
+                    Alt = "TestAlt"
+                }
+            },
+            new Recipe
+            {
+                Name = recipeName + "3",
+                Instructions = instructions,
+                PrepTime = Random.Next(5, 31),
+                CookTime = Random.Next(10, 61),
+                ServingSize = Random.Next(1, 11),
+                User = user,
+                Categories = categoryList,
+                Tags = tagList,
+                Ingredients = ingredientList,
+                RecipeImage = new RecipeImage()
+                {
+                    ImageId = 3,
+                    ImageUrl = "TestImageUrl",
+                    PhotographerName = "TestPhotographerName",
+                    PhotographerUrl = "TestPhotographerUrl",
+                    Alt = "TestAlt"
+                }
+            }
+            ];
 
-            context.Recipes.Add(recipe);
+
+            context.Recipes.AddRange(recipes);
             await context.SaveChangesAsync();
         }
     }
