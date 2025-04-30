@@ -1,6 +1,8 @@
-﻿using System;
+﻿using LadleMeThis.Models.AuthContracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +20,9 @@ namespace LadleMethisIntegrationTests
 
         public async Task LoginUser(string email, string password)
         {
-            var loginRequest = new
-            {
-                Email = email,
-                Password = password
-            };
+            var loginRequest = new AuthRequest(email, password);
 
-            var response = await _client.PostAsJsonAsync("/Auth/Login", loginRequest);
+            var response = await _client.PostAsJsonAsync("/login", loginRequest);
 
             AttachAuthCookies(response);
         }
