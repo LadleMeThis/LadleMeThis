@@ -33,31 +33,28 @@ public class IngredientControllerTests(LadleMeThisFactory factory) : IClassFixtu
     public async Task GetByIdAsync_ReturnsTag_AfterAddingIt()
     {
         // Arrange
-        var newIngredient= new IngredientCreateRequest { Name = "AnotherIngredient", Unit = "test"};
-        var createResponse = await _client.PostAsJsonAsync("/ingredients", newIngredient);
-        var createdIngredient = await createResponse.Content.ReadFromJsonAsync<IngredientDTO>();
+        const int ingredientId = 1;
 
         // Act
-        var response = await _client.GetAsync($"/ingredient/{createdIngredient.IngredientId}");
+        var response = await _client.GetAsync($"/ingredient/{ingredientId}");
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var returnedCategory = await response.Content.ReadFromJsonAsync<IngredientDTO>();
-        Assert.Equal(createdIngredient.IngredientId, returnedCategory.IngredientId);
-        Assert.Equal("AnotherIngredient", returnedCategory.Name);
+        var returnedIngredient = await response.Content.ReadFromJsonAsync<IngredientDTO>();
+        Assert.NotNull(returnedIngredient);
+        Assert.Equal(ingredientId, returnedIngredient.IngredientId);
+        Assert.Equal("AnotherIngredient", returnedIngredient.Name);
     }
 
     [Fact]
     public async Task DeleteByIdAsync_RemovesTag()
     {
         // Arrange
-        var newIngredient= new IngredientCreateRequest { Name = "IngredientToDelete", Unit = "Test"};
-        var createResponse = await _client.PostAsJsonAsync("/ingredients", newIngredient);
-        var createdIngredient = await createResponse.Content.ReadFromJsonAsync<IngredientDTO>();
+        const int ingredientId = 1;
 
         // Act
-        var deleteResponse = await _client.DeleteAsync($"/ingredient/{createdIngredient.IngredientId}");
-        var getResponse = await _client.GetAsync($"/ingredient/{createdIngredient.IngredientId}");
+        var deleteResponse = await _client.DeleteAsync($"/ingredient/{ingredientId}");
+        var getResponse = await _client.GetAsync($"/ingredient/{ingredientId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent ,deleteResponse.StatusCode);

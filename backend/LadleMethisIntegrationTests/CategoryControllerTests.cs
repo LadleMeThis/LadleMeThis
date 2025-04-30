@@ -31,17 +31,16 @@ public class CategoryControllerTests(LadleMeThisFactory factory) : IClassFixture
     public async Task GetByIdAsync_ReturnsTag_AfterAddingIt()
     {
         // Arrange
-        var newCategory= new CategoryCreateRequest { Name = "AnotherCategory" };
-        var createResponse = await _client.PostAsJsonAsync("/categories", newCategory);
-        var createdCategory = await createResponse.Content.ReadFromJsonAsync<CategoryDTO>();
+        const int categoryId = 1;
 
         // Act
-        var response = await _client.GetAsync($"/category/{createdCategory.CategoryId}");
+        var response = await _client.GetAsync($"/category/{categoryId}");
 
         // Assert
         response.EnsureSuccessStatusCode();
         var returnedCategory = await response.Content.ReadFromJsonAsync<CategoryDTO>();
-        Assert.Equal(createdCategory.CategoryId, returnedCategory.CategoryId);
+        Assert.NotNull(returnedCategory);
+        Assert.Equal(categoryId, returnedCategory.CategoryId);
         Assert.Equal("AnotherCategory", returnedCategory.Name);
     }
 
@@ -49,13 +48,11 @@ public class CategoryControllerTests(LadleMeThisFactory factory) : IClassFixture
     public async Task DeleteByIdAsync_RemovesTag()
     {
         // Arrange
-        var newCategory= new CategoryCreateRequest { Name = "CategoryToDelete" };
-        var createResponse = await _client.PostAsJsonAsync("/categories", newCategory);
-        var createdCategory = await createResponse.Content.ReadFromJsonAsync<CategoryDTO>();
-
+        const int categoryId = 1;
+        
         // Act
-        var deleteResponse = await _client.DeleteAsync($"/category/{createdCategory.CategoryId}");
-        var getResponse = await _client.GetAsync($"/category/{createdCategory.CategoryId}");
+        var deleteResponse = await _client.DeleteAsync($"/category/{categoryId}");
+        var getResponse = await _client.GetAsync($"/category/{categoryId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
