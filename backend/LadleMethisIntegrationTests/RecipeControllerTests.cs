@@ -9,10 +9,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using LadleMeThis.Data.Entity;
+using LadleMeThis.Models.ErrorMessages;
+using LadleMeThis.Models.RecipeRatingsModels;
+using LadleMeThis.Services.RecipeService;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LadleMethisIntegrationTests
 {
-    [Collection ("Recipe")]
+    [Collection("Recipe")]
     public class RecipeControllerTests : IClassFixture<LadleMeThisFactory>
     {
         private readonly HttpClient _client;
@@ -21,7 +27,7 @@ namespace LadleMethisIntegrationTests
         private const string VALID_EMAIL = "test@example.com";
         private const string VALID_PASSWORD = "Test@123";
         private const string USER_WITHOUT_RECIPE = "testUserWithoutRecipe@example.com";
-        
+
 
 
         public RecipeControllerTests(LadleMeThisFactory factory)
@@ -563,6 +569,50 @@ namespace LadleMethisIntegrationTests
         }
 
 
+        [Fact]
+        public async Task CreateRecipeRating_ValidId_ShouldReturnRecipeRatingId()
+        {
+            // Arrange
+            int recipeId = 1;
+            var recipeRating = new CreateRecipeRatingDTO(2, "test review");
 
+            await _userLogger.LoginUser(VALID_EMAIL, VALID_PASSWORD);
+
+            // Act
+            var response = await _client.PostAsJsonAsync($"/recipe/{recipeId}/rating", recipeRating);
+
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+
+            var reviewId = await response.Content.ReadFromJsonAsync<int>();
+            Assert.True(reviewId > 0);
+
+            using (var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+                var ratings = context.Ratings.Where(r => r.Recipe.RecipeId == recipeId && r.Review == "test review");
+
+                Assert.Single(ratings);
+            }
+        }
+
+
+        [Fact]
+        public async Task CreateRecipeRating_InvalidId_ShouldReturnNotFound()
+        {
+            // Arrange
+            int recipeId = -1;
+            var recipeRating = new CreateRecipeRatingDTO(2, "test review");
+
+            await _userLogger.LoginUser(VALID_EMAIL, VALID_PASSWORD);
+
+            // Act
+            var response = await _client.PostAsJsonAsync($"/recipe/{recipeId}/rating", recipeRating);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+        }
     }
 }
