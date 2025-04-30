@@ -80,9 +80,18 @@ public class TestDataSeeder(
     {
         if (!await context.Categories.AnyAsync())
         {
-            var category = new Category { Name = "Test Category" };
+            var category0 = new Category { Name = "Test Category1" };
+            var category1 = new Category { Name = "Test Category2" };
+            var category2 = new Category { Name = "Test Category3" };
 
-            context.Categories.Add(category);
+            var categories = new List<Category> { category0, category1, category2 };
+
+
+            foreach (var category in categories)
+            {
+                context.Categories.Add(category);
+            }
+
             await context.SaveChangesAsync();
         }
     }
