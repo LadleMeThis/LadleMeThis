@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LadleMeThisIntegrationTests;
 
+[Collection("Sample")]
 public class IngredientControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
 	private readonly HttpClient _client = factory.CreateClient();
