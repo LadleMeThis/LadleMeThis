@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using LadleMeThis.Data.Entity;
 
 namespace LadleMethisIntegrationTests
 {
@@ -89,11 +90,10 @@ namespace LadleMethisIntegrationTests
         [Fact]
         public async Task CreateRecipe_LoggedInUser_ShouldReturnOkAndRecipeId()
         {
-
-
+            const string recipeName = "Delicious Recipe";
             // Arrange
             var createRecipeDto = new CreateRecipeDTO(
-                Name: "Delicious Recipe",
+                Name: recipeName,
                 PrepTime: 15,
                 CookTime: 30,
                 Instructions: "Mix all ingredients and cook for 30 minutes.",
@@ -103,7 +103,7 @@ namespace LadleMethisIntegrationTests
                 Categories: new int[] { 1, 3 }
             );
 
-            await _userLogger.LoginUser(VALID_EMAIL,VALID_PASSWORD);
+            await _userLogger.LoginUser(VALID_EMAIL, VALID_PASSWORD);
 
             var response = await _client.PostAsJsonAsync("/recipes", createRecipeDto);
 
@@ -342,7 +342,7 @@ namespace LadleMethisIntegrationTests
                 var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
 
                 var expectedRecipes = await context.Recipes
-                    .Where(r => r.Ingredients.Any(i =>  ingredientIds.Contains(i.IngredientId)))
+                    .Where(r => r.Ingredients.Any(i => ingredientIds.Contains(i.IngredientId)))
                     .ToListAsync();
 
                 Assert.Equal(expectedRecipes.Count, recipes.Count);
@@ -413,6 +413,120 @@ namespace LadleMethisIntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+
+
+        // if you try to update the recipe with a non existent category, tag or ingredient id, it will just not do it, and it wont even inform you!
+
+        [Fact]
+        public async Task UpdateRecipe_ValidRequest_ShouldReturnNoContent()
+        {
+            // Arrange
+            int recipeId = 1;
+            string? name = "new name";
+            int? prepTime = 2;
+            int? cookTime = 2;
+            string? instructions = "new instructions";
+            int? servingSize = 3;
+            int[]? ingredients = { 1, 2, 3 };
+            int[]? tags = { 1, 2, 3 };
+            int[]? categories = { 1, 2, 3 };
+
+            var updateDto = new UpdateRecipeDTO(recipeId, name, prepTime, cookTime, instructions, servingSize, ingredients, tags, categories);
+
+            var content = JsonContent.Create(updateDto);
+
+            // Act
+            var response = await _client.PutAsync($"/recipe/{recipeId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+
+                var updatedRecipe = context.Recipes
+                    .Include(r => r.Ingredients)
+                    .Include(r => r.Tags)
+                    .Include(r => r.Categories)
+                    .FirstOrDefault(r => r.RecipeId == recipeId);
+
+                Assert.NotNull(updatedRecipe);
+
+                // Ingredients
+                Assert.Equal(3, updatedRecipe.Ingredients.Count);
+                Assert.All(ingredients, id =>
+                    Assert.Contains(updatedRecipe.Ingredients, i => i.IngredientId == id));
+
+                // Tags
+                Assert.Equal(3, updatedRecipe.Tags.Count);
+                Assert.All(tags, id =>
+                    Assert.Contains(updatedRecipe.Tags, t => t.TagId == id));
+
+                // Categories
+                Assert.Equal(3, updatedRecipe.Categories.Count);
+                Assert.All(categories, id =>
+                    Assert.Contains(updatedRecipe.Categories, c => c.CategoryId == id));
+
+            }
+        }
+
+
+
+        [Fact]
+        public async Task UpdateRecipe_InvalidId_ShouldReturnNotFound()
+        {
+            // Arrange
+            var nonExistentId = -1;
+            string? name = "new name";
+            int? prepTime = 2;
+            int? cookTime = 2;
+            string? instructions = "new instructions";
+            int? servingSize = 3;
+            int[]? ingredients = { 1, 2, 3 };
+            int[]? tags = { 1, 2, 3 };
+            int[]? categories = { 1, 2, 3 };
+
+            var updateDto = new UpdateRecipeDTO(nonExistentId, name, prepTime, cookTime, instructions, servingSize, ingredients, tags, categories);
+
+            var content = JsonContent.Create(updateDto);
+
+            // Act
+            var response = await _client.PutAsync($"/recipe/{nonExistentId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task UpdateRecipe_RecipeIdInUrlAndBodyDiffer_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var recipeId1 = -1;
+            var recipeId2 = -2;
+            string? name = "new name";
+            int? prepTime = 2;
+            int? cookTime = 2;
+            string? instructions = "new instructions";
+            int? servingSize = 3;
+            int[]? ingredients = { 1, 2, 3 };
+            int[]? tags = { 1, 2, 3 };
+            int[]? categories = { 1, 2, 3 };
+
+            var updateDto = new UpdateRecipeDTO(recipeId1, name, prepTime, cookTime, instructions, servingSize, ingredients, tags, categories);
+
+            var content = JsonContent.Create(updateDto);
+
+            // Act
+            var response = await _client.PutAsync($"/recipe/{recipeId2}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var error = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Recipe ID mismatch", error);
+        }
+
 
 
 
