@@ -383,5 +383,38 @@ namespace LadleMethisIntegrationTests
         }
 
 
+        [Fact]
+        public async Task GetRecipeById_ValidId_ShouldReturnFullRecipe()
+        {
+            // Arrange
+            var validRecipeId = 1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipe/{validRecipeId}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipe = await response.Content.ReadFromJsonAsync<FullRecipeDTO>();
+
+            Assert.NotNull(recipe);
+            Assert.Equal(validRecipeId, recipe.RecipeId);
+        }
+
+
+        [Fact]
+        public async Task GetRecipeById_InvalidId_ShouldReturnNotFound()
+        {
+            // Arrange
+            var invalidRecipeId = -1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipe/{invalidRecipeId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+
+
     }
 }
