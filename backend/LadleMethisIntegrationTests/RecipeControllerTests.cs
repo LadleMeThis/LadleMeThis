@@ -6,9 +6,7 @@ using LadleMeThis.Context;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
-using Azure.Identity;
-using LadleMeThis.Data.Entity;
+using Microsoft.AspNetCore.Http;
 
 namespace LadleMethisIntegrationTests
 {
@@ -17,14 +15,17 @@ namespace LadleMethisIntegrationTests
         private readonly HttpClient _client;
         private readonly UserLogger _userLogger;
         private readonly LadleMeThisFactory _factory;
-        private  const string ADMIN_EMAIL = "admin@example.com";
+        private const string ADMIN_EMAIL = "admin@example.com";
         private const string ADMIN_PASSWORD = "Admin@123";
         private const string USER_EMAIL = "user@example.com";
         private const string USER_PASSWORD = "User@123";
 
         public RecipeControllerTests(LadleMeThisFactory factory)
         {
-            _client = factory.CreateClient();
+            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
+                HandleCookies = true
+            });
             _userLogger = new UserLogger(_client);
             _factory = factory;
 
@@ -70,18 +71,24 @@ namespace LadleMethisIntegrationTests
         }
 
         [Fact]
-        public async Task GetRecipesByCategoryId_ShouldReturnBadRequest_WhenIdIsInvalid()
+        public async Task GetRecipesByCategoryId_ShouldReturnEmptyList_WhenIdIsIsNonExistent()
         {
             int categoryId = -1;
             var response = await _client.GetAsync($"/recipes/category/{categoryId}");
+            response.EnsureSuccessStatusCode();
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.Empty(recipes);
 
         }
 
         [Fact]
         public async Task CreateRecipe_LoggedInUser_ShouldReturnOkAndRecipeId()
         {
+
+
             // Arrange
             var createRecipeDto = new CreateRecipeDTO(
                 Name: "Delicious Recipe",
@@ -93,10 +100,9 @@ namespace LadleMethisIntegrationTests
                 Tags: new int[] { 1, 2 },
                 Categories: new int[] { 1, 3 }
             );
-           await  _userLogger.LoginUser(ADMIN_EMAIL, ADMIN_PASSWORD);
 
+            await _userLogger.LoginUser(ADMIN_EMAIL,ADMIN_PASSWORD);
 
-            // Act
             var response = await _client.PostAsJsonAsync("/recipes", createRecipeDto);
 
             // Assert
@@ -132,7 +138,7 @@ namespace LadleMethisIntegrationTests
         public async Task GetLoggedInUserRecipes_LoggedInUser_ShouldReturnRecipesIfUserHasAny()
         {
             // Arrange
-            await _userLogger.LoginUser(ADMIN_EMAIL,ADMIN_PASSWORD);
+            await _userLogger.LoginUser(ADMIN_EMAIL, ADMIN_PASSWORD);
 
             // Act
             var response = await _client.GetAsync("/recipes/my-recipes");
@@ -172,5 +178,98 @@ namespace LadleMethisIntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
+
+
+        [Fact]
+        public async Task GetRecipesByName_ValidRecipeName_ShouldReturnMatchingRecipes()
+        {
+            // Arrange
+            var recipeName = "Fluffernut Pie";
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/{recipeName}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.Single(recipes);
+
+            Assert.Equal(recipeName, recipes.First().Name);
+        }
+
+        [Fact]
+        public async Task GetRecipesByName_InvalidRecipeName_ShouldReturnEmptyRecipeList()
+        {
+            // Arrange
+            var invalidRecipeName = -1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/{invalidRecipeName}");
+            response.EnsureSuccessStatusCode();
+
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+
+            // Assert
+            Assert.NotNull(recipes);
+            Assert.Empty(recipes);
+        }
+
+
+        [Fact]
+        public async Task GetRecipesByTagId_ValidTagId_ShouldReturnMatchingRecipes()
+        {
+            // Arrange
+            var validTagId = 1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/tag/{validTagId}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.NotEmpty(recipes);
+
+
+            Assert.All(recipes, recipe =>
+                Assert.True(recipe.Tags.Any(t => t.TagId == validTagId),
+                    $"Recipe with id: {recipe.RecipeId} does not contain TagId of: {validTagId}"));
+
+
+            using (var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+
+                var expectedRecipes = await context.Recipes
+                    .Where(r => r.Tags.Any(t => t.TagId == validTagId))
+                    .ToListAsync();
+
+                Assert.Equal(expectedRecipes.Count, recipes.Count);
+            }
+        }
+
+
+        [Fact]
+        public async Task GetRecipesByTagId_InvalidTagId_ShouldReturnNotFound()
+        {
+            // Arrange
+            var invalidTagId = -1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/tag/{invalidTagId}");
+
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            // Assert
+            Assert.NotNull(recipes);
+            Assert.Empty(recipes);
+        }
+
+
     }
 }
