@@ -1,6 +1,8 @@
 using System.Data.Common;
 using LadleMeThis.Context;
+using LadleMethisIntegrationTests.Seeder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -39,9 +41,15 @@ public class LadleMeThisFactory : WebApplicationFactory<Program>
 			var sp = services.BuildServiceProvider();
 			using var scope = sp.CreateScope();
 			var db = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
-			
 			db.Database.EnsureDeleted();
 			db.Database.EnsureCreated();
+			
+			var identityManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+			var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+			var seeder = new TestDataSeeder(userManager, identityManager, db);
+
+			var seedTask = seeder.SeedAsync();
+			seedTask.Wait();
 		});
 	}
 

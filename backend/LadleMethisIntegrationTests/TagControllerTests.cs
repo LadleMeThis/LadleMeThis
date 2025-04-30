@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
+using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.TagModels;
 
 namespace LadleMeThisIntegrationTests;
@@ -19,7 +21,7 @@ public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<Ladl
         var response = await _client.PostAsJsonAsync("/tags", newTag);
 
         // Assert
-        response.EnsureSuccessStatusCode(); // Status code 200-299
+        response.EnsureSuccessStatusCode(); 
         var createdTag = await response.Content.ReadFromJsonAsync<TagDTO>();
         Assert.NotNull(createdTag);
         Assert.Equal("TestTag", createdTag.Name);
@@ -29,17 +31,16 @@ public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<Ladl
     public async Task GetByIdAsync_ReturnsTag_AfterAddingIt()
     {
         // Arrange
-        var newTag = new TagCreateRequest { Name = "AnotherTag" };
-        var createResponse = await _client.PostAsJsonAsync("/tags", newTag);
-        var createdTag = await createResponse.Content.ReadFromJsonAsync<TagDTO>();
+        const int tagId = 1;
 
         // Act
-        var response = await _client.GetAsync($"/tag/{createdTag.TagId}");
+        var response = await _client.GetAsync($"/tag/{tagId}");
 
         // Assert
         response.EnsureSuccessStatusCode();
         var returnedTag = await response.Content.ReadFromJsonAsync<TagDTO>();
-        Assert.Equal(createdTag.TagId, returnedTag.TagId);
+        Assert.NotNull(returnedTag);
+        Assert.Equal(tagId, returnedTag.TagId);
         Assert.Equal("AnotherTag", returnedTag.Name);
     }
 
@@ -47,16 +48,56 @@ public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<Ladl
     public async Task DeleteByIdAsync_RemovesTag()
     {
         // Arrange
-        var newTag = new TagCreateRequest { Name = "TagToDelete" };
-        var createResponse = await _client.PostAsJsonAsync("/tags", newTag);
-        var createdTag = await createResponse.Content.ReadFromJsonAsync<TagDTO>();
+        const int tagId = 1;
 
         // Act
-        var deleteResponse = await _client.DeleteAsync($"/tag/{createdTag.TagId}");
-        var getResponse = await _client.GetAsync($"/tag/{createdTag.TagId}");
+        var deleteResponse = await _client.DeleteAsync($"/tag/{tagId}");
+        var getResponse = await _client.GetAsync($"/tag/{tagId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
+    }
+    
+    [Fact]
+    public async Task DeleteByIdAsync_Fails()
+    {
+        // Arrange
+        const int tagId = -1;
+        
+        // Act
+        var deleteResponse = await _client.DeleteAsync($"/tag/{tagId}");
+        var responseContent = await deleteResponse.Content.ReadAsStringAsync();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, deleteResponse.StatusCode);
+        Assert.Equal(ErrorMessages.NotFoundMessage, responseContent);
+    }
+    
+    [Fact]
+    public async Task AddAsync_Fails()
+    {
+        // Arrange
+        var newTag = new TagCreateRequest {  };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/tags", newTag);
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains("validation error", responseContent, StringComparison.OrdinalIgnoreCase);
+    }
+    
+    [Fact]
+    public async Task GetAllAsync_ReturnsAllTags()
+    {
+        // Act
+        var response = await _client.GetAsync("/tags");
+        var responseContent = await response.Content.ReadFromJsonAsync<List<TagDTO>>();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.IsType<List<TagDTO>>(responseContent);
     }
 }
