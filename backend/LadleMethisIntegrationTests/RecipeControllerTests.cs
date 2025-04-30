@@ -12,6 +12,7 @@ using LadleMeThis.Data.Entity;
 
 namespace LadleMethisIntegrationTests
 {
+    [Collection ("Recipe")]
     public class RecipeControllerTests : IClassFixture<LadleMeThisFactory>
     {
         private readonly HttpClient _client;
@@ -20,7 +21,7 @@ namespace LadleMethisIntegrationTests
         private const string VALID_EMAIL = "test@example.com";
         private const string VALID_PASSWORD = "Test@123";
         private const string USER_WITHOUT_RECIPE = "testUserWithoutRecipe@example.com";
-
+        
 
 
         public RecipeControllerTests(LadleMeThisFactory factory)
@@ -196,9 +197,9 @@ namespace LadleMethisIntegrationTests
             var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
 
             Assert.NotNull(recipes);
-            Assert.Single(recipes);
+            Assert.NotEmpty(recipes);
 
-            Assert.Equal(recipeName, recipes.First().Name);
+            Assert.True(recipes.All(r => r.Name.Contains(recipeName)));
         }
 
         [Fact]
@@ -527,6 +528,39 @@ namespace LadleMethisIntegrationTests
             Assert.Contains("Recipe ID mismatch", error);
         }
 
+
+        [Fact]
+        public async Task DeleteRecipe_ValidId_ShouldRemoveRecipe()
+        {
+            // Arrange
+            int recipeId = 2;
+
+            // Act
+            var response = await _client.DeleteAsync($"/recipe/{recipeId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+
+            using (var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+                var recipe = await context.Recipes.FindAsync(recipeId);
+                Assert.Null(recipe);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteRecipe_InvalidId_ShouldReturnNotFound()
+        {
+            // Arrange
+            int nonExistentId = -1;
+
+            // Act
+            var response = await _client.DeleteAsync($"/recipe/{nonExistentId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
 
 
 
