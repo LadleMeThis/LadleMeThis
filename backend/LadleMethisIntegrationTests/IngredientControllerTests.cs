@@ -1,12 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using LadleMeThis.Context;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.IngredientsModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace LadleMeThisIntegrationTests;
 
+[Collection("Sample")]
 public class IngredientControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
 	private readonly HttpClient _client = factory.CreateClient();

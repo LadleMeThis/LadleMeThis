@@ -1,11 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.TagModels;
 
 namespace LadleMeThisIntegrationTests;
 
+[Collection("Sample")]
 public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
     private readonly HttpClient _client = factory.CreateClient();

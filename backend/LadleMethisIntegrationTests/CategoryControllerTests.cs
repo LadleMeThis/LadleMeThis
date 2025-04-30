@@ -5,6 +5,7 @@ using LadleMeThis.Models.ErrorMessages;
 
 namespace LadleMeThisIntegrationTests;
 
+[Collection("Sample")]
 public class CategoryControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
 	private readonly HttpClient _client = factory.CreateClient();
