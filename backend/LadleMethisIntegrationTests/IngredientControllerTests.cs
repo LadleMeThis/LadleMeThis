@@ -1,9 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
-using LadleMeThis.Context;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.IngredientsModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace LadleMeThisIntegrationTests;
 

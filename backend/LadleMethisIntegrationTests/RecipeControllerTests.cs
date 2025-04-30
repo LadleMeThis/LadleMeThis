@@ -7,14 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using LadleMeThis.Data.Entity;
-using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.RecipeRatingsModels;
-using LadleMeThis.Services.RecipeService;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace LadleMethisIntegrationTests
 {

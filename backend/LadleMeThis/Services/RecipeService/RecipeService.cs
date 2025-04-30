@@ -1,13 +1,8 @@
 using LadleMeThis.Data.Entity;
-using LadleMeThis.Models.CategoryModels;
-using LadleMeThis.Models.IngredientsModels;
 using LadleMeThis.Models.RecipeModels;
 using LadleMeThis.Models.RecipeRatingsModels;
-using LadleMeThis.Models.TagModels;
-using LadleMeThis.Models.UserModels;
 using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Services.RecipeDetailService;
-using LadleMeThis.Services.RecipeRatingService;
 using Microsoft.AspNetCore.Identity;
 
 namespace LadleMeThis.Services.RecipeService;

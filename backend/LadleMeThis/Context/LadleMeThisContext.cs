@@ -1,14 +1,7 @@
 using LadleMeThis.Data.Entity;
-using LadleMeThis.Models.CategoryModels;
-using LadleMeThis.Models.IngredientsModels;
-using LadleMeThis.Models.RecipeModels;
-using LadleMeThis.Models.RecipeRatingsModels;
-using LadleMeThis.Models.UserModels;
-using LadleMeThis.Models.TagModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace LadleMeThis.Context;
 
