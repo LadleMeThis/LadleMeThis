@@ -18,8 +18,7 @@ namespace LadleMethisIntegrationTests
         private readonly LadleMeThisFactory _factory;
         private const string VALID_EMAIL = "test@example.com";
         private const string VALID_PASSWORD = "Test@123";
-        private const string INVALID_EMAIL = "user@example.com";
-        private const string INVALID_PASSWORD = "User@123";
+        private const string USER_WITHOUT_RECIPE = "testUserWithoutRecipe@example.com";
 
 
 
@@ -158,7 +157,7 @@ namespace LadleMethisIntegrationTests
         public async Task GetLoggedInUserRecipes_LoggedInUser_ShouldReturnEmptyListIfUserHasNone()
         {
             // Arrange
-            await _userLogger.LoginUser(INVALID_EMAIL, INVALID_PASSWORD);
+            await _userLogger.LoginUser(USER_WITHOUT_RECIPE, VALID_PASSWORD);
 
             // Act
             var response = await _client.GetAsync("/recipes/my-recipes");
@@ -271,6 +270,116 @@ namespace LadleMethisIntegrationTests
             // Assert
             Assert.NotNull(recipes);
             Assert.Empty(recipes);
+        }
+
+
+        [Fact]
+        public async Task GetRecipesByIngredientId_ValidIngredientId_ShouldReturnMatchingRecipes()
+        {
+            // Arrange
+            var validIngredientId = 1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/ingredient/{validIngredientId}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.NotEmpty(recipes);
+
+            using (var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+
+                var expectedRecipes = await context.Recipes
+                    .Where(r => r.Ingredients.Any(i => i.IngredientId == validIngredientId))
+                    .ToListAsync();
+
+                Assert.Equal(expectedRecipes.Count, recipes.Count);
+            }
+        }
+
+
+        [Fact]
+        public async Task GetRecipesByIngredientId_InvalidIngredientId_ShouldReturnEmptyList()
+        {
+            // Arrange
+            var invalidIngredientId = -1;
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/ingredient/{invalidIngredientId}");
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            // Assert
+            Assert.NotNull(recipes);
+            Assert.Empty(recipes);
+        }
+
+
+
+        [Fact]
+        public async Task GetRecipesByIngredientIds_ValidIds_ShouldReturnMatchingRecipes()
+        {
+            // Arrange
+            var ingredientIds = new List<int> { 1, 2 };
+            var query = string.Join("&ingredientIds=", ingredientIds);
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/ingredients?ingredientIds={query}");
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            Assert.NotNull(recipes);
+            Assert.NotEmpty(recipes);
+
+            using (var scope = _factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+
+                var expectedRecipes = await context.Recipes
+                    .Where(r => r.Ingredients.Any(i =>  ingredientIds.Contains(i.IngredientId)))
+                    .ToListAsync();
+
+                Assert.Equal(expectedRecipes.Count, recipes.Count);
+            }
+        }
+
+
+        [Fact]
+        public async Task GetRecipesByIngredientIds_InvalidIds_ShouldReturnEmptyList()
+        {
+            // Arrange
+            var invalidIds = new List<int> { -1, -2 };
+            var query = string.Join("&ingredientIds=", invalidIds);
+
+            // Act
+            var response = await _client.GetAsync($"/recipes/ingredients?ingredientIds={query}");
+            response.EnsureSuccessStatusCode();
+            var recipes = await response.Content.ReadFromJsonAsync<List<RecipeCardDTO>>();
+
+            // Assert
+            Assert.NotNull(recipes);
+            Assert.Empty(recipes);
+        }
+
+
+
+        [Fact]
+        public async Task GetRecipesByIngredientIds_WithoitIds_ShouldReturnBadRequest()
+        {
+            // Act
+            var response = await _client.GetAsync("/recipes/ingredients");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            var error = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Ingredient IDs must be provided", error);
         }
 
 

@@ -47,17 +47,17 @@ using (var scope = app.Services.CreateScope())
 		db.Database.Migrate();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-	var services = scope.ServiceProvider;
-	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-	var context = services.GetRequiredService<LadleMeThisContext>();
-	var imageService = new FoodImageService(builder.Configuration);
+//using (var scope = app.Services.CreateScope())
+//{
+//	var services = scope.ServiceProvider;
+//	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+//	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+//	var context = services.GetRequiredService<LadleMeThisContext>();
+//	var imageService = new FoodImageService(builder.Configuration);
 
-	var seeder = new DataSeeder(userManager, roleManager, context, imageService);
-	await seeder.SeedAsync();
-}
+//	var seeder = new DataSeeder(userManager, roleManager, context, imageService);
+//	await seeder.SeedAsync();
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
