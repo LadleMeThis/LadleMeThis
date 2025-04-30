@@ -17,23 +17,7 @@ public class UserController : ControllerBase
 	{
 		_userService = userService;
 	}
-
-	[HttpGet("/users")]
-	public async Task<ActionResult> GetAllUser()
-	{
-		try
-		{
-			var users = await _userService.GetAllUsersAsync();
-			return Ok(users);
-		}
-		catch (Exception ex)
-		{
-			Console.Error.WriteLine(ex.Message);
-
-			return BadRequest(ErrorMessages.BadRequestMessage);
-		}
-	}
-
+	
 	[Authorize]
 	[HttpGet("/user")]
 	public async Task<ActionResult> GetUserById()
@@ -51,23 +35,7 @@ public class UserController : ControllerBase
 			return BadRequest(ErrorMessages.BadRequestMessage);
 		}
 	}
-
-	[HttpPost("/users")]
-	public async Task<ActionResult> CreateUser([FromBody] RegistrationRequest registrationRequest)
-	{
-		try
-		{
-			await _userService.CreateUserAsync(registrationRequest);
-			return Ok();
-		}
-		catch (Exception ex)
-		{
-			Console.Error.WriteLine(ex.Message);
-
-			return BadRequest(ErrorMessages.BadRequestMessage);
-		}
-	}
-
+	
 	[Authorize]
 	[HttpPut("/user")]
 	public async Task<ActionResult> UpdateUser([FromBody] UserUpdateDTO userUpdateDto)
@@ -125,7 +93,7 @@ public class UserController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			return StatusCode(500, "Message");
+			return BadRequest(ErrorMessages.BadRequestMessage);
 		}
 	}
 
