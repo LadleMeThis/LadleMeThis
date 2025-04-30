@@ -19,20 +19,6 @@ namespace LadleMeThis.Services.UserService
             _tokenService = tokenService;
         }
 
-        public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync()
-        {
-
-            var users = await _userManager.Users.ToListAsync();
-
-            return users.Select(user => new UserResponseDTO
-            {
-                UserId = user.Id,
-                Username = user.UserName,
-                Email = user.Email,
-            }).ToList();
-
-        }
-
         public async Task<IEnumerable<UserReviewDTO>> GetAllUsersInReviewFormatAsync()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -59,26 +45,6 @@ namespace LadleMeThis.Services.UserService
                 Username = user.UserName,
                 Email = user.Email,
             };
-        }
-
-     
-        public async Task<IdentityResult> CreateUserAsync(RegistrationRequest registrationRequest)
-        {
-            var user = new IdentityUser
-            {
-                UserName = registrationRequest.Username,
-                Email = registrationRequest.Email,
-
-            };
-            
-            var result = await _userManager.CreateAsync(user, registrationRequest.Password);
-
-            if (!result.Succeeded)
-            {
-                return result;
-            }
-
-            return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> UpdateUserAsync(string userId, UserUpdateDTO userUpdateDto)
