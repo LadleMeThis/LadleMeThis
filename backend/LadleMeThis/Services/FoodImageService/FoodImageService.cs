@@ -1,5 +1,4 @@
 ﻿using LadleMeThis.Data.Entity;
-using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace LadleMeThis.Services.FoodImageService
