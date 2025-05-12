@@ -7,7 +7,7 @@ using LadleMethisIntegrationTests;
 using Newtonsoft.Json;
 
 namespace LadleMeThisIntegrationTests;
-[Collection("Recipe")]
+[Collection("IntegrationTests")]
 public class UserControllerTests : IClassFixture<LadleMeThisFactory>
 {
 	private readonly HttpClient _client;
