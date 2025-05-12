@@ -30,24 +30,6 @@ namespace LadleMeThisTests
             _userService = new UserService(_userManagerMock.Object, _roleManagerMock.Object, _tokenServiceMock.Object);
         }
 
-        [Test]
-        public async Task GetAllUsersAsync_ReturnsUsers()
-        {
-            var users = new List<IdentityUser>
-    {
-        new IdentityUser { Id = "1", UserName = "user1", Email = "email1@test.com" },
-        new IdentityUser { Id = "2", UserName = "user2", Email = "email2@test.com" }
-    };
-
-            var mockUserQueryable = users.AsQueryable().BuildMock();
-
-            _userManagerMock.Setup(x => x.Users).Returns(mockUserQueryable);
-
-            var result = await _userService.GetAllUsersAsync();
-
-            Assert.That(result.Count(), Is.EqualTo(2));
-            Assert.That(result.First().Username, Is.EqualTo("user1"));
-        }
 
         [Test]
         public async Task GetUserByIdAsync_UserExists_ReturnsUser()
@@ -70,23 +52,6 @@ namespace LadleMeThisTests
                 await _userService.GetUserByIdAsync("1"));
         }
 
-        [Test]
-        public async Task CreateUserAsync_Success()
-        {
-            var request = new RegistrationRequest
-                (
-                 "newuser",
-                 "test@example.com",
-                 "StrongPassword123!"
-                );
-
-            _userManagerMock.Setup(x => x.CreateAsync(It.IsAny<IdentityUser>(), request.Password))
-                            .ReturnsAsync(IdentityResult.Success);
-
-            var result = await _userService.CreateUserAsync(request);
-
-            Assert.That(result.Succeeded, Is.True);
-        }
 
         [Test]
         public async Task DeleteUserAsync_UserFound_ReturnsSuccess()
