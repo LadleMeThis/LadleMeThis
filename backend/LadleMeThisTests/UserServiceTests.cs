@@ -178,15 +178,5 @@ namespace LadleMeThisTests
             Assert.That(result.ErrorMessages.ContainsKey("Bad credentials"), Is.True);
         }
 
-        // Helper to mock IQueryable<IdentityUser>
-        private Mock<Microsoft.EntityFrameworkCore.DbSet<IdentityUser>> GetMockDbSet(IQueryable<IdentityUser> data)
-        {
-            var mockSet = new Mock<Microsoft.EntityFrameworkCore.DbSet<IdentityUser>>();
-            mockSet.As<IQueryable<IdentityUser>>().Setup(m => m.Provider).Returns(data.Provider);
-            mockSet.As<IQueryable<IdentityUser>>().Setup(m => m.Expression).Returns(data.Expression);
-            mockSet.As<IQueryable<IdentityUser>>().Setup(m => m.ElementType).Returns(data.ElementType);
-            mockSet.As<IQueryable<IdentityUser>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
-            return mockSet;
-        }
     }
 }
