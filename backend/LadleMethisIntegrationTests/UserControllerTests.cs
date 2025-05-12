@@ -3,16 +3,23 @@ using System.Net.Http.Json;
 using System.Text;
 using LadleMeThis.Models.AuthContracts;
 using LadleMeThis.Models.UserModels;
+using LadleMethisIntegrationTests;
 using Newtonsoft.Json;
 
 namespace LadleMeThisIntegrationTests;
-
-public class UserControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
+[Collection("Recipe")]
+public class UserControllerTests : IClassFixture<LadleMeThisFactory>
 {
-	private readonly HttpClient _client = factory.CreateClient();
-	private readonly UserLogger _logger = new UserLogger(_client);
-	
-	
+	private readonly HttpClient _client;
+	private readonly UserLogger _logger;
+
+	public UserControllerTests(LadleMeThisFactory factory)
+	{
+		_client = factory.CreateClient();
+		_logger = new UserLogger(_client);
+	}
+
+
 	[Fact]
 	public async Task Register_ReturnsCreated()
 	{
@@ -31,9 +38,9 @@ public class UserControllerTests(LadleMeThisFactory factory) : IClassFixture<Lad
 	public async Task Login_ReturnsOK_AttachesToken()
 	{
 		// Arrange
-		const string userName = "test_example";
+		const string email = "test@example.com";
 		const string password = "Test@123";
-		var testUser = new AuthRequest(userName,password);
+		var testUser = new AuthRequest(email,password);
 		
 		// Act
 		var response = await _client.PostAsJsonAsync("/login", testUser);
@@ -50,7 +57,7 @@ public class UserControllerTests(LadleMeThisFactory factory) : IClassFixture<Lad
 	public async Task GetUserById_ReturnsUserResponseDTO()
 	{
 		// Arrange
-		const string email = "test_example";
+		const string email = "test@example.com";
 		const string password = "Test@123";
 		await _logger.LoginUser(email, password);
 		
@@ -87,7 +94,7 @@ public class UserControllerTests(LadleMeThisFactory factory) : IClassFixture<Lad
 		
 		// Assert
 		response.EnsureSuccessStatusCode();
-		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+		Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 		Assert.NotNull(content);
 		Assert.Equal(updatedTestUser.Username, content.Username);
 	}
@@ -96,8 +103,12 @@ public class UserControllerTests(LadleMeThisFactory factory) : IClassFixture<Lad
 	public async Task DeleteUser_ReturnsNoContent()
 	{
 		// Arrange
-		const string email = "test_example";
+		const string email = "test2@example.com";
 		const string password = "Test@123";
+		
+		var newUser = new RegistrationRequest(email, "test_example2", password);
+		await _client.PostAsJsonAsync("/register", newUser);
+		
 		await _logger.LoginUser(email, password);
 		
 		// Act

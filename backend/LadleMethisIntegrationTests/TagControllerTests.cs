@@ -1,11 +1,14 @@
 using System.Net;
 using System.Net.Http.Json;
+using LadleMeThis.Context;
+using LadleMeThis.Data.Entity;
 using LadleMeThis.Models.ErrorMessages;
 using LadleMeThis.Models.TagModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LadleMeThisIntegrationTests;
-
-[Collection("Sample")]
+[Collection("Recipe")]
 public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
     private readonly HttpClient _client = factory.CreateClient();
@@ -28,31 +31,34 @@ public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<Ladl
     }
 
     [Fact]
-    public async Task GetByIdAsync_ReturnsTag_AfterAddingIt()
+    public async Task GetByIdAsync_ReturnsTag()
     {
         // Arrange
-        const int tagId = 1;
+        var tag = await GetLast();
 
         // Act
-        var response = await _client.GetAsync($"/tag/{tagId}");
+        var response = await _client.GetAsync($"/tag/{tag.TagId}");
 
         // Assert
         response.EnsureSuccessStatusCode();
         var returnedTag = await response.Content.ReadFromJsonAsync<TagDTO>();
         Assert.NotNull(returnedTag);
-        Assert.Equal(tagId, returnedTag.TagId);
-        Assert.Equal("AnotherTag", returnedTag.Name);
+        Assert.Equal(tag.TagId, returnedTag.TagId);
+        Assert.Equal(tag.Name, returnedTag.Name);
     }
 
     [Fact]
     public async Task DeleteByIdAsync_RemovesTag()
     {
         // Arrange
-        const int tagId = 1;
+        var newTag = new TagCreateRequest { Name = "TestTag" };
+        var response = await _client.PostAsJsonAsync("/tags", newTag);
+
+        var tag = await GetLast();
 
         // Act
-        var deleteResponse = await _client.DeleteAsync($"/tag/{tagId}");
-        var getResponse = await _client.GetAsync($"/tag/{tagId}");
+        var deleteResponse = await _client.DeleteAsync($"/tag/{tag.TagId}");
+        var getResponse = await _client.GetAsync($"/tag/{tag.TagId}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
@@ -99,5 +105,22 @@ public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<Ladl
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.IsType<List<TagDTO>>(responseContent);
+
+        using var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+
+        var expectedTags = await context.Tags.ToListAsync();
+
+        Assert.Equal(expectedTags.Count, responseContent.Count);
+    }
+    
+    private async Task<Tag> GetLast()
+    {
+        using var scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+
+        var expectedTags = await context.Tags.ToListAsync();
+
+        return expectedTags.Last();
     }
 }

@@ -1,11 +1,13 @@
 using System.Text;
 using LadleMeThis.Context;
+using LadleMeThis.Data.Seeder;
 using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Repositories.RecipeRatingRepository;
 using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Repositories.TagRepository;
 using LadleMeThis.Services.CategoryService;
+using LadleMeThis.Services.FoodImageService;
 using LadleMeThis.Services.IngredientService;
 using LadleMeThis.Services.RecipeDetailService;
 using LadleMeThis.Services.RecipeRatingService;
