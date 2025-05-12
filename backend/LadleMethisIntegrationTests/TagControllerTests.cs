@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LadleMeThisIntegrationTests;
-[Collection("Recipe")]
+
+[Collection("IntegrationTests")]
 public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
     private readonly HttpClient _client = factory.CreateClient();
