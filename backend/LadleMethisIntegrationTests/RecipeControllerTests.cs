@@ -11,7 +11,8 @@ using LadleMeThis.Models.RecipeRatingsModels;
 
 namespace LadleMethisIntegrationTests
 {
-    [Collection("Recipe")]
+    [Collection("IntegrationTests")]
+
     public class RecipeControllerTests : IClassFixture<LadleMeThisFactory>
     {
         private readonly HttpClient _client;

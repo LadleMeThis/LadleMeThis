@@ -5,7 +5,8 @@ using LadleMeThis.Models.TagModels;
 
 namespace LadleMeThisIntegrationTests;
 
-[Collection("Sample")]
+[Collection("IntegrationTests")]
+
 public class TagControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
     private readonly HttpClient _client = factory.CreateClient();

@@ -5,7 +5,8 @@ using LadleMeThis.Models.IngredientsModels;
 
 namespace LadleMeThisIntegrationTests;
 
-[Collection("Sample")]
+[Collection("IntegrationTests")]
+
 public class IngredientControllerTests(LadleMeThisFactory factory) : IClassFixture<LadleMeThisFactory>
 {
 	private readonly HttpClient _client = factory.CreateClient();
