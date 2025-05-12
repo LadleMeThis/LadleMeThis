@@ -1,11 +1,13 @@
 using System.Text;
 using LadleMeThis.Context;
+using LadleMeThis.Data.Seeder;
 using LadleMeThis.Repositories.CategoryRepository;
 using LadleMeThis.Repositories.IngredientRepository;
 using LadleMeThis.Repositories.RecipeRatingRepository;
 using LadleMeThis.Repositories.RecipeRepository;
 using LadleMeThis.Repositories.TagRepository;
 using LadleMeThis.Services.CategoryService;
+using LadleMeThis.Services.FoodImageService;
 using LadleMeThis.Services.IngredientService;
 using LadleMeThis.Services.RecipeDetailService;
 using LadleMeThis.Services.RecipeRatingService;
@@ -39,23 +41,17 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-	var db = scope.ServiceProvider.GetRequiredService<LadleMeThisContext>();
+	var services = scope.ServiceProvider;
 	
-	if (db.Database.IsRelational()) 
+	var db = services.GetRequiredService<LadleMeThisContext>();
+	
+	if (db.Database.IsRelational())
+	{
 		db.Database.Migrate();
+
+		await SeedDatabaseAsync(services, builder, db);
+	}
 }
-
-//using (var scope = app.Services.CreateScope())
-//{
-//	var services = scope.ServiceProvider;
-//	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-//	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-//	var context = services.GetRequiredService<LadleMeThisContext>();
-//	var imageService = new FoodImageService(builder.Configuration);
-
-//	var seeder = new DataSeeder(userManager, roleManager, context, imageService);
-//	await seeder.SeedAsync();
-//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -83,7 +79,6 @@ void AddServices(WebApplicationBuilder webApplicationBuilder)
 	webApplicationBuilder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 	webApplicationBuilder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 	webApplicationBuilder.Services.AddScoped<IRecipeRatingRepository, RecipeRatingRepository>();
-	// webApplicationBuilder.Services.AddScoped<ISavedRecipeRepository, SavedRecipeRepository>();
 	webApplicationBuilder.Services.AddScoped<IIngredientService, IngredientService>();
 	webApplicationBuilder.Services.AddScoped<ITagService, TagService>();
 	webApplicationBuilder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -92,7 +87,6 @@ void AddServices(WebApplicationBuilder webApplicationBuilder)
 	webApplicationBuilder.Services.AddScoped<IRecipeRatingService, RecipeRatingService>();
 	webApplicationBuilder.Services.AddScoped<IUserService, UserService>();
 	webApplicationBuilder.Services.AddScoped<ITokenService, TokenService>();
-	// webApplicationBuilder.Services.AddScoped<ISavedRecipeService, SavedRecipeService>();
 }
 
 void AddDb(WebApplicationBuilder builder1)
@@ -163,6 +157,17 @@ void AddCookiePolicy(WebApplicationBuilder builder3)
 		options.Secure = CookieSecurePolicy.Always;
 		options.MinimumSameSitePolicy = SameSiteMode.None;
 	});
+}
+
+async Task SeedDatabaseAsync(IServiceProvider serviceProvider, WebApplicationBuilder webApplicationBuilder2,
+	LadleMeThisContext ladleMeThisContext)
+{
+	var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+	var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+	var imageService = new FoodImageService(webApplicationBuilder2.Configuration);
+
+	var seeder = new DataSeeder(userManager, roleManager, ladleMeThisContext, imageService);
+	await seeder.SeedAsync();
 }
 
 public partial class Program { }
